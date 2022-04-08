@@ -3,5 +3,6 @@
         "origin",
         "upstream",
         "main"
-    ]
+    ],
+    "cmake.configureOnOpen": true
 }
