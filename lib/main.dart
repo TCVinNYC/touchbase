@@ -34,7 +34,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Let's Connect",
       theme: ThemeData(
-        primarySwatch: createMaterialColor(Color.fromARGB(255, 255, 170, 12)),
+        primaryColor: createMaterialColor(Color.fromARGB(255, 255, 170, 12))
+        
+        //primarySwatch: createMaterialColor(Color.fromARGB(255, 255, 170, 12)),
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -75,8 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   )),
               Container(
                 width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(20),
-                child: Text(
+                padding: const EdgeInsets.all(30),
+                child: const Text(
                   "Login",
                   textAlign: TextAlign.left,
                   style: TextStyle(
@@ -86,13 +88,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
+                padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
                 child: TextField(
                   onChanged: (text) {
                     email = text;
                   },
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       hintText: "someone@example.com",
                       prefixIcon: Icon(Icons.alternate_email_rounded),
                       // suffixIcon: _controller.text.isEmpty
@@ -106,13 +108,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
+                padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
                 child: TextField(
                   onChanged: (text) {
                     password = text;
                   },
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       focusedBorder: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock),
                       border: OutlineInputBorder(),
@@ -122,21 +124,31 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Container(
                 padding: const EdgeInsets.all(15),
-                width: MediaQuery.of(context).size.width / 1.6,
-                height: MediaQuery.of(context).size.width / 5.5,
+                width: MediaQuery.of(context).size.width / 1.2,
+                height: MediaQuery.of(context).size.height / 9.5,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)
+                        )
+                      
+                      ),
+                    
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SignupPage()));
+                    //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SignupPage()));
                   },
-                  child: Text(
+                  child: const Text(
                     'Login',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold
+                      ),
                   ),
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(50),
-                child: Text(
+                padding: const EdgeInsets.all(10),
+                child: const Text(
                   "Or, log in with...",
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
@@ -144,6 +156,43 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
+              Container(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    Spacer(flex: 4),
+                    Container(
+                      width: MediaQuery.of(context).size.width/3.5,
+                      height: MediaQuery.of(context).size.height/12,
+                      child: OutlinedButton(
+                        onPressed: () {},
+                          child: Image.asset(
+                          "assets/googleLogo.png",	
+                        height: 40,
+                        width: 40,
+                       ),
+                      ),
+                    ),
+                    Spacer(flex: 2),
+                    Container(
+                      width: MediaQuery.of(context).size.width/3.5,
+                      height: MediaQuery.of(context).size.height/12,
+                      child: OutlinedButton(
+                        onPressed: () {},
+                          child: Image.asset(
+                          "assets/appleLogo.png",	
+                        height: 40,
+                        width: 40,
+                       ),
+                      ),
+                    ),
+
+                   Spacer(flex: 4),
+
+                  ],
+                ),
+
+                ),
             ],
           ),
         ),
