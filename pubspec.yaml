@@ -59,7 +59,16 @@ flutter:
   uses-material-design: true
 
   assets:
-     - assets/
+     - assets\Images
+     - assets\Lottie
+  fonts:
+    - family: Quicksand
+      fonts:
+        - asset: assets\Quicksand\Quicksand-Regular.ttf
+        - asset: assets\Quicksand\Quicksand-Bold.ttf
+        - asset: assets\Quicksand\Quicksand-Light.ttf
+        - asset: assets\Quicksand\Quicksand-Semibold.ttf
+        - asset: assets\Quicksand\Quicksand-Medium.ttf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
@@ -76,7 +85,7 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

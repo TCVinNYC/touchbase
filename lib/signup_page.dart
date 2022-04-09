@@ -37,7 +37,6 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Sign Up Page',
       home: Scaffold(
         body: Center(
           child: Column(
@@ -54,6 +53,9 @@ class _SignupPageState extends State<SignupPage> {
                     animate: true,
                     fit: BoxFit.fitWidth,
                   )),
+                Container(
+                  child: const Text("Screen 2"),
+                ),
             ],
           ),
         ),

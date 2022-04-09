@@ -34,7 +34,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Let's Connect",
       theme: ThemeData(
-        primaryColor: createMaterialColor(Color.fromARGB(255, 255, 170, 12))
+        fontFamily: 'Quicksand',
+        primaryColor: createMaterialColor(const Color.fromARGB(255, 255, 170, 12))
         
         //primarySwatch: createMaterialColor(Color.fromARGB(255, 255, 170, 12)),
       ),
@@ -64,29 +65,29 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              const SizedBox(
-                height: 20,
-              ),
+              //Orange Guy GIF
               Container(
                   padding: const EdgeInsets.all(10),
                   child: Lottie.asset(
-                    "assets/orange-coder.json",
+                    "assets/Lottie/orange-coder.json",
                     repeat: true,
                     animate: true,
                     fit: BoxFit.fitWidth,
                   )),
+              //Login Text
               Container(
                 width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(30),
+                padding: const EdgeInsets.fromLTRB(30, 30, 0, 20),
                 child: const Text(
                   "Login",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 35,
+                    fontSize: 32,
                   ),
                 ),
               ),
+              //Email Field
               Container(
                 padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
                 child: TextField(
@@ -107,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       labelText: "Email ID"),
                 ),
               ),
+              //Password Field
               Container(
                 padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
                 child: TextField(
@@ -118,10 +120,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       focusedBorder: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock),
                       border: OutlineInputBorder(),
+                      // suffixIcon: Icon(
+                      //  Icons.error,
+                      // ),
                       labelText: "Password"),
                   obscureText: true,
                 ),
               ),
+              //Login Button
               Container(
                 padding: const EdgeInsets.all(15),
                 width: MediaQuery.of(context).size.width / 1.2,
@@ -135,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     
                   onPressed: () {
-                    //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SignupPage()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const SignupPage()));
                   },
                   child: const Text(
                     'Login',
@@ -146,6 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
+              //bottom text
               Container(
                 padding: const EdgeInsets.all(10),
                 child: const Text(
@@ -156,38 +163,40 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
+              //Google Button
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(5),
                 child: Row(
                   children: [
-                    Spacer(flex: 4),
+                    const Spacer(flex: 4),
                     Container(
-                      width: MediaQuery.of(context).size.width/3.5,
-                      height: MediaQuery.of(context).size.height/12,
+                      width: MediaQuery.of(context).size.width/4,
+                      height: MediaQuery.of(context).size.height/13,
                       child: OutlinedButton(
                         onPressed: () {},
                           child: Image.asset(
-                          "assets/googleLogo.png",	
-                        height: 40,
-                        width: 40,
+                          "assets/Images/googleLogo.png",	
+                        height: 35,
+                        width: 35,
                        ),
                       ),
                     ),
-                    Spacer(flex: 2),
+                    const Spacer(flex: 2),
+                    //Apple Button
                     Container(
-                      width: MediaQuery.of(context).size.width/3.5,
-                      height: MediaQuery.of(context).size.height/12,
+                      width: MediaQuery.of(context).size.width/4,
+                      height: MediaQuery.of(context).size.height/13,
                       child: OutlinedButton(
                         onPressed: () {},
                           child: Image.asset(
-                          "assets/appleLogo.png",	
-                        height: 40,
-                        width: 40,
+                          "assets/Images/appleLogo.png",	
+                        height: 35,
+                        width: 35,
                        ),
                       ),
                     ),
 
-                   Spacer(flex: 4),
+                   const Spacer(flex: 4),
 
                   ],
                 ),
