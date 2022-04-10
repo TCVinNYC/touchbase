@@ -48,14 +48,14 @@ class _SignupPageState extends State<SignupPage> {
               Container(
                   padding: const EdgeInsets.all(10),
                   child: Lottie.asset(
-                    "assets/orange-coder.json",
+                    "assets/images/orange-coder.json",
                     repeat: true,
                     animate: true,
                     fit: BoxFit.fitWidth,
                   )),
-                Container(
-                  child: const Text("Screen 2"),
-                ),
+              Container(
+                child: const Text("Screen 2"),
+              ),
             ],
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/signup_page.dart';
 import 'package:lottie/lottie.dart';
@@ -34,11 +35,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Let's Connect",
       theme: ThemeData(
-        fontFamily: 'Quicksand',
-        primaryColor: createMaterialColor(const Color.fromARGB(255, 255, 170, 12))
-        
-        //primarySwatch: createMaterialColor(Color.fromARGB(255, 255, 170, 12)),
-      ),
+          fontFamily: 'Quicksand',
+          primaryColor:
+              createMaterialColor(const Color.fromARGB(255, 255, 170, 12))
+
+          //primarySwatch: createMaterialColor(Color.fromARGB(255, 255, 170, 12)),
+          ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -61,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return MaterialApp(
       title: 'Flutter layout demo',
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -69,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Container(
                   padding: const EdgeInsets.all(10),
                   child: Lottie.asset(
-                    "assets/Lottie/orange-coder.json",
+                    "assets/images/orange-coder.json",
                     repeat: true,
                     animate: true,
                     fit: BoxFit.fitWidth,
@@ -95,6 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     email = text;
                   },
                   keyboardType: TextInputType.emailAddress,
+                  // scrollPadding: EdgeInsets.only(bottom: 40),
                   decoration: const InputDecoration(
                       hintText: "someone@example.com",
                       prefixIcon: Icon(Icons.alternate_email_rounded),
@@ -110,12 +114,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               //Password Field
               Container(
-                padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
+                padding: const EdgeInsets.fromLTRB(25, 5, 25, 15),
                 child: TextField(
                   onChanged: (text) {
                     password = text;
                   },
-                  keyboardType: TextInputType.text,
+                  //scrollPadding: EdgeInsets.only(bottom: 40),
+                  keyboardType: TextInputType.visiblePassword,
                   decoration: const InputDecoration(
                       focusedBorder: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock),
@@ -130,31 +135,24 @@ class _MyHomePageState extends State<MyHomePage> {
               //Login Button
               Container(
                 padding: const EdgeInsets.all(15),
-                width: MediaQuery.of(context).size.width / 1.2,
-                height: MediaQuery.of(context).size.height / 9.5,
+                width: MediaQuery.of(context).size.width / 1.1,
+                height: MediaQuery.of(context).size.height / 10,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)
-                        )
-                      
-                      ),
-                    
+                          borderRadius: BorderRadius.circular(15))),
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const SignupPage()));
+                    // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignupPage()));
                   },
                   child: const Text(
                     'Login',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold
-                      ),
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
               //bottom text
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
                 child: const Text(
                   "Or, log in with...",
                   style: TextStyle(
@@ -170,42 +168,78 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     const Spacer(flex: 4),
                     Container(
-                      width: MediaQuery.of(context).size.width/4,
-                      height: MediaQuery.of(context).size.height/13,
+                      width: MediaQuery.of(context).size.width / 3.3,
+                      height: MediaQuery.of(context).size.height / 13,
                       child: OutlinedButton(
-                        onPressed: () {},
-                          child: Image.asset(
-                          "assets/Images/googleLogo.png",	
-                        height: 35,
-                        width: 35,
-                       ),
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12))),
+                        onPressed: () {
+                          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignupPage()));
+                        },
+                        child: Image.asset(
+                          "assets/images/googleLogo.png",
+                          height: 35,
+                          width: 35,
+                        ),
                       ),
                     ),
                     const Spacer(flex: 2),
                     //Apple Button
                     Container(
-                      width: MediaQuery.of(context).size.width/4,
-                      height: MediaQuery.of(context).size.height/13,
+                      width: MediaQuery.of(context).size.width / 3.3,
+                      height: MediaQuery.of(context).size.height / 13,
                       child: OutlinedButton(
-                        onPressed: () {},
-                          child: Image.asset(
-                          "assets/Images/appleLogo.png",	
-                        height: 35,
-                        width: 35,
-                       ),
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12))),
+                        onPressed: () {
+                          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignupPage()));
+                        },
+                        child: Image.asset(
+                          "assets/images/appleLogo.png",
+                          height: 35,
+                          width: 35,
+                        ),
                       ),
                     ),
-
-                   const Spacer(flex: 4),
-
+                    const Spacer(flex: 4),
                   ],
                 ),
-
+                //Register Text and Button
+              ),
+              const Spacer(
+                flex: 2,
+              ),
+              Container(
+                padding: const EdgeInsets.all(10),
+                child: RichText(
+                  text: TextSpan(children: [
+                    const TextSpan(
+                      text: "New to Let's Connect? ",
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                        text: 'Sign Up',
+                        style: const TextStyle(
+                          color: Colors.blue,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const SignupPage()));
+                          }),
+                  ]),
                 ),
+              ),
+              const Spacer(
+                flex: 1,
+              ),
             ],
           ),
         ),
-        resizeToAvoidBottomInset: false,
       ),
     );
   }
