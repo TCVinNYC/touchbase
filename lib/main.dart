@@ -13,22 +13,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "Let's Connect",
-      theme: ThemeData(
-          fontFamily: 'Quicksand',
-          primaryColor:
-              createMaterialColor(const Color.fromARGB(255, 255, 170, 12))
+      theme: ThemeData(fontFamily: 'Frutiger'),
+      //  fontFamily: 'Frutiger',
+      //primaryColor: createMaterialColor(const Color.fromARGB(255, 255, 170, 12)),
 
-          //primarySwatch: createMaterialColor(Color.fromARGB(255, 255, 170, 12)),
-          ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      //primarySwatch: createMaterialColor(Color.fromARGB(255, 255, 170, 12)),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
+  //final String title;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -65,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   "Login",
                   textAlign: TextAlign.left,
                   style: TextStyle(
+                    fontFamily: 'Quicksand',
                     fontWeight: FontWeight.bold,
                     fontSize: 32,
                   ),
@@ -122,11 +122,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15))),
                   onPressed: () {
-                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MainPage()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const MainPage()));
                   },
                   child: const Text(
                     'Login',
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Quicksand',
+                    ),
                   ),
                 ),
               ),
@@ -136,6 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: const Text(
                   "Or, log in with...",
                   style: TextStyle(
+                    fontFamily: 'Quicksand',
                     fontWeight: FontWeight.w400,
                     fontSize: 15,
                   ),
@@ -198,12 +204,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     const TextSpan(
                       text: "New to Let's Connect? ",
                       style: TextStyle(
+                        fontFamily: 'Quicksand',
                         color: Colors.black,
                       ),
                     ),
                     TextSpan(
                         text: 'Sign Up',
                         style: const TextStyle(
+                          fontFamily: 'Quicksand',
                           color: Colors.blue,
                         ),
                         recognizer: TapGestureRecognizer()
