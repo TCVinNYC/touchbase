@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lets_connect/mainpages/eventsPage/filter_events_page.dart';
 import 'events_Data.dart';
 
 class EventsPage extends StatefulWidget {
@@ -45,10 +46,17 @@ class _EventsPageState extends State<EventsPage> with TickerProviderStateMixin {
                 actions: <Widget>[
                   IconButton(
                     icon: const Icon(
-                      Icons.search,
+                      Icons.menu_rounded,
                       color: Colors.black,
                     ),
-                    onPressed: () {},
+                    tooltip: 'Filter Options',
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute<void>(
+                        builder: (BuildContext context) {
+                          return const FilterEventsPage();
+                        },
+                      ));
+                    },
                   )
                 ],
                 pinned: true,

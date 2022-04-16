@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.1"
+  chip_list:
+    dependency: "direct main"
+    description:
+      name: chip_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.3.3+8"
   clock:
     dependency: transitive
     description:
@@ -64,20 +71,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
-  extended_list:
-    dependency: transitive
+  equatable:
+    dependency: "direct main"
     description:
-      name: extended_list
+      name: equatable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
-  extended_list_library:
-    dependency: transitive
-    description:
-      name: extended_list_library
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.0"
+    version: "2.0.3"
   extended_nested_scroll_view:
     dependency: "direct main"
     description:
@@ -130,6 +130,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.6"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.17.0"
   lints:
     dependency: transitive
     description:
@@ -137,20 +144,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-  loading_more_list:
-    dependency: "direct main"
-    description:
-      name: loading_more_list
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.1.2"
-  loading_more_list_library:
-    dependency: transitive
-    description:
-      name: loading_more_list_library
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
   lottie:
     dependency: "direct main"
     description:
@@ -219,6 +212,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.1.48"
+  syncfusion_flutter_datepicker:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_datepicker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.1.48"
   term_glyph:
     dependency: transitive
     description:
@@ -247,13 +254,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
-  waterfall_flow:
-    dependency: transitive
-    description:
-      name: waterfall_flow
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.2"
 sdks:
   dart: ">=2.17.0-0 <3.0.0"
   flutter: ">=2.5.0"
