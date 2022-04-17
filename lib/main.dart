@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
-import 'package:lets_connect/mainpages/signupPage/signup_page.dart';
+import 'package:lets_connect/mainpages/signupPage/signup.dart';
 import 'package:lottie/lottie.dart';
 
 void main() {
@@ -217,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const SignupPage()));
+                                builder: (context) => const SignUp()));
                           }),
                   ]),
                 ),

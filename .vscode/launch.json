@@ -1,0 +1,44 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "lets_connect",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "lets_connect (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "lets_connect (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "Flutter (lib\\signup_page.dart)",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib\\signup_page.dart"
+        },
+        {
+            "name": "Flutter (lib\\register.dart)",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib\\register.dart"
+        },
+        {
+            "name": "Flutter (lib\\signup.dart)",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib\\signup.dart"
+        }
+    ]
+}
