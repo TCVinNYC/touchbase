@@ -64,7 +64,7 @@ class _EventsPageState extends State<EventsPage> with TickerProviderStateMixin {
                 snap: false,
                 forceElevated: innerBoxIsScrolled,
                 bottom: TabBar(
-                  splashFactory: InkRipple.splashFactory,
+                  // splashFactory: InkRipple.splashFactory,
                   labelColor: Colors.black,
                   unselectedLabelColor: const Color.fromARGB(255, 32, 29, 29),
                   indicatorColor: Colors.amberAccent,
