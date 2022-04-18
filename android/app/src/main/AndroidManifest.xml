@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.lets_connect">
    <application
-        android:label="lets_connect"
+        android:label="Touchbase"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
