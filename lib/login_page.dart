@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart'; 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -10,7 +10,6 @@ import 'package:flutter/gestures.dart';
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lets_connect/mainpages/signupPage/signup.dart';
 import 'package:lottie/lottie.dart';
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -116,10 +115,8 @@ class _LoginPageState extends State<LoginPage> {
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15))),
-                  onPressed: () {
+                  onPressed: () async {
                     signIn();
-                    //Navigator.of(context).push(MaterialPageRoute(
-                      //  builder: (context) => const MainPage()));
                   },
                   child: const Text(
                     'Login',
@@ -223,10 +220,29 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ],
           ),
-    )); 
+        ));
   }
+
   Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text.trim(), password: passwordController.text.trim());
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim());
+    } on FirebaseAuthException catch (e) {
+      if (email == "") {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Enter email first! Please try again!')));
+      } else if (password == "") {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Cannot have an empty password! Please try again!')));
+      } else if (e.code == 'user-not-found') {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Wrong Email. Please try again!')));
+      } else if (e.code == 'wrong-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Wrong Password. Please try again!')));
+      }
+    }
   }
 }
 
