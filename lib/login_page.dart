@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:lets_connect/firebase/fire_auth.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -116,7 +117,17 @@ class _LoginPageState extends State<LoginPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15))),
                   onPressed: () async {
-                    signIn();
+                    User? user = await FireAuth.signInUsingEmailPassword(
+                      email: email.trim(),
+                      password: password.trim(),
+                      context: context,
+                    );
+                    if (user != null) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) => const MainPage()),
+                      );
+                    }
                   },
                   child: const Text(
                     'Login',
@@ -210,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const SignUp()));
+                                builder: (context) => SignUp()));
                           }),
                   ]),
                 ),
@@ -221,28 +232,6 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
         ));
-  }
-
-  Future signIn() async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim());
-    } on FirebaseAuthException catch (e) {
-      if (email == "") {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Enter email first! Please try again!')));
-      } else if (password == "") {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Cannot have an empty password! Please try again!')));
-      } else if (e.code == 'user-not-found') {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Wrong Email. Please try again!')));
-      } else if (e.code == 'wrong-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Wrong Password. Please try again!')));
-      }
-    }
   }
 }
 

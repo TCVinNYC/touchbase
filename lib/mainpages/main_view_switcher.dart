@@ -1,6 +1,7 @@
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/mainpages/eventsPage/events_page.dart';
+import 'package:lets_connect/mainpages/profilePage/profile_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -20,9 +21,7 @@ class _MainPageState extends State<MainPage> {
         child:
             Text('Add Page', style: TextStyle(fontSize: 60))), //ProfilePage(),
     const EventsPage(),
-    const Center(
-        child: Text('Profile Page',
-            style: TextStyle(fontSize: 60))), //ProfilePage(),
+    const ProfilePage(), //ProfilePage(),
   ];
 
   @override

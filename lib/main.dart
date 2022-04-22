@@ -7,17 +7,14 @@ import 'firebase_options.dart';
 //import 'src/authentication.dart';
 //import 'src/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
-import 'package:lets_connect/mainpages/signupPage/signup.dart';
-import 'package:lottie/lottie.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
