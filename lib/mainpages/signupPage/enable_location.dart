@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lets_connect/datamodels/location_model.dart';
+import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lottie/lottie.dart';
 import 'package:location/location.dart';
 
@@ -90,11 +92,8 @@ class _LocationPageState extends State<LocationPage> {
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15))),
-                  onPressed: ()  {
-                    _getUserLocation;
-                    if(_userLocation != null){
-                      print("dsf");
-                    }
+                  onPressed: () {
+                    getLocation();
                   },
                   child: const Text(
                     'Enable Location Services',
@@ -134,5 +133,20 @@ class _LocationPageState extends State<LocationPage> {
         )
       ]),
     );
+  }
+
+  void getLocation() async {
+    final service = LocationService();
+    final locationData = await service.getLocation();
+
+    if (locationData != null) {
+      final placeMark = await service.getPlaceMark(locationData: locationData);
+
+      setState(() {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const MainPage()),
+        );
+      });
+    }
   }
 }
