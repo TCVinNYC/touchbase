@@ -22,8 +22,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  String email = "";
-  String password = "";
 
   @override
   void dispose() {
@@ -45,8 +43,8 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.all(10),
                   child: Lottie.asset(
                     "assets/images/orange-coder.json",
-                    repeat: true,
-                    animate: true,
+                     repeat: true,
+                    // animate: true,
                     fit: BoxFit.fitWidth,
                   )),
               //Login Text
@@ -68,9 +66,6 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
                 child: TextField(
                   controller: emailController,
-                  onChanged: (text) {
-                    email = text;
-                  },
                   keyboardType: TextInputType.emailAddress,
                   // scrollPadding: EdgeInsets.only(bottom: 40),
                   decoration: const InputDecoration(
@@ -91,9 +86,6 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.fromLTRB(25, 5, 25, 15),
                 child: TextField(
                   controller: passwordController,
-                  onChanged: (text) {
-                    password = text;
-                  },
                   //scrollPadding: EdgeInsets.only(bottom: 40),
                   keyboardType: TextInputType.visiblePassword,
                   decoration: const InputDecoration(
@@ -118,8 +110,8 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(15))),
                   onPressed: () async {
                     User? user = await FireAuth.signInUsingEmailPassword(
-                      email: email.trim(),
-                      password: password.trim(),
+                      email: emailController.text.trim(),
+                      password: passwordController.text.trim(),
                       context: context,
                     );
                     if (user != null) {
