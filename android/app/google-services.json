@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "871129232474",
+    "project_id": "touchbase-b2faf",
+    "storage_bucket": "touchbase-b2faf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:871129232474:android:1909c6d86a92c8588a9463",
+        "android_client_info": {
+          "package_name": "com.example.lets_connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "871129232474-efseb17tm6ju15ontrohcj991h5llqgc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzDq6eb0gNR20uVPWh_eYi-t8fQutCGqA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "871129232474-efseb17tm6ju15ontrohcj991h5llqgc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "871129232474-n3avlap91b5s03ra29n2uukmqcokduvv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.letsConnect"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
