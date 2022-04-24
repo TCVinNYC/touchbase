@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:lets_connect/firebase/fire_auth.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -21,8 +22,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  String email = "";
-  String password = "";
 
   @override
   void dispose() {
@@ -44,8 +43,8 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.all(10),
                   child: Lottie.asset(
                     "assets/images/orange-coder.json",
-                    repeat: true,
-                    animate: true,
+                     repeat: true,
+                    // animate: true,
                     fit: BoxFit.fitWidth,
                   )),
               //Login Text
@@ -67,9 +66,6 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
                 child: TextField(
                   controller: emailController,
-                  onChanged: (text) {
-                    email = text;
-                  },
                   keyboardType: TextInputType.emailAddress,
                   // scrollPadding: EdgeInsets.only(bottom: 40),
                   decoration: const InputDecoration(
@@ -90,9 +86,6 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.fromLTRB(25, 5, 25, 15),
                 child: TextField(
                   controller: passwordController,
-                  onChanged: (text) {
-                    password = text;
-                  },
                   //scrollPadding: EdgeInsets.only(bottom: 40),
                   keyboardType: TextInputType.visiblePassword,
                   decoration: const InputDecoration(
@@ -116,7 +109,17 @@ class _LoginPageState extends State<LoginPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15))),
                   onPressed: () async {
-                    signIn();
+                    User? user = await FireAuth.signInUsingEmailPassword(
+                      email: emailController.text.trim(),
+                      password: passwordController.text.trim(),
+                      context: context,
+                    );
+                    if (user != null) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) => const MainPage()),
+                      );
+                    }
                   },
                   child: const Text(
                     'Login',
@@ -210,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const SignUp()));
+                                builder: (context) => SignUp()));
                           }),
                   ]),
                 ),
@@ -221,28 +224,6 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
         ));
-  }
-
-  Future signIn() async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim());
-    } on FirebaseAuthException catch (e) {
-      if (email == "") {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Enter email first! Please try again!')));
-      } else if (password == "") {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Cannot have an empty password! Please try again!')));
-      } else if (e.code == 'user-not-found') {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Wrong Email. Please try again!')));
-      } else if (e.code == 'wrong-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Wrong Password. Please try again!')));
-      }
-    }
   }
 }
 
