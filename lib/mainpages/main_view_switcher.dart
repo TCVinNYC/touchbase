@@ -17,11 +17,11 @@ class _MainPageState extends State<MainPage> {
     const Center(
         child: Text('Connect Page',
             style: TextStyle(fontSize: 60))), //ConnectPage(),
-    const Center(
-        child:
-            Text('Add Page', style: TextStyle(fontSize: 60))), //ProfilePage(),
+    // const Center(
+    //     child:
+    //         Text('Add Page', style: TextStyle(fontSize: 60))), 
     const EventsPage(),
-    const ProfilePage(), //ProfilePage(),
+    const ProfilePage(),
   ];
 
   @override
@@ -49,9 +49,9 @@ class _MainPageState extends State<MainPage> {
               child: GNav(
                 rippleColor: Colors.orangeAccent,
                 hoverColor: Colors.orangeAccent,
-                gap: 8,
+                gap: 1,
                 activeColor: Colors.white,
-                iconSize: 24,
+                iconSize: 25,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
                 duration: const Duration(milliseconds: 200),
@@ -65,10 +65,6 @@ class _MainPageState extends State<MainPage> {
                   GButton(
                     icon: Icons.public_rounded,
                     text: 'Connect',
-                  ),
-                  GButton(
-                    icon: Icons.add,
-                    text: 'Upload',
                   ),
                   GButton(
                     icon: Icons.event_available_rounded,

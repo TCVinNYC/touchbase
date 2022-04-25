@@ -1,6 +1,6 @@
 // let poster choose category
 import 'package:equatable/equatable.dart';
-import 'package:lets_connect/datamodels/category_model.dart';
+import 'package:lets_connect/datamodels/category.dart';
 
 class CategoryFilter extends Equatable {
   final int id;

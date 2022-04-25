@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // ignore: unused_import
-import 'package:lets_connect/datamodels/category_model.dart';
+import 'package:lets_connect/datamodels/category.dart';
 import '../../datamodels/price_model.dart';
 import 'package:chip_list/chip_list.dart';
 import 'package:intl/intl.dart';
@@ -16,15 +16,15 @@ class _EventsPageState extends State<FilterEventsPage>
   bool _value = false;
   double val = 20;
 
-  TimeOfDay? startTime2 = TimeOfDay.now();
-  TimeOfDay? endTime2 = TimeOfDay(hour: 11, minute: 59);
-  late String? startTime2_formatted = startTime2?.format(context);
-  late String? endTime2_formatted = endTime2?.format(context);
+  TimeOfDay? startTime = TimeOfDay.now();
+  TimeOfDay? endTime = TimeOfDay(hour: 11, minute: 59);
+  late String? startTime_formatted = startTime?.format(context);
+  late String? endTime_formatted = endTime?.format(context);
 
-  DateTime _starttime = DateTime.now();
-  DateTime _endtime = DateTime.now().add(Duration(days: 365));
-  late String starttime_formatted = DateFormat.yMd().format(_starttime);
-  late String endtime_formatted = DateFormat.yMd().format(_endtime);
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now().add(Duration(days: 365));
+  late String starttime_formatted = DateFormat.yMd().format(startDate);
+  late String endtime_formatted = DateFormat.yMd().format(endDate);
 
   final _errordate = const SnackBar(
       content: Text('Cannot have end date before the selected start date!'));
@@ -34,14 +34,14 @@ class _EventsPageState extends State<FilterEventsPage>
   _selectStartDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _starttime, // Refer step 1
+      initialDate: startDate, // Refer step 1
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
     );
-    if (picked != null && picked != _starttime) {
+    if (picked != null && picked != startDate) {
       setState(() {
-        _starttime = picked;
-        starttime_formatted = DateFormat.yMd().format(_starttime);
+        startDate = picked;
+        starttime_formatted = DateFormat.yMd().format(startDate);
       });
     }
   }
@@ -49,16 +49,16 @@ class _EventsPageState extends State<FilterEventsPage>
   _selectEndDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _endtime, // Refer step 1
+      initialDate: endDate, // Refer step 1
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
     );
-    if (picked != null && picked != _starttime) {
+    if (picked != null && picked != startDate) {
       setState(() {
-        _endtime = picked;
-        //var tempDifference = _endtime.subtract)
-        if (_starttime.isBefore(_endtime)) {
-          endtime_formatted = DateFormat.yMd().format(_endtime);
+        endDate = picked;
+        //var tempDifference = endDate.subtract)
+        if (startDate.isBefore(endDate)) {
+          endtime_formatted = DateFormat.yMd().format(endDate);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(_errordate);
         }
@@ -68,6 +68,7 @@ class _EventsPageState extends State<FilterEventsPage>
 
   @override
   Widget build(BuildContext context) {
+    var priceEnable;
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -107,7 +108,6 @@ class _EventsPageState extends State<FilterEventsPage>
                       fontFamily: 'Quicksand',
                       fontWeight: FontWeight.w600,
                       fontSize: 18)),
-              // CustomPriceFilter(),
               CustomPriceFilter(prices: Price.prices),
               const Divider(
                 height: 20,
@@ -122,7 +122,7 @@ class _EventsPageState extends State<FilterEventsPage>
                       fontFamily: 'Quicksand',
                       fontWeight: FontWeight.w600,
                       fontSize: 18)),
-              CustomCategoryFiler(),
+              CustomCategoryFiler(enableMultiselect: true),
               const Divider(
                 height: 20,
                 thickness: 0.5,
@@ -146,7 +146,7 @@ class _EventsPageState extends State<FilterEventsPage>
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Color.fromARGB(
+                        primary: const Color.fromARGB(
                             225, 255, 183, 0), // Background color
                       ),
                       //style: ButtonStyle(backgroundColor: Colors.orange),
@@ -168,7 +168,7 @@ class _EventsPageState extends State<FilterEventsPage>
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Color.fromARGB(
+                        primary: const Color.fromARGB(
                             225, 255, 183, 0), // Background color
                       ),
                       onPressed: () {
@@ -263,15 +263,15 @@ class _EventsPageState extends State<FilterEventsPage>
                       ),
                       onPressed: () async {
                         TimeOfDay? newTime = await showTimePicker(
-                            context: context, initialTime: startTime2!);
+                            context: context, initialTime: startTime!);
                         if (newTime != null) {
                           setState(() {
-                            startTime2 = newTime;
-                            startTime2_formatted = startTime2?.format(context);
+                            startTime = newTime;
+                            startTime_formatted = startTime?.format(context);
                           });
                         }
                       },
-                      child: Text(startTime2_formatted.toString(),
+                      child: Text(startTime_formatted.toString(),
                           style: const TextStyle(
                             fontWeight: FontWeight.w400,
                             fontFamily: 'QuickSand',
@@ -292,16 +292,16 @@ class _EventsPageState extends State<FilterEventsPage>
                       onPressed: () async {
                         TimeOfDay? newTime = await showTimePicker(
                           context: context,
-                          initialTime: endTime2!,
+                          initialTime: endTime!,
                         );
                         if (newTime != null) {
                           setState(() {
-                            endTime2 = newTime;
-                            endTime2_formatted = endTime2?.format(context);
+                            endTime = newTime;
+                            endTime_formatted = endTime?.format(context);
                           });
                         }
                       },
-                      child: Text(endTime2_formatted.toString(),
+                      child: Text(endTime_formatted.toString(),
                           style: const TextStyle(
                             fontWeight: FontWeight.w400,
                             fontFamily: 'QuickSand',
@@ -318,13 +318,27 @@ class _EventsPageState extends State<FilterEventsPage>
                 endIndent: 0,
                 color: Colors.grey,
               ),
-              const Text('Age Range',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18)),
-              CustomAgeFilter(),
+            Row(
+              children: [
+                const Text('Only for 21+?',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Quicksand',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18)),
+                const Spacer(),
+                Switch(
+                  value: priceEnable,
+                  onChanged: (value) {
+                    setState(() {
+                      priceEnable = value;
+                    });
+                  },
+                  activeTrackColor: Colors.orangeAccent,
+                  activeColor: Colors.orange,
+                ),
+              ],
+            ),
             ],
           ),
         ),
@@ -334,26 +348,28 @@ class _EventsPageState extends State<FilterEventsPage>
 }
 
 class CustomCategoryFiler extends StatelessWidget {
-  final List<String> categories = [
-    "tech",
-    "startup",
-    "new friends",
-    "college",
-    "art",
-    "acting",
-    "reading",
-    "marketing",
-    "finance",
-    "trading",
-    "business",
-    "leadership",
-    "cars",
-    "energy",
-    "social issues",
-    "dancing"
-  ];
 
-  CustomCategoryFiler({Key? key}) : super(key: key);
+  final List<String> categories = [
+    "Arts & Entertainment",
+    "Business & Career",
+    "Communities & Lifestyles",
+    "Cultures & Languages",
+    "Health & Support",
+    "Hobbies",
+    "Internet & Technology",
+    "Parenting & Family",
+    "Pets & Animals",
+    "Politics & Activism",
+    "Religion & Beliefs",
+    "Science",
+    "Social",
+    "Sports & Recreation",
+    "Education",
+    "Other"
+  ];
+    late bool enableMultiselect;
+
+  CustomCategoryFiler({Key? key, required this.enableMultiselect}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -370,8 +386,8 @@ class CustomCategoryFiler extends StatelessWidget {
               fontWeight: FontWeight.w500,
               fontSize: 15),
           listOfChipNames: categories,
-          listOfChipIndicesCurrentlySeclected: [],
-          supportsMultiSelect: true,
+          listOfChipIndicesCurrentlySeclected: enableMultiselect == true ? [] : [0],
+          supportsMultiSelect: enableMultiselect,
           borderRadiiList: const [5],
           activeBgColorList: const [Color.fromARGB(225, 255, 183, 0)],
           inactiveBgColorList: const [Colors.grey],
@@ -406,39 +422,6 @@ class CustomPriceFilter extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5)),
                   child: Text(
                     price.price,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w500),
-                  )),
-            ),
-          )
-          .toList(),
-    );
-  }
-}
-
-class CustomAgeFilter extends StatelessWidget {
-  final List ages = ['ANY', 'EVERYONE', '21+'];
-  CustomAgeFilter({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: ages
-          .map(
-            (ages) => InkWell(
-              onTap: () {},
-              child: Container(
-                  margin: const EdgeInsets.only(top: 15, bottom: 10),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Text(
-                    ages,
                     style: const TextStyle(
                         color: Colors.white,
                         fontFamily: 'Quicksand',
