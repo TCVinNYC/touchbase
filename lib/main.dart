@@ -25,9 +25,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Touchbase",
       theme: ThemeData(fontFamily: 'Frutiger'),
+      color: createMaterialColor(const Color.fromARGB(255, 255, 170, 12)),
       //  fontFamily: 'Frutiger',
       //primaryColor: createMaterialColor(const Color.fromARGB(255, 255, 170, 12)),
-
       //primarySwatch: createMaterialColor(Color.fromARGB(255, 255, 170, 12)),
       home: const MyHomePage(),
     );
@@ -36,8 +36,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
-  //final String title;
-
+  
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
