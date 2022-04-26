@@ -123,6 +123,7 @@ class AllEventsPage extends StatelessWidget {
         stream: getAllEvents(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
+            print(snapshot);
             return Text("Something when wrong!" + snapshot.error.toString());
           } else if (snapshot.hasData) {
             final events = snapshot.data!;
@@ -151,6 +152,7 @@ class YourEventsPage extends StatelessWidget {
             return Text("Something when wrong!" + snapshot.error.toString());
           } else if (snapshot.hasData) {
             final events = snapshot.data!;
+            print(events);
             return ListView(children: events.map(buildEventTemplate).toList());
           } else {
             return const Center(child: CircularProgressIndicator());
@@ -173,7 +175,7 @@ class PastEventsPage extends StatelessWidget {
         stream: getPastEvents(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text("Something when wrong!" + snapshot.error.toString());
+            return Text("Something when wrong!" + snapshot.toString());
           } else if (snapshot.hasData) {
             final events = snapshot.data!;
             return ListView(children: events.map(buildEventTemplate).toList());
@@ -284,7 +286,7 @@ Widget buildEventTemplate(Event event) => FractionallySizedBox(
                         color: Colors.blueAccent,
                       ),
                       Text(
-                        event.location,
+                        event.locationAddress,
                         style: TextStyle(
                             fontFamily: 'Quicksand',
                             color: Colors.blue.withOpacity(0.9),

@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.all(10),
                   child: Lottie.asset(
                     "assets/images/orange-coder.json",
-                     repeat: true,
+                    repeat: true,
                     // animate: true,
                     fit: BoxFit.fitWidth,
                   )),

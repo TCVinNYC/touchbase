@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lets_connect/widgets/custom_category.dart';
 // ignore: unused_import
-import 'package:lets_connect/datamodels/category.dart';
 import '../../datamodels/price_model.dart';
 import 'package:chip_list/chip_list.dart';
 import 'package:intl/intl.dart';
@@ -66,9 +66,11 @@ class _EventsPageState extends State<FilterEventsPage>
     }
   }
 
+  List<String> selectedCategories = [];
+
   @override
   Widget build(BuildContext context) {
-    var priceEnable;
+    var priceEnable = false;
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -122,7 +124,10 @@ class _EventsPageState extends State<FilterEventsPage>
                       fontFamily: 'Quicksand',
                       fontWeight: FontWeight.w600,
                       fontSize: 18)),
-              CustomCategoryFiler(enableMultiselect: true),
+              CustomCategory(
+                enableMultiselect: true,
+                selectedCategories: selectedCategories,
+              ),
               const Divider(
                 height: 20,
                 thickness: 0.5,
@@ -318,27 +323,27 @@ class _EventsPageState extends State<FilterEventsPage>
                 endIndent: 0,
                 color: Colors.grey,
               ),
-            Row(
-              children: [
-                const Text('Only for 21+?',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18)),
-                const Spacer(),
-                Switch(
-                  value: priceEnable,
-                  onChanged: (value) {
-                    setState(() {
-                      priceEnable = value;
-                    });
-                  },
-                  activeTrackColor: Colors.orangeAccent,
-                  activeColor: Colors.orange,
-                ),
-              ],
-            ),
+              Row(
+                children: [
+                  const Text('Only for 21+?',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'Quicksand',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18)),
+                  const Spacer(),
+                  Switch(
+                    value: priceEnable,
+                    onChanged: (value) {
+                      setState(() {
+                        priceEnable = value;
+                      });
+                    },
+                    activeTrackColor: Colors.orangeAccent,
+                    activeColor: Colors.orange,
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -347,92 +352,7 @@ class _EventsPageState extends State<FilterEventsPage>
   }
 }
 
-class CustomCategoryFiler extends StatelessWidget {
 
-  final List<String> categories = [
-    "Arts & Entertainment",
-    "Business & Career",
-    "Communities & Lifestyles",
-    "Cultures & Languages",
-    "Health & Support",
-    "Hobbies",
-    "Internet & Technology",
-    "Parenting & Family",
-    "Pets & Animals",
-    "Politics & Activism",
-    "Religion & Beliefs",
-    "Science",
-    "Social",
-    "Sports & Recreation",
-    "Education",
-    "Other"
-  ];
-    late bool enableMultiselect;
-
-  CustomCategoryFiler({Key? key, required this.enableMultiselect}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 10),
-      child: SizedBox(
-        width: 500,
-        child: ChipList(
-          shouldWrap: true,
-          runSpacing: 0,
-          spacing: 0,
-          style: const TextStyle(
-              fontFamily: 'Quicksand',
-              fontWeight: FontWeight.w500,
-              fontSize: 15),
-          listOfChipNames: categories,
-          listOfChipIndicesCurrentlySeclected: enableMultiselect == true ? [] : [0],
-          supportsMultiSelect: enableMultiselect,
-          borderRadiiList: const [5],
-          activeBgColorList: const [Color.fromARGB(225, 255, 183, 0)],
-          inactiveBgColorList: const [Colors.grey],
-          activeTextColorList: const [Colors.black],
-          inactiveTextColorList: const [Colors.white70],
-          activeBorderColorList: const [Colors.black12],
-          //inactiveBorderColorList: const [Colors.black54],
-        ),
-      ),
-    );
-  }
-}
-
-class CustomPriceFilter extends StatelessWidget {
-  final List<Price> prices;
-  const CustomPriceFilter({Key? key, required this.prices}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: prices
-          .map(
-            (price) => InkWell(
-              onTap: () {},
-              child: Container(
-                  margin: const EdgeInsets.only(top: 10, bottom: 10),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Text(
-                    price.price,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w500),
-                  )),
-            ),
-          )
-          .toList(),
-    );
-  }
-}
 
 // class CustomDateFilter extends StatelessWidget {
 //   CustomDateFilter({Key? key}) : super(key: key);

@@ -29,7 +29,7 @@ class EventNotifier with ChangeNotifier {
   }
 
   deleteEvent(Event Event) {
-    _EventList.removeWhere((_Event) => _Event.documentId == Event.documentId);
+    _EventList.removeWhere((_Event) => _Event.documentID == Event.documentID);
     notifyListeners();
   }
 }
