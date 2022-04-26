@@ -61,8 +61,6 @@ class _CreateEventState extends State<CreateEventPage> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
     bool priceEnable = false;
     bool adultEnable = false;
     return Scaffold(
