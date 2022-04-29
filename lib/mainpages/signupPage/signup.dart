@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lets_connect/mainpages/signupPage/background.dart';
+
+import 'package:lets_connect/mainpages/signupPage/signup_image.dart';
+
 import 'package:lets_connect/firebase/fire_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lets_connect/mainpages/signupPage/enable_location.dart';
@@ -22,6 +25,77 @@ class SignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    return Background(
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
+          Widget>[
+        Container(
+          padding: const EdgeInsets.only(right: 35, left: 35, bottom: 45),
+          child: const Text(
+            'Create Account',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 40,
+            ),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.only(right: 35, left: 35, bottom: 7),
+          child: TextField(
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: const Color.fromARGB(187, 255, 240, 206),
+                hintText: 'Name',
+                prefixIcon: const Icon(Icons.person_rounded),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(),
+                  borderRadius: BorderRadius.circular(10),
+                )),
+          ),
+        ),
+        Container(
+            padding:
+                const EdgeInsets.only(top: 7, right: 35, left: 35, bottom: 7),
+            child: TextField(
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white70,
+                    hintText: 'Email',
+                    prefixIcon: const Icon(Icons.alternate_email),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(),
+                      borderRadius: BorderRadius.circular(10),
+                    )))),
+        Container(
+            padding:
+                const EdgeInsets.only(top: 7, right: 35, left: 35, bottom: 50),
+            child: TextField(
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white70,
+                    hintText: 'Create Password',
+                    prefixIcon: const Icon(Icons.lock),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(),
+                      borderRadius: BorderRadius.circular(10),
+                    )))),
+        SizedBox(
+            height: 50,
+            width: 260,
+            // width: MediaQuery.of(context).size.width / 1.5,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const SignUpImage()));
+              },
+              child: const Text('Sign Up',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              )),
+            )),
+
     return Scaffold(
       // backgroundColor: const Background(),
       body: Stack(children: <Widget>[
@@ -204,10 +278,13 @@ class SignUp extends StatelessWidget {
             elevation: 0, //No shadow
           ),
         ),
+
       ]),
     );
   }
 }
+
+
 
           // Container(
           //     padding:

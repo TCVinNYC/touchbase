@@ -25,9 +25,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Touchbase",
       theme: ThemeData(fontFamily: 'Frutiger'),
+
+   
+
+
       color: createMaterialColor(const Color.fromARGB(255, 255, 170, 12)),
       //fontFamily: 'Frutiger',
       //primaryColor: createMaterialColor(const Color.fromARGB(255, 255, 170, 12)),
+
       //primarySwatch: createMaterialColor(Color.fromARGB(255, 255, 170, 12)),
       home: const MyHomePage(),
     );
