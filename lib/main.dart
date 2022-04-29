@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: "Let's Connect",
       theme: ThemeData(fontFamily: 'Frutiger'),
       //  fontFamily: 'Frutiger',
-      //primaryColor: createMaterialColor(const Color.fromARGB(255, 255, 170, 12)),
+      // primaryColor: createMaterialColor(Color.fromRGBO(255, 170, 12, 1)),
 
       //primarySwatch: createMaterialColor(Color.fromARGB(255, 255, 170, 12)),
       home: const MyHomePage(),
