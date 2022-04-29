@@ -451,7 +451,7 @@ class _CreateEventState extends State<CreateEventPage> {
                         priceController.text = "0";
                       }
                       String name = FirebaseAuth
-                          .instance.currentUser!.displayName as String;
+                          .instance.currentUser!.displayName.toString();
                       //String title = "title";
                       String userID = FirebaseAuth.instance.currentUser!.uid;
                       List<String> host = [name, "title", userID];

@@ -22,7 +22,7 @@ class ProfilePage extends StatelessWidget {
 
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (context) => LoginPage(),
+                  builder: (context) => const MyHomePage(),
                 ),
               );
             },

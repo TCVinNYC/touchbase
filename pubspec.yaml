@@ -52,6 +52,9 @@ dependencies:
   path_provider: ^2.0.9
   firebase_storage: ^10.2.13
   uuid: ^3.0.6
+  firebase_storage_web: ^3.2.13
+  firebase_image: ^1.1.1
+  maps_launcher: ^2.0.1
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:lets_connect/widgets/custom_category.dart';
 // ignore: unused_import
@@ -13,58 +15,6 @@ class FilterEventsPage extends StatefulWidget {
 
 class _EventsPageState extends State<FilterEventsPage>
     with TickerProviderStateMixin {
-  bool _value = false;
-  double val = 20;
-
-  TimeOfDay? startTime = TimeOfDay.now();
-  TimeOfDay? endTime = TimeOfDay(hour: 11, minute: 59);
-  late String? startTime_formatted = startTime?.format(context);
-  late String? endTime_formatted = endTime?.format(context);
-
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now().add(Duration(days: 365));
-  late String starttime_formatted = DateFormat.yMd().format(startDate);
-  late String endtime_formatted = DateFormat.yMd().format(endDate);
-
-  final _errordate = const SnackBar(
-      content: Text('Cannot have end date before the selected start date!'));
-  final _errortime = const SnackBar(
-      content: Text('Cannot have end time before the selected start time!'));
-
-  _selectStartDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: startDate, // Refer step 1
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
-    );
-    if (picked != null && picked != startDate) {
-      setState(() {
-        startDate = picked;
-        starttime_formatted = DateFormat.yMd().format(startDate);
-      });
-    }
-  }
-
-  _selectEndDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: endDate, // Refer step 1
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
-    );
-    if (picked != null && picked != startDate) {
-      setState(() {
-        endDate = picked;
-        //var tempDifference = endDate.subtract)
-        if (startDate.isBefore(endDate)) {
-          endtime_formatted = DateFormat.yMd().format(endDate);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(_errordate);
-        }
-      });
-    }
-  }
 
   List<String> selectedCategories = [];
 
@@ -350,86 +300,53 @@ class _EventsPageState extends State<FilterEventsPage>
       ),
     );
   }
+  double val = 20;
+
+  TimeOfDay? startTime = TimeOfDay.now();
+  TimeOfDay? endTime = const TimeOfDay(hour: 11, minute: 59);
+  late String? startTime_formatted = startTime?.format(context);
+  late String? endTime_formatted = endTime?.format(context);
+
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now().add(const Duration(days: 365));
+  late String starttime_formatted = DateFormat.yMd().format(startDate);
+  late String endtime_formatted = DateFormat.yMd().format(endDate);
+
+  final _errordate = const SnackBar(
+      content: Text('Cannot have end date before the selected start date!'));
+
+  _selectStartDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: startDate, // Refer step 1
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+    if (picked != null && picked != startDate) {
+      setState(() {
+        startDate = picked;
+        starttime_formatted = DateFormat.yMd().format(startDate);
+      });
+    }
+  }
+
+  _selectEndDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: endDate, // Refer step 1
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+    if (picked != null && picked != startDate) {
+      setState(() {
+        endDate = picked;
+        //var tempDifference = endDate.subtract)
+        if (startDate.isBefore(endDate)) {
+          endtime_formatted = DateFormat.yMd().format(endDate);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(_errordate);
+        }
+      });
+    }
+  }
 }
-
-
-
-// class CustomDateFilter extends StatelessWidget {
-//   CustomDateFilter({Key? key}) : super(key: key);
-//   DateTime beginning = DateTime.now();
-//   DateTime future = DateTime.now().add(Duration(days: 365));
-//   late final String _begginingFormatted = DateFormat.yMMMMd().format(beginning);
-//   late final String _futureFormatted = DateFormat.yMMMMd().format(future);
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       crossAxisAlignment: CrossAxisAlignment.center,
-//       children: [
-//         // Text("Start: "),
-//         Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: ElevatedButton(
-//             onPressed: () {
-//               Scaffold(
-//                   body: Container(
-//                 child: SfDateRangePicker(),
-//               ));
-//             },
-//             child: Text(_begginingFormatted.toString()),
-//           ),
-//         ),
-//         const Text("─",
-//             style: TextStyle(fontSize: 13, fontWeight: FontWeight.w100)),
-//         Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: ElevatedButton(
-//             onPressed: () {},
-//             child: Text(_futureFormatted.toString()),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
-
-
-
-// class CustomPriceFilter extends StatelessWidget {
-//   final List<String> categories = [
-//     "ANY",
-//     "FREE",
-//     "\$\$\$",
-//   ];
-//   CustomPriceFilter({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 10),
-//       child: SizedBox(
-//         width: 500,
-//         child: ChipList(
-//           shouldWrap: true,
-//           runSpacing: 5,
-//           spacing: 0,
-//           style: const TextStyle(
-//               color: Colors.white,
-//               fontFamily: 'Quicksand',
-//               fontWeight: FontWeight.bold),
-//           listOfChipNames: categories,
-//           listOfChipIndicesCurrentlySeclected: [0],
-//           supportsMultiSelect: false,
-//           borderRadiiList: const [10],
-//           activeBgColorList: const [Colors.orange],
-//           inactiveBgColorList: const [Colors.grey],
-//           activeTextColorList: const [Colors.white],
-//           inactiveTextColorList: const [Colors.white70],
-//           activeBorderColorList: const [Colors.black12],
-//           //inactiveBorderColorList: const [Colors.black54],
-//         ),
-//       ),
-//     );
-//   }
-// }
