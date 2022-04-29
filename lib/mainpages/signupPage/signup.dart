@@ -25,77 +25,6 @@ class SignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return Background(
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
-          Widget>[
-        Container(
-          padding: const EdgeInsets.only(right: 35, left: 35, bottom: 45),
-          child: const Text(
-            'Create Account',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 40,
-            ),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.only(right: 35, left: 35, bottom: 7),
-          child: TextField(
-            decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color.fromARGB(187, 255, 240, 206),
-                hintText: 'Name',
-                prefixIcon: const Icon(Icons.person_rounded),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(),
-                  borderRadius: BorderRadius.circular(10),
-                )),
-          ),
-        ),
-        Container(
-            padding:
-                const EdgeInsets.only(top: 7, right: 35, left: 35, bottom: 7),
-            child: TextField(
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white70,
-                    hintText: 'Email',
-                    prefixIcon: const Icon(Icons.alternate_email),
-                    border: OutlineInputBorder(
-                      borderSide: const BorderSide(),
-                      borderRadius: BorderRadius.circular(10),
-                    )))),
-        Container(
-            padding:
-                const EdgeInsets.only(top: 7, right: 35, left: 35, bottom: 50),
-            child: TextField(
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white70,
-                    hintText: 'Create Password',
-                    prefixIcon: const Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderSide: const BorderSide(),
-                      borderRadius: BorderRadius.circular(10),
-                    )))),
-        SizedBox(
-            height: 50,
-            width: 260,
-            // width: MediaQuery.of(context).size.width / 1.5,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const SignUpImage()));
-              },
-              child: const Text('Sign Up',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              )),
-            )),
-
     return Scaffold(
       // backgroundColor: const Background(),
       body: Stack(children: <Widget>[
@@ -177,8 +106,6 @@ class SignUp extends StatelessWidget {
                       password: passwordController.text.trim(),
                       name: nameController.text.trim(),
                       context: context,
-                      //  title: title.trim(),
-                      // company: company.trim(),
                     );
                     if (user != null) {
                       Navigator.of(context).pushReplacement(
@@ -280,54 +207,6 @@ class SignUp extends StatelessWidget {
         ),
 
       ]),
-    );
+      );
   }
 }
-
-
-
-          // Container(
-          //     padding:
-          //         const EdgeInsets.only(top: 10, right: 35, left: 35, bottom: 10),
-          //     child: TextField(
-          //         decoration: InputDecoration(
-          //             filled: true,
-          //             fillColor: Colors.white70,
-          //             hintText: 'Pronouns (Optional)',
-          //             // prefixIcon: const Icon(Icons.person_rounded),
-          //             border: OutlineInputBorder(
-          //               borderSide: const BorderSide(),
-          //               borderRadius: BorderRadius.circular(20),
-          //             )))),
-
-
-                        // Container(
-              //   padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-              //   child: TextField(
-              //     controller: titleController,
-              //     decoration: InputDecoration(
-              //       filled: true,
-              //       fillColor: Colors.white70,
-              //       hintText: 'Title',
-              //       prefixIcon: const Icon(Icons.content_paste_rounded),
-              //       border: OutlineInputBorder(
-              //         borderSide: const BorderSide(),
-              //         borderRadius: BorderRadius.circular(7),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // Container(
-              //   padding: const EdgeInsets.fromLTRB(25, 5, 25, 40),
-              //   child: TextField(
-              //       controller: companyController,
-              //       decoration: InputDecoration(
-              //           filled: true,
-              //           fillColor: Colors.white70,
-              //           hintText: 'Company',
-              //           prefixIcon: const Icon(Icons.work_rounded),
-              //           border: OutlineInputBorder(
-              //             borderSide: const BorderSide(),
-              //             borderRadius: BorderRadius.circular(7),
-              //           ))),
-              // ),

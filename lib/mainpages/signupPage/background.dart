@@ -44,7 +44,6 @@ class Background extends StatelessWidget {
                 scale: 1.9,
               ),
             ),
-          //  child,
           ],
         ),
     );

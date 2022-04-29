@@ -1,15 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:lets_connect/mainpages/profilePage/account_info.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_info.dart';
 import 'package:lets_connect/mainpages/profilePage/side_menu_button.dart';
-=======
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/login_page.dart';
 import 'package:lets_connect/main.dart';
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
-
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -17,7 +14,6 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         title: const Text(
           'My Profile',
@@ -117,8 +113,14 @@ class ProfilePage extends StatelessWidget {
               const Divider(thickness: 1),
               // LOGOUT
               InkWell(
-                  onTap: () {
-                    //logout navigation
+                  onTap: () async {
+                    await FirebaseAuth.instance.signOut();
+
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const MyHomePage(),
+                      ),
+                    );
                   },
                   child: SideMenu(
                       icon: Icons.logout_rounded,
@@ -151,75 +153,3 @@ class ProfilePage extends StatelessWidget {
     );
   }
 }
-
-
-// class ProfilePage extends StatelessWidget {
-//   const ProfilePage({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         body: SingleChildScrollView(
-//       child: Stack(
-//         children: <Widget>[
-//           const InfoBody(),
-//           // const Positioned(
-//   bottom: 235,
-//   child: AboutMeCard(),
-// ),
-// Positioned(
-//     bottom: 60,
-//     child: SizedBox(
-//         width: MediaQuery.of(context).size.width,
-//         height: 160,
-//         // decoration: const BoxDecoration(
-//         //   color: Colors.grey,
-//         // ),
-//         child: Column(
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//             children: [
-//               GestureDetector(
-//                   onTap: () {
-//                     //redirect to account info form or whatever it is
-//                   },
-//                   child: const ProfileButton(
-//                       icon: Icons.account_circle_rounded,
-//                       text: 'Account Information')),
-//               GestureDetector(
-//                 onTap: () {
-//                   // redirect to settings form
-//                 },
-//                 child: const ProfileButton(
-//                     icon: Icons.settings_rounded, text: 'Settings'),
-//               ),
-//             ]))),
-//         ],
-//       ),
-//     ));
-//   }
-// }
-=======
-      resizeToAvoidBottomInset: false,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text('Profile Page', style: TextStyle(fontSize: 60)),
-          ElevatedButton(
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => const MyHomePage(),
-                ),
-              );
-            },
-            child: const Text('Logout'),
-          )
-        ],
-      ),
-    );
-  }
-}
-

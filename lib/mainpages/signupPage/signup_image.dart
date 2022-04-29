@@ -54,8 +54,6 @@ class SignUpImage extends StatelessWidget {
                 ))
           ],
         ),
-        // ],
-        // )
       ),
     );
   }

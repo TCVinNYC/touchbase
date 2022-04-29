@@ -3,9 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:lets_connect/login_page.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-
-//import 'src/authentication.dart';
-//import 'src/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
 
@@ -25,14 +22,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Touchbase",
       theme: ThemeData(fontFamily: 'Frutiger'),
-
-   
-
-
       color: createMaterialColor(const Color.fromARGB(255, 255, 170, 12)),
       //fontFamily: 'Frutiger',
       //primaryColor: createMaterialColor(const Color.fromARGB(255, 255, 170, 12)),
-
       //primarySwatch: createMaterialColor(Color.fromARGB(255, 255, 170, 12)),
       home: const MyHomePage(),
     );
