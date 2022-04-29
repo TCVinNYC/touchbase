@@ -1,7 +1,15 @@
+
 import 'package:flutter/material.dart';
 import 'package:lets_connect/mainpages/profilePage/account_info.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_info.dart';
 import 'package:lets_connect/mainpages/profilePage/side_menu_button.dart';
+=======
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:lets_connect/login_page.dart';
+import 'package:lets_connect/main.dart';
+import 'package:lets_connect/mainpages/main_view_switcher.dart';
+
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -9,6 +17,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         title: const Text(
           'My Profile',
@@ -189,3 +198,28 @@ class ProfilePage extends StatelessWidget {
 //     ));
 //   }
 // }
+=======
+      resizeToAvoidBottomInset: false,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text('Profile Page', style: TextStyle(fontSize: 60)),
+          ElevatedButton(
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => const MyHomePage(),
+                ),
+              );
+            },
+            child: const Text('Logout'),
+          )
+        ],
+      ),
+    );
+  }
+}
+
