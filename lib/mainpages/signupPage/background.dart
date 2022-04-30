@@ -6,46 +6,45 @@ class Background extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Positioned(
-              bottom: -100,
-              left: -70,
-              child: Image.asset(
-                "assets/images/signup_bg1.png",
-                scale: 1.2,
-              ),
+        alignment: Alignment.center,
+        children: <Widget>[
+          Positioned(
+            bottom: -100,
+            left: -70,
+            child: Image.asset(
+              "assets/images/signup_bg1.png",
+              scale: 1.2,
             ),
-            Positioned(
-              top: -80,
-              right: -50,
-              child: Image.asset(
-                "assets/images/signup_bg2.png",
-                scale: 1.8,
-              ),
+          ),
+          Positioned(
+            top: -80,
+            right: -50,
+            child: Image.asset(
+              "assets/images/signup_bg2.png",
+              scale: 1.8,
             ),
-            Positioned(
-              top: 70,
-              left: -140,
-              child: Image.asset(
-                "assets/images/signup_bg3.png",
-                scale: 1.7,
-              ),
+          ),
+          Positioned(
+            top: 70,
+            left: -140,
+            child: Image.asset(
+              "assets/images/signup_bg3.png",
+              scale: 1.7,
             ),
-            Positioned(
-              bottom: 230,
-              right: -120,
-              child: Image.asset(
-                "assets/images/signup_bg4.png",
-                scale: 1.9,
-              ),
+          ),
+          Positioned(
+            bottom: 230,
+            right: -120,
+            child: Image.asset(
+              "assets/images/signup_bg4.png",
+              scale: 1.9,
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 }
