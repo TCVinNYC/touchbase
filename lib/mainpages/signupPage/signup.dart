@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lets_connect/mainpages/signupPage/background.dart';
+
+import 'package:lets_connect/mainpages/signupPage/signup_image.dart';
+
 import 'package:lets_connect/firebase/fire_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lets_connect/mainpages/signupPage/enable_location.dart';
@@ -103,8 +106,6 @@ class SignUp extends StatelessWidget {
                       password: passwordController.text.trim(),
                       name: nameController.text.trim(),
                       context: context,
-                      //  title: title.trim(),
-                      // company: company.trim(),
                     );
                     if (user != null) {
                       Navigator.of(context).pushReplacement(
@@ -204,53 +205,8 @@ class SignUp extends StatelessWidget {
             elevation: 0, //No shadow
           ),
         ),
+
       ]),
-    );
+      );
   }
 }
-
-          // Container(
-          //     padding:
-          //         const EdgeInsets.only(top: 10, right: 35, left: 35, bottom: 10),
-          //     child: TextField(
-          //         decoration: InputDecoration(
-          //             filled: true,
-          //             fillColor: Colors.white70,
-          //             hintText: 'Pronouns (Optional)',
-          //             // prefixIcon: const Icon(Icons.person_rounded),
-          //             border: OutlineInputBorder(
-          //               borderSide: const BorderSide(),
-          //               borderRadius: BorderRadius.circular(20),
-          //             )))),
-
-
-                        // Container(
-              //   padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-              //   child: TextField(
-              //     controller: titleController,
-              //     decoration: InputDecoration(
-              //       filled: true,
-              //       fillColor: Colors.white70,
-              //       hintText: 'Title',
-              //       prefixIcon: const Icon(Icons.content_paste_rounded),
-              //       border: OutlineInputBorder(
-              //         borderSide: const BorderSide(),
-              //         borderRadius: BorderRadius.circular(7),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // Container(
-              //   padding: const EdgeInsets.fromLTRB(25, 5, 25, 40),
-              //   child: TextField(
-              //       controller: companyController,
-              //       decoration: InputDecoration(
-              //           filled: true,
-              //           fillColor: Colors.white70,
-              //           hintText: 'Company',
-              //           prefixIcon: const Icon(Icons.work_rounded),
-              //           border: OutlineInputBorder(
-              //             borderSide: const BorderSide(),
-              //             borderRadius: BorderRadius.circular(7),
-              //           ))),
-              // ),

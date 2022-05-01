@@ -1,112 +1,68 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lets_connect/mainpages/eventsPage/events_page.dart';
+import 'package:path/path.dart';
+import 'package:uuid/uuid.dart';
 
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 var today = DateFormat("MMMM, dd, yyyy").format(DateTime.now());
 
-// getEvents()  {
-//   Stream<QuerySnapshot> snapshot =  FirebaseFirestore.instance
-//       .collection('events')
-//       .where('date', isGreaterThanOrEqualTo: today)
-//       .snapshots();
+Future<String> uploadEvent(
+  String sessionTitle,
+  DateTime time,
+  String description,
+  String locationName,
+  String locationAddress,
+  String price,
+  bool paid,
+  String category,
+  bool age,
+  List<String> host,
+  File image,
+) async {
+  CollectionReference ref = FirebaseFirestore.instance.collection('events');
+  String docID = FirebaseFirestore.instance.collection('events').doc().id;
+  String url = await uploadImage(image, "events");
+  if (url != "error") {
+    await ref.doc(docID).set({
+      'id': docID,
+      'sessionTitle': sessionTitle,
+      'time': time,
+      'imageURL': url,
+      'description': description,
+      'locationName': locationName,
+      'locationAddress': locationAddress,
+      'price': price,
+      'paid': paid,
+      'category': category,
+      'age': age,
+      'host': host,
+    });
+    print("done");
+    return "done";
+  } else {
+    print("broke");
+    return ("Some error occured, please try again!");
+  }
+}
 
+Future<String> uploadImage(File file, String baseFolder) async {
+  final userID = FirebaseAuth.instance.currentUser!.uid;
+  final fileName = basename(file.path);
+  final destination = '$baseFolder/$userID/$fileName';
 
-//   return  StreamBuilder<QuerySnapshot>(
-//   stream: snapshot,
-//   builder: (context, snapshot) {
-//     if (!snapshot.hasData) return const LinearProgressIndicator();
-
-//     return buildEventsList(context, snapshot.data?.docs ?? []);
-//   });
-
-// }
-  // List<Event> _eventList = [];
-
-  // snapshot.forEach((document) {
-  //   Event food = Event.fromMap(document.data);
-  //   _eventList.add(food);
-  // });
-
-  // eventNotifier.eventList = _eventList;
-
-
-
-// getEventsList() {
-//   final Stream<QuerySnapshot> eventCollectionStream = FirebaseFirestore.instance
-//       .collection('events')
-      // .where('date', isGreaterThanOrEqualTo: today)
-      // .snapshots();
-
-//   return StreamBuilder<QuerySnapshot>(
-//       stream: eventCollectionStream,
-//       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-//         if (snapshot.hasError) {
-//           return Text('Something went wrong');
-//         }
-
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           return Text("Loading");
-//         }
-       
-
-//       });
-// }
-// getEventsList() {
-//   Stream eventCollections = FirebaseFirestore.instance
-// .collection('events')
-// .where('date', isGreaterThanOrEqualTo: today)
-//           .snapshots(),
-
-//       builder;
-//   (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-//     if (snapshot.hasError) {
-//       return Text("Something went wrong");
-//     }
-
-//     if (snapshot.hasData && !snapshot.data!.exists) {
-//       return Text("Document does not exist");
-//     }
-
-//     if (!snapshot.hasData) {
-//       return Text("loading");
-//     }
-
-//     if (snapshot.connectionState == ConnectionState.done) {
-//       return snapshot.data!.data() as Map<String, dynamic>;
-//       //Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-//       // return EventModel(id: 1, time: data['time'], sessionTitle: data['event_name'], coordinator: data['host'], attendees: data['attendees'], location: data['location']);
-//     }
-//   };
-// }
-
-// Stream<QuerySnapshot> getEventsList(BuildContext context) async* {
-//   yield* FirebaseFirestore.instance
-//       .collection('events')
-//       //.where('date', isGreaterThanOrEqualTo: today)
-//       .snapshots();
-
-// }
-
-  // return FutureBuilder<DocumentSnapshot>(
-  //   builder:
-  //       (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-
-  //     if (snapshot.hasError) {
-  //       return Text("Something went wrong!");
-  //     }
-
-  //     if (snapshot.hasData && !snapshot.data!.exists) {
-  //       return Text("No Events!");
-  //     }
-
-  //     if (snapshot.connectionState == ConnectionState.done) {
-  //       Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-  //       return Text("Full Name: ${data['full_name']} ${data['last_name']}");
-  //     }
-
-  //     return Text("loading");
-  //   },
-  // );
-
+  try {
+    final Reference ref = FirebaseStorage.instance.ref().child(destination);
+    await ref.putFile(file);
+    String url = await ref.getDownloadURL();
+    return url;
+  } on FirebaseException catch (e) {
+    print(e.stackTrace);
+    return ("error");
+  }
+}

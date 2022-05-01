@@ -1,6 +1,8 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
+import 'package:lets_connect/widgets/custom_category.dart';
 // ignore: unused_import
-import 'package:lets_connect/datamodels/category.dart';
 import '../../datamodels/price_model.dart';
 import 'package:chip_list/chip_list.dart';
 import 'package:intl/intl.dart';
@@ -13,62 +15,12 @@ class FilterEventsPage extends StatefulWidget {
 
 class _EventsPageState extends State<FilterEventsPage>
     with TickerProviderStateMixin {
-  bool _value = false;
-  double val = 20;
 
-  TimeOfDay? startTime = TimeOfDay.now();
-  TimeOfDay? endTime = TimeOfDay(hour: 11, minute: 59);
-  late String? startTime_formatted = startTime?.format(context);
-  late String? endTime_formatted = endTime?.format(context);
-
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now().add(Duration(days: 365));
-  late String starttime_formatted = DateFormat.yMd().format(startDate);
-  late String endtime_formatted = DateFormat.yMd().format(endDate);
-
-  final _errordate = const SnackBar(
-      content: Text('Cannot have end date before the selected start date!'));
-  final _errortime = const SnackBar(
-      content: Text('Cannot have end time before the selected start time!'));
-
-  _selectStartDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: startDate, // Refer step 1
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
-    );
-    if (picked != null && picked != startDate) {
-      setState(() {
-        startDate = picked;
-        starttime_formatted = DateFormat.yMd().format(startDate);
-      });
-    }
-  }
-
-  _selectEndDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: endDate, // Refer step 1
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
-    );
-    if (picked != null && picked != startDate) {
-      setState(() {
-        endDate = picked;
-        //var tempDifference = endDate.subtract)
-        if (startDate.isBefore(endDate)) {
-          endtime_formatted = DateFormat.yMd().format(endDate);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(_errordate);
-        }
-      });
-    }
-  }
+  List<String> selectedCategories = [];
 
   @override
   Widget build(BuildContext context) {
-    var priceEnable;
+    var priceEnable = false;
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -122,7 +74,10 @@ class _EventsPageState extends State<FilterEventsPage>
                       fontFamily: 'Quicksand',
                       fontWeight: FontWeight.w600,
                       fontSize: 18)),
-              CustomCategoryFiler(enableMultiselect: true),
+              CustomCategory(
+                enableMultiselect: true,
+                selectedCategories: selectedCategories,
+              ),
               const Divider(
                 height: 20,
                 thickness: 0.5,
@@ -318,198 +273,80 @@ class _EventsPageState extends State<FilterEventsPage>
                 endIndent: 0,
                 color: Colors.grey,
               ),
-            Row(
-              children: [
-                const Text('Only for 21+?',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18)),
-                const Spacer(),
-                Switch(
-                  value: priceEnable,
-                  onChanged: (value) {
-                    setState(() {
-                      priceEnable = value;
-                    });
-                  },
-                  activeTrackColor: Colors.orangeAccent,
-                  activeColor: Colors.orange,
-                ),
-              ],
-            ),
+              Row(
+                children: [
+                  const Text('Only for 21+?',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'Quicksand',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18)),
+                  const Spacer(),
+                  Switch(
+                    value: priceEnable,
+                    onChanged: (value) {
+                      setState(() {
+                        priceEnable = value;
+                      });
+                    },
+                    activeTrackColor: Colors.orangeAccent,
+                    activeColor: Colors.orange,
+                  ),
+                ],
+              ),
             ],
           ),
         ),
       ),
     );
   }
-}
+  double val = 20;
 
-class CustomCategoryFiler extends StatelessWidget {
+  TimeOfDay? startTime = TimeOfDay.now();
+  TimeOfDay? endTime = const TimeOfDay(hour: 11, minute: 59);
+  late String? startTime_formatted = startTime?.format(context);
+  late String? endTime_formatted = endTime?.format(context);
 
-  final List<String> categories = [
-    "Arts & Entertainment",
-    "Business & Career",
-    "Communities & Lifestyles",
-    "Cultures & Languages",
-    "Health & Support",
-    "Hobbies",
-    "Internet & Technology",
-    "Parenting & Family",
-    "Pets & Animals",
-    "Politics & Activism",
-    "Religion & Beliefs",
-    "Science",
-    "Social",
-    "Sports & Recreation",
-    "Education",
-    "Other"
-  ];
-    late bool enableMultiselect;
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now().add(const Duration(days: 365));
+  late String starttime_formatted = DateFormat.yMd().format(startDate);
+  late String endtime_formatted = DateFormat.yMd().format(endDate);
 
-  CustomCategoryFiler({Key? key, required this.enableMultiselect}) : super(key: key);
+  final _errordate = const SnackBar(
+      content: Text('Cannot have end date before the selected start date!'));
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 10),
-      child: SizedBox(
-        width: 500,
-        child: ChipList(
-          shouldWrap: true,
-          runSpacing: 0,
-          spacing: 0,
-          style: const TextStyle(
-              fontFamily: 'Quicksand',
-              fontWeight: FontWeight.w500,
-              fontSize: 15),
-          listOfChipNames: categories,
-          listOfChipIndicesCurrentlySeclected: enableMultiselect == true ? [] : [0],
-          supportsMultiSelect: enableMultiselect,
-          borderRadiiList: const [5],
-          activeBgColorList: const [Color.fromARGB(225, 255, 183, 0)],
-          inactiveBgColorList: const [Colors.grey],
-          activeTextColorList: const [Colors.black],
-          inactiveTextColorList: const [Colors.white70],
-          activeBorderColorList: const [Colors.black12],
-          //inactiveBorderColorList: const [Colors.black54],
-        ),
-      ),
+  _selectStartDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: startDate, // Refer step 1
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
     );
+    if (picked != null && picked != startDate) {
+      setState(() {
+        startDate = picked;
+        starttime_formatted = DateFormat.yMd().format(startDate);
+      });
+    }
+  }
+
+  _selectEndDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: endDate, // Refer step 1
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+    if (picked != null && picked != startDate) {
+      setState(() {
+        endDate = picked;
+        //var tempDifference = endDate.subtract)
+        if (startDate.isBefore(endDate)) {
+          endtime_formatted = DateFormat.yMd().format(endDate);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(_errordate);
+        }
+      });
+    }
   }
 }
-
-class CustomPriceFilter extends StatelessWidget {
-  final List<Price> prices;
-  const CustomPriceFilter({Key? key, required this.prices}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: prices
-          .map(
-            (price) => InkWell(
-              onTap: () {},
-              child: Container(
-                  margin: const EdgeInsets.only(top: 10, bottom: 10),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Text(
-                    price.price,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.w500),
-                  )),
-            ),
-          )
-          .toList(),
-    );
-  }
-}
-
-// class CustomDateFilter extends StatelessWidget {
-//   CustomDateFilter({Key? key}) : super(key: key);
-//   DateTime beginning = DateTime.now();
-//   DateTime future = DateTime.now().add(Duration(days: 365));
-//   late final String _begginingFormatted = DateFormat.yMMMMd().format(beginning);
-//   late final String _futureFormatted = DateFormat.yMMMMd().format(future);
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       crossAxisAlignment: CrossAxisAlignment.center,
-//       children: [
-//         // Text("Start: "),
-//         Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: ElevatedButton(
-//             onPressed: () {
-//               Scaffold(
-//                   body: Container(
-//                 child: SfDateRangePicker(),
-//               ));
-//             },
-//             child: Text(_begginingFormatted.toString()),
-//           ),
-//         ),
-//         const Text("─",
-//             style: TextStyle(fontSize: 13, fontWeight: FontWeight.w100)),
-//         Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: ElevatedButton(
-//             onPressed: () {},
-//             child: Text(_futureFormatted.toString()),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
-
-
-
-// class CustomPriceFilter extends StatelessWidget {
-//   final List<String> categories = [
-//     "ANY",
-//     "FREE",
-//     "\$\$\$",
-//   ];
-//   CustomPriceFilter({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 10),
-//       child: SizedBox(
-//         width: 500,
-//         child: ChipList(
-//           shouldWrap: true,
-//           runSpacing: 5,
-//           spacing: 0,
-//           style: const TextStyle(
-//               color: Colors.white,
-//               fontFamily: 'Quicksand',
-//               fontWeight: FontWeight.bold),
-//           listOfChipNames: categories,
-//           listOfChipIndicesCurrentlySeclected: [0],
-//           supportsMultiSelect: false,
-//           borderRadiiList: const [10],
-//           activeBgColorList: const [Colors.orange],
-//           inactiveBgColorList: const [Colors.grey],
-//           activeTextColorList: const [Colors.white],
-//           inactiveTextColorList: const [Colors.white70],
-//           activeBorderColorList: const [Colors.black12],
-//           //inactiveBorderColorList: const [Colors.black54],
-//         ),
-//       ),
-//     );
-//   }
-// }

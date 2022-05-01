@@ -22,6 +22,7 @@ class _MainPageState extends State<MainPage> {
     //         Text('Add Page', style: TextStyle(fontSize: 60))), 
     const EventsPage(),
     const ProfilePage(),
+
   ];
 
   @override
