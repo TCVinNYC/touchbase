@@ -31,7 +31,7 @@ class ViewEventPage extends StatelessWidget {
               ),
               background: Image(
                 image: event.image.image,
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.fill,
                 color: Colors.orangeAccent.withOpacity(.3),
                 colorBlendMode: BlendMode.colorBurn,
               ),
@@ -50,7 +50,7 @@ class ViewEventPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    showHost(event: event, showName: true),
+                    showHost(event: event, width: 35, height: 35, showName: true),
                     showLocation(event: event, showName: true),
                     showDate(event: event, showIcon: true),
                     const SizedBox(height: 5),

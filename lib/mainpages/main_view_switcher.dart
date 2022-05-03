@@ -1,5 +1,7 @@
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:lets_connect/datamodels/user_model.dart';
+import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/mainpages/eventsPage/events_page.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_page.dart';
 

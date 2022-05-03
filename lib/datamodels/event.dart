@@ -68,7 +68,7 @@ class Event {
           age: json['age']! as bool,
           host: json['host']! as List<dynamic>,
           attendees: json['attendees'] != null
-              ? json['host'] as List<dynamic>
+              ? json['attendees'] as List<dynamic>
               : <dynamic>[],
         );
 }

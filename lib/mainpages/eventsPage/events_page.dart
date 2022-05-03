@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/event.dart';
+import 'package:lets_connect/firebase/fire_auth.dart';
 import 'package:lets_connect/mainpages/eventsPage/create_event.dart';
 import 'package:lets_connect/mainpages/eventsPage/filter_events_page.dart';
 import 'package:lets_connect/mainpages/eventsPage/view_event.dart';
@@ -130,7 +132,9 @@ class AllEventsPage extends StatelessWidget {
             final events = snapshot.data!;
             return ListView.separated(
               itemBuilder: (BuildContext context, int index) {
-                return EventWidget(event: events[index],);
+                return EventWidget(
+                  event: events[index],
+                );
               },
               itemCount: events.length,
               separatorBuilder: (BuildContext context, int index) {
@@ -158,13 +162,24 @@ class YourEventsPage extends StatelessWidget {
       child: StreamBuilder<List<Event>>(
         stream: getYourEvents(),
         builder: (context, snapshot) {
+        print(FirebaseAuth.instance.currentUser?.uid);
           if (snapshot.hasError) {
             return Text("Something when wrong!" + snapshot.error.toString());
           } else if (snapshot.hasData) {
             final events = snapshot.data!;
             print(events);
-            return Container();
-            //return ListView(children: events.map(buildEventTemplate).toList());
+            return ListView.separated(
+              itemBuilder: (BuildContext context, int index) {
+                return EventWidget(
+                  event: events[index],
+                );
+              },
+              itemCount: events.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return Container();
+              },
+            );
+            //return ListView(children: events.map(buildEventTemplate(context)).toList());
           } else {
             return const Center(child: CircularProgressIndicator());
           }
@@ -202,6 +217,7 @@ class PastEventsPage extends StatelessWidget {
 
 Stream<List<Event>> getAllEvents() => FirebaseFirestore.instance
     .collection('events')
+    //.where('attendees', arrayContainsAny: [user!.uid])
     .where("time", isGreaterThanOrEqualTo: DateTime.now())
     .snapshots()
     .map((snapshot) =>
@@ -209,6 +225,7 @@ Stream<List<Event>> getAllEvents() => FirebaseFirestore.instance
 
 Stream<List<Event>> getYourEvents() => FirebaseFirestore.instance
     .collection('events')
+    .where('attendees', arrayContainsAny: [FirebaseAuth.instance.currentUser?.uid])
     .where("time", isGreaterThanOrEqualTo: DateTime.now())
     .snapshots()
     .map((snapshot) =>
@@ -216,7 +233,8 @@ Stream<List<Event>> getYourEvents() => FirebaseFirestore.instance
 
 Stream<List<Event>> getPastEvents() => FirebaseFirestore.instance
     .collection('events')
-    .where("time", isGreaterThanOrEqualTo: DateTime.now())
+    .where("time", isLessThan: DateTime.now())
+    .where('attendees', arrayContainsAny: [FirebaseAuth.instance.currentUser?.uid])
     .snapshots()
     .map((snapshot) =>
         snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList());
@@ -433,18 +451,7 @@ Stream<List<Event>> getPastEvents() => FirebaseFirestore.instance
 //       coordinator: "Jeff Chun",
 //       attendees: "ur mom 1",
 //       location: "New York, NY"),
-//   EventPost(
-//       time: "1:00 PM",
-//       sessionTitle: "Startup Panel",
-//       coordinator: "John Doe",
-//       attendees: "Your Mom",
-//       location: "San Franciso, CA"),
-//   EventPost(
-//       time: "9:45 PM",
-//       sessionTitle: "Happy Hour Meet & Greet",
-//       coordinator: "Kison Patel",
-//       attendees: "Your Mom",
-//       location: "Chicago, IL"),
+
 //   EventPost(
 //       time: "2:30PM",
 //       sessionTitle: "Boy Genius Talk",
