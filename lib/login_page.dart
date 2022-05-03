@@ -110,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15))),
                 onPressed: () async {
-                  User? user = await FireAuth.signInUsingEmailPassword(
+                  User? user = await signInUsingEmailPassword(
                     email: emailController.text.trim(),
                     password: passwordController.text.trim(),
                     context: context,

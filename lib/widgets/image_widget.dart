@@ -11,10 +11,12 @@ class ImageWidget extends StatelessWidget {
   final double width;
   final double height;
   final bool enableEditButton;
+  final bool circular;
 
   const ImageWidget({
     Key? key,
     this.image,
+    required this.circular,
     this.imageAsset,
     required this.onClicked,
     required this.width,
@@ -28,8 +30,8 @@ class ImageWidget extends StatelessWidget {
         child: Stack(
       children: [
         image != null
-            ? buildImage(context, width, height)
-            : buildImageAsset(context, width, height),
+            ? buildImage(context, width, height, circular)
+            : buildImageAsset(context, width, height, circular),
         Positioned(
           bottom: 4,
           right: 5,
@@ -41,13 +43,17 @@ class ImageWidget extends StatelessWidget {
     ));
   }
 
-  Widget buildImage(BuildContext context, double width, double height) {
+  Widget buildImage(
+      BuildContext context, double width, double height, bool circular) {
     final imagePath = this.image!.path;
     final image = imagePath.contains('https://')
         ? NetworkImage(imagePath)
         : FileImage(File(imagePath));
 
     return Material(
+      elevation: 2,
+      clipBehavior: Clip.antiAlias,
+      type: circular == false ? MaterialType.canvas : MaterialType.circle,
       color: Colors.transparent,
       child: Ink.image(
         image: image as ImageProvider,
@@ -58,8 +64,12 @@ class ImageWidget extends StatelessWidget {
     );
   }
 
-  Widget buildImageAsset(BuildContext context, double width, double height) {
+  Widget buildImageAsset(
+      BuildContext context, double width, double height, bool circular) {
     return Material(
+      elevation: 2,
+      clipBehavior: circular == false ? Clip.none : Clip.antiAlias,
+      type: circular == false ? MaterialType.canvas : MaterialType.circle,
       color: Colors.transparent,
       child: Ink.image(
         image: imageAsset!,

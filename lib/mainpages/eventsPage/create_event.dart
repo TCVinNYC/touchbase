@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lets_connect/firebase/event_data.dart';
+import 'package:lets_connect/datamodels/user_model.dart';
+import 'package:lets_connect/firebase/fire_auth.dart';
+import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/mainpages/eventsPage/filter_events_page.dart';
 import 'package:lets_connect/widgets/custom_category.dart';
 import 'package:lets_connect/widgets/image_widget.dart';
@@ -224,6 +226,7 @@ class _CreateEventState extends State<CreateEventPage> {
                             height: 175,
                             width: 750,
                             enableEditButton: true,
+                            circular: false,
                           )
                         : ImageWidget(
                             imageAsset: imageAsset,
@@ -231,6 +234,7 @@ class _CreateEventState extends State<CreateEventPage> {
                             height: 175,
                             width: 750,
                             enableEditButton: false,
+                            circular: false,
                           ),
                   )),
 
@@ -450,11 +454,14 @@ class _CreateEventState extends State<CreateEventPage> {
                       if (priceEnable == false) {
                         priceController.text = "0";
                       }
-                      String name = FirebaseAuth
-                          .instance.currentUser!.displayName.toString();
-                      //String title = "title";
-                      String userID = FirebaseAuth.instance.currentUser!.uid;
-                      List<String> host = [name, "title", userID];
+                      
+                      print(FireMethods.myUserID);
+                      print(FireMethods.fireAuth.currentUser!.displayName);
+                      List<dynamic> host = await FireMethods().getUserData(FireMethods.myUserID);
+
+                      // Stream<UserData> myUser = await FireMethods().getUserData(FireMethods.myUserID);
+                      // UserData myUser2 = myUser as UserData;
+                      //List<dynamic> host = [myUser2.name, myUser2.title, myUser2.profilePic, myUser2.userID];
 
                       finalDateTime = DateTime(
                           dateSelect.year,
@@ -462,10 +469,9 @@ class _CreateEventState extends State<CreateEventPage> {
                           dateSelect.day,
                           timeSelect!.hour,
                           timeSelect!.minute);
-                      String result = await uploadEvent(
+                      String result = await FireMethods().uploadEvent(
                           titleController.text,
                           finalDateTime,
-                          //DateTime.parse(finalDateTime),
                           descriptionController.text,
                           locationNameController.text,
                           locationAddressController.text,

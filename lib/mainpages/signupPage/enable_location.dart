@@ -142,7 +142,7 @@ class _LocationPageState extends State<LocationPage> {
 
     if (locationData != null) {
       final placeMark = await service.getPlaceMark(locationData: locationData);
-
+      print(placeMark);
       setState(() {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const SetUpInfo()),

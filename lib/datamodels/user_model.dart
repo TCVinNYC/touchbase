@@ -1,11 +1,8 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:http/http.dart';
-import 'package:path_provider/path_provider.dart';
 
-class User {
+class UserData {
   final String userID;
+  final String name;
   final String prounouns;
   final String title;
   final String company;
@@ -15,7 +12,8 @@ class User {
   final List<dynamic> postIDs;
   final List<dynamic> connectionIDs;
 
-  User({
+  UserData({
+    required this.name,
     required this.userID,
     required this.prounouns,
     required this.title,
@@ -31,6 +29,7 @@ class User {
   Map<String, Object?> toJson() {
     return {
       'id': userID,
+      'name' : name,
       'pronouns': prounouns,
       'title': title,
       'imageURL': profilePic,
@@ -43,9 +42,10 @@ class User {
   }
 
 //info for reading event
-  User.fromJson(Map<String, Object?> json)
+  UserData.fromJson(Map<String, Object?> json)
       : this(
           userID: json['id']! as String,
+          name: json['name']! as String,
           prounouns: json['pronouns']! as String,
           title: json['title']! as String,
           profilePic: Image.network(json['imageURL']! as String),
