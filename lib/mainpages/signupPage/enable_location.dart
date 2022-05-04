@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/location_model.dart';
-import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lets_connect/mainpages/signupPage/userdetails.dart';
 import 'package:lottie/lottie.dart';
 import 'package:location/location.dart';
@@ -142,7 +141,7 @@ class _LocationPageState extends State<LocationPage> {
 
     if (locationData != null) {
       final placeMark = await service.getPlaceMark(locationData: locationData);
-
+      print(placeMark);
       setState(() {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const SetUpInfo()),

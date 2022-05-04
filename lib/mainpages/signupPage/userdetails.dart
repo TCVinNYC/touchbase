@@ -1,9 +1,12 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
+import 'package:lets_connect/firebase/firestore.dart';
+import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lets_connect/widgets/image_widget.dart';
+import 'package:lets_connect/widgets/textfield_widget.dart';
 
 class SetUpInfo extends StatefulWidget {
   const SetUpInfo({Key? key}) : super(key: key);
@@ -13,9 +16,13 @@ class SetUpInfo extends StatefulWidget {
 }
 
 class _SetUpInfoState extends State<SetUpInfo> {
-  File? image;
+  final pronounsController = TextEditingController();
+  final titleController = TextEditingController();
+  final companyController = TextEditingController();
+  final aboutMeController = TextEditingController();
 
-  AssetImage imageAsset = const AssetImage('assets/images/upload_image.jpg');
+  File? image;
+  AssetImage imageAsset = const AssetImage('assets/images/blank-pfp.png');
   Future pickImage(context, ImageSource source) async {
     try {
       XFile? image = await ImagePicker().pickImage(
@@ -43,39 +50,38 @@ class _SetUpInfoState extends State<SetUpInfo> {
         child: SingleChildScrollView(
           child: Column(children: [
             Container(
-              decoration: BoxDecoration(shape: BoxShape.circle
-                  // border: Border.all(width: 0.6, color: Colors.black87),
-                  ),
-              // CircleAvatar(
+              padding: const EdgeInsets.all(20),
               child: image != null
                   ? ImageWidget(
                       image: image!,
                       onClicked: (source) => pickImage(context, source),
-                      height: 200,
-                      width: 200,
+                      height: 175,
+                      width: 175,
                       enableEditButton: true,
+                      circular: true,
                     )
                   : ImageWidget(
                       imageAsset: imageAsset,
                       onClicked: (source) => pickImage(context, source),
-                      height: 200,
-                      width: 200,
+                      height: 175,
+                      width: 175,
                       enableEditButton: false,
+                      circular: true,
                     ),
             ),
-            // ),
-            ProfileTextField(text: 'Pronouns'),
-            Padding(padding: EdgeInsets.only(bottom: 25)),
-            ProfileTextField(text: 'Title'),
-            Padding(padding: EdgeInsets.only(bottom: 25)),
-            ProfileTextField(text: 'Company'),
-            Padding(padding: EdgeInsets.only(bottom: 25)),
+            TextFieldWidget(text: 'Pronouns', controller: pronounsController),
+            const Padding(padding: EdgeInsets.only(bottom: 25)),
+            TextFieldWidget(text: 'Title', controller: titleController),
+            const Padding(padding: EdgeInsets.only(bottom: 25)),
+            TextFieldWidget(text: 'Company', controller: companyController),
+            const Padding(padding: EdgeInsets.only(bottom: 25)),
             SizedBox(
               // height: 190,
               child: TextField(
+                controller: aboutMeController,
                 maxLines: 5,
                 maxLength: 179,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     labelText: 'About Me',
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     labelStyle: TextStyle(
@@ -85,41 +91,70 @@ class _SetUpInfoState extends State<SetUpInfo> {
                         color: Colors.orangeAccent),
                     border: OutlineInputBorder()),
               ),
-            )
+            ),
+            const SizedBox(height: 25),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 25, 10, 10),
+              width: MediaQuery.of(context).size.width / 1.1,
+              height: MediaQuery.of(context).size.height / 9,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12))),
+                onPressed: () async {
+                  if (image == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content:
+                            Text('Please upload an image of yourself :)')));
+                  } else if (titleController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Title cannot be empty')));
+                  } else if (companyController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Company cannot be empty')));
+                  } else if (aboutMeController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                            'Please provide some details about yourself :)')));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Uploading, Please wait...')));
+                    String result = await FireMethods().uploadUserData(
+                        pronounsController.text,
+                        FireMethods.fireAuth.currentUser!.displayName!,
+                        titleController.text,
+                        companyController.text,
+                        aboutMeController.text,
+                        [],
+                        [],
+                        [],
+                        image);
+                    if (result == "done") {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content:
+                              Text("Congrats Your Account Has Been Created!")));
+                      
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const MainPage()));
+                    } else {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(result)));
+                    }
+                  }
+                },
+                child: const Text(
+                  'Submit',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Quicksand',
+                  ),
+                ),
+              ),
+            ),
           ]),
         ),
       ),
     );
-  }
-}
-
-class ProfileTextField extends StatelessWidget {
-  final String text;
-  const ProfileTextField({
-    Key? key,
-    required this.text,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-        decoration: InputDecoration(
-            labelText: text,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            labelStyle: const TextStyle(
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.bold,
-                // fontWeight: FontWeight.w700,
-                fontSize: 22,
-                color: Colors.orangeAccent),
-            border: OutlineInputBorder()
-            // helperText: 'Name',
-            // helperStyle: TextStyle(fontSize: 16, fontFamily: 'Quicksand'),
-            // enabledBorder: UnderlineInputBorder(
-            // borderSide: BorderSide(
-            // color: Colors.orangeAccent,
-            // )
-            // )
-            ));
   }
 }

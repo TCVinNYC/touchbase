@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
+import 'package:lets_connect/datamodels/user_model.dart';
+import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_info_card.dart';
-import 'package:lets_connect/mainpages/profilePage/account_info.dart';
+import 'package:lets_connect/widgets/image_widget.dart';
 
-class ProfileInfo extends StatelessWidget {
-  const ProfileInfo({
-    Key? key,
-  }) : super(key: key);
+class ProfileInfo extends StatefulWidget {
+  const ProfileInfo({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileInfo> createState() => _ProfileInfoState();
+}
+
+class _ProfileInfoState extends State<ProfileInfo> {
+  
 
   @override
   Widget build(BuildContext context) {
+     final user = UserPreferences.getUser();
     return SizedBox(
       height: 330,
       width: MediaQuery.of(context).size.width,
-      // decoration: const BoxDecoration(color: Colors.grey),
       child: Stack(children: [
         Container(
             width: MediaQuery.of(context).size.width,
@@ -35,24 +43,26 @@ class ProfileInfo extends StatelessWidget {
                 Row(children: [
                   //PROFILE PIC
                   //change how to get profile pic
-                  const CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://i.pinimg.com/originals/94/25/93/9425933cef85981844778fe55327f5da.jpg'),
-                    radius: 55,
-                  ),
+                  //Image( image: user.profilePic!.image,),
+                  // CircleAvatar(
+                  //   backgroundImage: Image.network(user.profilePic.toString()),
+                  //   radius: 55,
+                  // ),
+                  //ImageWidget(circular: true, width: 175, height: 175, enableEditButton: false, imageAsset: user.profilePic!.image),
                   Expanded(
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                         //NAME
                         //change how to get name
                         Padding(
-                          padding: EdgeInsets.only(left: 30, bottom: 5),
+                          padding: const EdgeInsets.only(left: 30, bottom: 5),
                           child: Text(
-                            'Stevenson Chittumuri',
+                            //'Stevenson Chittumuri',
+                            user.name,
                             maxLines: 3,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Frutiger',
                                 fontSize: 20,
@@ -62,10 +72,11 @@ class ProfileInfo extends StatelessWidget {
                         //PRONOUNS
                         //change how to get pronouns
                         Padding(
-                          padding: EdgeInsets.only(left: 30, bottom: 5),
+                          padding: const EdgeInsets.only(left: 30, bottom: 5),
                           child: Text(
-                            'He/Him',
-                            style: TextStyle(
+                            //'He/Him',
+                            user.prounouns,
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Frutiger',
                                 fontSize: 16,
@@ -75,10 +86,11 @@ class ProfileInfo extends StatelessWidget {
                         // TITLE
                         //change how to get info
                         Padding(
-                          padding: EdgeInsets.only(left: 30, bottom: 5),
+                          padding: const EdgeInsets.only(left: 30, bottom: 5),
                           child: Text(
-                            'ProfessionalCrastinator',
-                            style: TextStyle(
+                            //'ProfessionalCrastinator',
+                            user.title,
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Frutiger',
                                 fontSize: 16,
@@ -88,10 +100,11 @@ class ProfileInfo extends StatelessWidget {
                         //COMPANY
                         //change how to get info
                         Padding(
-                          padding: EdgeInsets.only(left: 30),
+                          padding: const EdgeInsets.only(left: 30),
                           child: Text(
-                            'New York Institute of Tech',
-                            style: TextStyle(
+                            //'New York Institute of Tech',
+                            user.company,
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Frutiger',
                                 fontSize: 16,
@@ -108,8 +121,9 @@ class ProfileInfo extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   child: Text(
                     // aboutMe,
-                    'pretend i wrote something really intriguing about myself. i like steven universe and ice cream. i have a very lovely gf :)',
-                    style: TextStyle(
+                    //'pretend i wrote something really intriguing about myself. i like steven universe and ice cream. i have a very lovely gf :)',
+                    user.aboutMe,
+                    style: const TextStyle(
                         color: Colors.white,
                         fontFamily: 'Frutiger',
                         fontWeight: FontWeight.bold,

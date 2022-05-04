@@ -55,6 +55,8 @@ dependencies:
   firebase_storage_web: ^3.2.13
   firebase_image: ^1.1.1
   maps_launcher: ^2.0.1
+  firebase_app_check: ^0.0.6+11
+  shared_preferences: ^2.0.13
 
 dev_dependencies:
   flutter_test:

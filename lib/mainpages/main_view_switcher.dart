@@ -4,12 +4,18 @@ import 'package:lets_connect/mainpages/eventsPage/events_page.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_page.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+   const MainPage({Key? key}) : super(key: key);              
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
+   @override
+  void initState()  {
+    super.initState();
+    //SharedPref().initialGetSaved();
+  }
+
   int _currentIndex = 0;
   final screens = [
     const Center(
@@ -17,12 +23,8 @@ class _MainPageState extends State<MainPage> {
     const Center(
         child: Text('Connect Page',
             style: TextStyle(fontSize: 60))), //ConnectPage(),
-    // const Center(
-    //     child:
-    //         Text('Add Page', style: TextStyle(fontSize: 60))), 
     const EventsPage(),
     const ProfilePage(),
-
   ];
 
   @override

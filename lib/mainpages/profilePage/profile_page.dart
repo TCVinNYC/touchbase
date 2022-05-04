@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lets_connect/datamodels/user_model.dart';
+import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/mainpages/profilePage/account_info.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_info.dart';
 import 'package:lets_connect/mainpages/profilePage/side_menu_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:lets_connect/login_page.dart';
 import 'package:lets_connect/main.dart';
-import 'package:lets_connect/mainpages/main_view_switcher.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -134,7 +133,7 @@ class ProfilePage extends StatelessWidget {
       //BODY
       body: SingleChildScrollView(
         child: Column(
-          children: const <Widget>[
+          children:  <Widget>[
             ProfileInfo(),
           ],
         ),

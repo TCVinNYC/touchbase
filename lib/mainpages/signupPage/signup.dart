@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lets_connect/mainpages/main_view_switcher.dart';
-import 'package:lets_connect/mainpages/signupPage/background.dart';
-
-import 'package:lets_connect/mainpages/signupPage/signup_image.dart';
-
 import 'package:lets_connect/firebase/fire_auth.dart';
+import 'package:lets_connect/mainpages/signupPage/background.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lets_connect/mainpages/signupPage/enable_location.dart';
-import 'package:lottie/lottie.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({Key? key}) : super(key: key);
@@ -101,7 +96,7 @@ class SignUp extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
                   onPressed: () async {
-                    User? user = await FireAuth.registerUsingEmailPassword(
+                    User? user = await registerUsingEmailPassword(
                       email: emailController.text.trim(),
                       password: passwordController.text.trim(),
                       name: nameController.text.trim(),

@@ -7,16 +7,18 @@ import 'package:path_provider/path_provider.dart';
 class ImageWidget extends StatelessWidget {
   final File? image;
   final AssetImage? imageAsset;
-  final ValueChanged<ImageSource> onClicked;
+  final ValueChanged<ImageSource>? onClicked;
   final double width;
   final double height;
   final bool enableEditButton;
+  final bool circular;
 
   const ImageWidget({
     Key? key,
     this.image,
+    required this.circular,
     this.imageAsset,
-    required this.onClicked,
+    this.onClicked,
     required this.width,
     required this.height,
     required this.enableEditButton,
@@ -28,8 +30,8 @@ class ImageWidget extends StatelessWidget {
         child: Stack(
       children: [
         image != null
-            ? buildImage(context, width, height)
-            : buildImageAsset(context, width, height),
+            ? buildImage(context, width, height, circular)
+            : buildImageAsset(context, width, height, circular),
         Positioned(
           bottom: 4,
           right: 5,
@@ -41,13 +43,17 @@ class ImageWidget extends StatelessWidget {
     ));
   }
 
-  Widget buildImage(BuildContext context, double width, double height) {
+  Widget buildImage(
+      BuildContext context, double width, double height, bool circular) {
     final imagePath = this.image!.path;
     final image = imagePath.contains('https://')
         ? NetworkImage(imagePath)
         : FileImage(File(imagePath));
 
     return Material(
+      elevation: 2,
+      clipBehavior: Clip.antiAlias,
+      type: circular == false ? MaterialType.canvas : MaterialType.circle,
       color: Colors.transparent,
       child: Ink.image(
         image: image as ImageProvider,
@@ -58,8 +64,12 @@ class ImageWidget extends StatelessWidget {
     );
   }
 
-  Widget buildImageAsset(BuildContext context, double width, double height) {
+  Widget buildImageAsset(
+      BuildContext context, double width, double height, bool circular) {
     return Material(
+      elevation: 2,
+      clipBehavior: circular == false ? Clip.none : Clip.antiAlias,
+      type: circular == false ? MaterialType.canvas : MaterialType.circle,
       color: Colors.transparent,
       child: Ink.image(
         image: imageAsset!,
@@ -70,7 +80,7 @@ class ImageWidget extends StatelessWidget {
           final source = await showImageSource(context);
           if (source == null) return;
 
-          onClicked(source);
+          onClicked!(source);
         }),
       ),
     );
@@ -101,7 +111,7 @@ class ImageWidget extends StatelessWidget {
                 final source = await showImageSource(context);
                 if (source == null) return;
 
-                onClicked(source);
+                onClicked!(source);
               },
               child: Container(
                 padding: EdgeInsets.all(all),

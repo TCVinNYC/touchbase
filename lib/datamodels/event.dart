@@ -1,8 +1,5 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:http/http.dart';
-import 'package:path_provider/path_provider.dart';
 
 class Event {
   final String documentID;
@@ -68,7 +65,7 @@ class Event {
           age: json['age']! as bool,
           host: json['host']! as List<dynamic>,
           attendees: json['attendees'] != null
-              ? json['host'] as List<dynamic>
+              ? json['attendees'] as List<dynamic>
               : <dynamic>[],
         );
 }
