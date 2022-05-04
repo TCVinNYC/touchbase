@@ -12,7 +12,6 @@ class FireMethods {
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
   static CollectionReference refEvents = firestore.collection('events');
   static var fireAuth = FirebaseAuth.instance;
-  static final myUserID = fireAuth.currentUser!.uid;
   static var today = DateFormat("MMMM, dd, yyyy").format(DateTime.now());
 
   Future<String> uploadEvent(
@@ -26,10 +25,11 @@ class FireMethods {
     String category,
     bool age,
     List<dynamic> host,
-    File image,
+    File? file,
   ) async {
     String docID = refEvents.doc().id;
-    String url = await uploadImage(image, "events");
+    
+    String url = await uploadImage(file!, "events");
     if (url != "error") {
       await refEvents.doc(docID).set({
         'id': docID,
@@ -66,8 +66,8 @@ class FireMethods {
   ) async {
     String imageurl = await uploadImage(file!, 'users');
     if (imageurl != 'error') {
-      await firestore.collection('users').doc(myUserID).set({
-        'id': myUserID,
+      await firestore.collection('users').doc(fireAuth.currentUser!.uid).set({
+        'id': fireAuth.currentUser!.uid,
         'name': name,
         'pronouns': prounouns ?? "",
         'title': title,
@@ -84,26 +84,20 @@ class FireMethods {
     }
   }
 
-  Future<List> getUserData(String userID) async {
-     firestore.collection('users').doc(userID).snapshots().map(
-        (DocumentSnapshot<Map<String, dynamic>> snapshot){
-          print(snapshot);
-         UserData temp = UserData.fromJson(snapshot.data() as Map<String, dynamic>);
-         print(temp);
-          return [temp.name, temp.title, temp.profilePic, temp.userID];         
-    });
-    return [];
+  Future<UserData?> getUserData(String userID) async {
+    var docSnapshot = await firestore.collection('users').doc(userID).get();
+    if (docSnapshot.exists) {
+      return UserData.fromJson(docSnapshot.data());
+    }
+    return null;
   }
 
-//   Future<Stream<UserData>> getUserData (String userID) async {
-//    return firestore.collection('users').doc(userID).snapshots().map((DocumentSnapshot<Map<String, dynamic>> snapshot) =>
-//       UserData.fromJson(snapshot.data() as Map<String, dynamic>));
-// }
+
 
   Future<String> updateUserEventCount(String eventID, bool addToList) {
     return firestore
         .collection('users')
-        .doc(myUserID)
+        .doc(fireAuth.currentUser!.uid)
         .update({
           'eventIDs': addToList == true
               ? FieldValue.arrayUnion([eventID])
@@ -119,8 +113,8 @@ class FireMethods {
         .doc(eventID)
         .update({
           'attendees': addToList == true
-              ? FieldValue.arrayUnion([myUserID])
-              : FieldValue.arrayRemove([myUserID])
+              ? FieldValue.arrayUnion([fireAuth.currentUser!.uid])
+              : FieldValue.arrayRemove([fireAuth.currentUser!.uid])
         })
         .then((value) =>
             addToList == true ? "Added To Event" : "Removed From Event")
@@ -162,7 +156,8 @@ class FireMethods {
 
   Future<String> uploadImage(File file, String baseFolder) async {
     final fileName = basename(file.path);
-    final destination = '$baseFolder/$myUserID/$fileName';
+    var uid = fireAuth.currentUser!.uid;
+    final destination = '$baseFolder/$uid/$fileName';
 
     try {
       final Reference ref = FirebaseStorage.instance.ref().child(destination);
@@ -170,7 +165,7 @@ class FireMethods {
       String url = await ref.getDownloadURL();
       return url;
     } on FirebaseException catch (e) {
-      print(e.stackTrace);
+      print(e.code);
       return ("error");
     }
   }

@@ -26,7 +26,7 @@ class UserData {
   });
 
 //info for uploading event
-  Map<String, Object?> toJson() {
+  Map<String, dynamic> toJson() {
     return {
       'id': userID,
       'name' : name,
@@ -42,9 +42,9 @@ class UserData {
   }
 
 //info for reading event
-  UserData.fromJson(Map<String, Object?> json)
+  UserData.fromJson(Map<String, dynamic>? json)
       : this(
-          userID: json['id']! as String,
+          userID: json!['id'] as String,
           name: json['name']! as String,
           prounouns: json['pronouns']! as String,
           title: json['title']! as String,

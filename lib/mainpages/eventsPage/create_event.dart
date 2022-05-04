@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
-import 'package:lets_connect/firebase/fire_auth.dart';
 import 'package:lets_connect/firebase/firestore.dart';
-import 'package:lets_connect/mainpages/eventsPage/filter_events_page.dart';
 import 'package:lets_connect/widgets/custom_category.dart';
 import 'package:lets_connect/widgets/image_widget.dart';
 import 'package:lets_connect/widgets/max_lines.dart';
@@ -44,8 +41,8 @@ class _CreateEventState extends State<CreateEventPage> {
     }
   }
 
-  File? image;
-  AssetImage imageAsset = const AssetImage('assets/images/upload_image.jpg');
+  File? imageFile;
+  final AssetImage imageAsset = const AssetImage('assets/images/upload_image.jpg');
 
   Future pickImage(context, ImageSource source) async {
     try {
@@ -56,7 +53,7 @@ class _CreateEventState extends State<CreateEventPage> {
         imageQuality: 60,
       );
       if (image == null) return;
-      setState(() => this.image = File(image.path));
+      setState(() => imageFile = File(image.path));
     } on PlatformException catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.message.toString())));
@@ -219,9 +216,9 @@ class _CreateEventState extends State<CreateEventPage> {
                     decoration: BoxDecoration(
                       border: Border.all(width: 0.6, color: Colors.black87),
                     ),
-                    child: image != null
+                    child: imageFile != null
                         ? ImageWidget(
-                            image: image!,
+                            image: imageFile!,
                             onClicked: (source) => pickImage(context, source),
                             height: 175,
                             width: 750,
@@ -428,7 +425,7 @@ class _CreateEventState extends State<CreateEventPage> {
                     if (titleController.text.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Event title cannot be empty!')));
-                    } else if (image == null) {
+                    } else if (imageFile == null) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Must upload an image!')));
                     } else if (descriptionController.text.isEmpty) {
@@ -455,13 +452,8 @@ class _CreateEventState extends State<CreateEventPage> {
                         priceController.text = "0";
                       }
                       
-                      print(FireMethods.myUserID);
-                      print(FireMethods.fireAuth.currentUser!.displayName);
-                      List<dynamic> host = await FireMethods().getUserData(FireMethods.myUserID);
-
-                      // Stream<UserData> myUser = await FireMethods().getUserData(FireMethods.myUserID);
-                      // UserData myUser2 = myUser as UserData;
-                      //List<dynamic> host = [myUser2.name, myUser2.title, myUser2.profilePic, myUser2.userID];
+                      UserData? user = await FireMethods().getUserData(FireMethods.fireAuth.currentUser!.uid);
+                      List<dynamic> host = [user?.name, user?.title, user?.profilePic, user?.userID];
 
                       finalDateTime = DateTime(
                           dateSelect.year,
@@ -469,6 +461,7 @@ class _CreateEventState extends State<CreateEventPage> {
                           dateSelect.day,
                           timeSelect!.hour,
                           timeSelect!.minute);
+
                       String result = await FireMethods().uploadEvent(
                           titleController.text,
                           finalDateTime,
@@ -480,7 +473,7 @@ class _CreateEventState extends State<CreateEventPage> {
                           selectedCategories.first,
                           adultEnable,
                           host,
-                          image!);
+                          imageFile!);
                       if (result == "done") {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

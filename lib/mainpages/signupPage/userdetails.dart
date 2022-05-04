@@ -119,7 +119,7 @@ class _SetUpInfoState extends State<SetUpInfo> {
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('Uploading, Please wait...')));
-                    String result = await FireMethods().uploadUserData(pronounsController.text, FireMethods.fireAuth.currentUser!.displayName.toString(), titleController.text, companyController.text, aboutMeController.text, [], [], [], image);
+                    String result = await FireMethods().uploadUserData(pronounsController.text, FireMethods.fireAuth.currentUser!.displayName!, titleController.text, companyController.text, aboutMeController.text, [], [], [], image);
                     if (result == "done") {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content:

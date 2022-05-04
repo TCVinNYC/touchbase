@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
