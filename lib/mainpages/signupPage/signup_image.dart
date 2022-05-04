@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lottie/lottie.dart';
-import 'package:lets_connect/mainpages/profilePage/profile_page.dart';
 
 class SignUpImage extends StatelessWidget {
   const SignUpImage({Key? key}) : super(key: key);

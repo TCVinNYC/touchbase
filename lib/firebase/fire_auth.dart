@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/firestore.dart';
-import 'package:provider/provider.dart';
 
 FirebaseAuth auth = FirebaseAuth.instance;
 User? user;
@@ -20,6 +20,10 @@ Future<User?> signInUsingEmailPassword({
     );
     user = userCredential.user;
     user = auth.currentUser;
+
+    UserData? userData = await FireMethods().getUserData(FireMethods.fireAuth.currentUser!.uid);
+    print(userData!.connectionIDs);
+    UserPreferences.setUser(userData);
   } on FirebaseAuthException catch (e) {
     if (email == "") {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

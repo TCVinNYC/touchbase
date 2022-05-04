@@ -1,11 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:lets_connect/firebase/fire_auth.dart';
-import 'package:provider/provider.dart';
-import 'firebase_options.dart';
-
-//import 'src/authentication.dart';
-//import 'src/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
@@ -115,6 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                     password: passwordController.text.trim(),
                     context: context,
                   );
+                  
                   if (user != null) {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) => const MainPage()),

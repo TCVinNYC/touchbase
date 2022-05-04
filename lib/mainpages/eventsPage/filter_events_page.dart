@@ -2,9 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:lets_connect/widgets/custom_category.dart';
-// ignore: unused_import
 import '../../datamodels/price_model.dart';
-import 'package:chip_list/chip_list.dart';
 import 'package:intl/intl.dart';
 
 class FilterEventsPage extends StatefulWidget {

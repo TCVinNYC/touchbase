@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/widgets/custom_category.dart';
@@ -41,9 +42,8 @@ class _CreateEventState extends State<CreateEventPage> {
     }
   }
 
-  File? imageFile;
-  final AssetImage imageAsset = const AssetImage('assets/images/upload_image.jpg');
-
+  File? image;
+  AssetImage imageAsset = const AssetImage('assets/images/upload_image.jpg');
   Future pickImage(context, ImageSource source) async {
     try {
       XFile? image = await ImagePicker().pickImage(
@@ -53,7 +53,7 @@ class _CreateEventState extends State<CreateEventPage> {
         imageQuality: 60,
       );
       if (image == null) return;
-      setState(() => imageFile = File(image.path));
+      setState(() => this.image = File(image.path));
     } on PlatformException catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.message.toString())));
@@ -216,9 +216,9 @@ class _CreateEventState extends State<CreateEventPage> {
                     decoration: BoxDecoration(
                       border: Border.all(width: 0.6, color: Colors.black87),
                     ),
-                    child: imageFile != null
+                    child: image != null
                         ? ImageWidget(
-                            image: imageFile!,
+                            image: image!,
                             onClicked: (source) => pickImage(context, source),
                             height: 175,
                             width: 750,
@@ -425,7 +425,7 @@ class _CreateEventState extends State<CreateEventPage> {
                     if (titleController.text.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Event title cannot be empty!')));
-                    } else if (imageFile == null) {
+                    } else if (image == null) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Must upload an image!')));
                     } else if (descriptionController.text.isEmpty) {
@@ -451,9 +451,16 @@ class _CreateEventState extends State<CreateEventPage> {
                       if (priceEnable == false) {
                         priceController.text = "0";
                       }
-                      
-                      UserData? user = await FireMethods().getUserData(FireMethods.fireAuth.currentUser!.uid);
-                      List<dynamic> host = [user?.name, user?.title, user?.profilePic, user?.userID];
+
+                      UserData? user = await FireMethods()
+                          .getUserData(FireMethods.fireAuth.currentUser!.uid);
+                     // SharedPref().storeUserData(user!);
+                      List<dynamic> host = [
+                        user?.name,
+                        user?.title,
+                        user?.profilePicLinkOnly,
+                        user?.userID
+                      ];
 
                       finalDateTime = DateTime(
                           dateSelect.year,
@@ -473,7 +480,7 @@ class _CreateEventState extends State<CreateEventPage> {
                           selectedCategories.first,
                           adultEnable,
                           host,
-                          imageFile!);
+                          image);
                       if (result == "done") {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

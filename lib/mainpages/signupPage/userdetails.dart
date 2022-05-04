@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lets_connect/widgets/image_widget.dart';
@@ -15,14 +16,13 @@ class SetUpInfo extends StatefulWidget {
 }
 
 class _SetUpInfoState extends State<SetUpInfo> {
-  File? image;
-  AssetImage imageAsset = const AssetImage('assets/images/blank-pfp.png');
-
   final pronounsController = TextEditingController();
   final titleController = TextEditingController();
   final companyController = TextEditingController();
   final aboutMeController = TextEditingController();
 
+  File? image;
+  AssetImage imageAsset = const AssetImage('assets/images/blank-pfp.png');
   Future pickImage(context, ImageSource source) async {
     try {
       XFile? image = await ImagePicker().pickImage(
@@ -104,14 +104,14 @@ class _SetUpInfoState extends State<SetUpInfo> {
                 onPressed: () async {
                   if (image == null) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Please upload an image of yourself :)')));
+                        content:
+                            Text('Please upload an image of yourself :)')));
                   } else if (titleController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Title cannot be empty')));
                   } else if (companyController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content:
-                            Text('Company cannot be empty')));
+                        content: Text('Company cannot be empty')));
                   } else if (aboutMeController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(
@@ -119,11 +119,21 @@ class _SetUpInfoState extends State<SetUpInfo> {
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('Uploading, Please wait...')));
-                    String result = await FireMethods().uploadUserData(pronounsController.text, FireMethods.fireAuth.currentUser!.displayName!, titleController.text, companyController.text, aboutMeController.text, [], [], [], image);
+                    String result = await FireMethods().uploadUserData(
+                        pronounsController.text,
+                        FireMethods.fireAuth.currentUser!.displayName!,
+                        titleController.text,
+                        companyController.text,
+                        aboutMeController.text,
+                        [],
+                        [],
+                        [],
+                        image);
                     if (result == "done") {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content:
                               Text("Congrats Your Account Has Been Created!")));
+                      
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const MainPage()));
                     } else {

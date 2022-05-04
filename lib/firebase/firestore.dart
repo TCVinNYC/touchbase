@@ -3,14 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:path/path.dart';
 
 class FireMethods {
-  // FireMethods();
-
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
-  static CollectionReference refEvents = firestore.collection('events');
   static var fireAuth = FirebaseAuth.instance;
   static var today = DateFormat("MMMM, dd, yyyy").format(DateTime.now());
 
@@ -27,15 +25,15 @@ class FireMethods {
     List<dynamic> host,
     File? file,
   ) async {
-    String docID = refEvents.doc().id;
-    
-    String url = await uploadImage(file!, "events");
-    if (url != "error") {
-      await refEvents.doc(docID).set({
+    String docID = firestore.collection('events').doc().id;
+    String imageurl = await uploadImage(file!, 'events');
+
+    if (imageurl != "error") {
+      await firestore.collection('events').doc(docID).set({
         'id': docID,
         'sessionTitle': sessionTitle,
         'time': time,
-        'imageURL': url,
+        'imageURL': imageurl,
         'description': description,
         'locationName': locationName,
         'locationAddress': locationAddress,
@@ -44,13 +42,13 @@ class FireMethods {
         'category': category,
         'age': age,
         'host': host,
-        'attendees': [host[3]]
+        'attendees': [host[2]]
       });
-      updateUserEventCount(docID, true);
+      await updateUserEventCount(docID, true);
       return "done";
-    } else {
-      return ("Some error occured, please try again!");
-    }
+   } else {
+     return ("Some error occured, please try again!");
+   }
   }
 
   Future<String> uploadUserData(
@@ -78,6 +76,8 @@ class FireMethods {
         'connectionIDs': connectionIDs ?? [],
         'postIDs': postIDs ?? [],
       });
+    UserData? userData = await FireMethods().getUserData(FireMethods.fireAuth.currentUser!.uid);
+    UserPreferences.setUser(userData!);
       return 'done';
     } else {
       return 'Some error occured, please try again!';
@@ -91,8 +91,6 @@ class FireMethods {
     }
     return null;
   }
-
-
 
   Future<String> updateUserEventCount(String eventID, bool addToList) {
     return firestore
@@ -121,39 +119,6 @@ class FireMethods {
         .catchError((error) => "Failed to update User Event: $error");
   }
 
-  // Stream<UserData> getUserData(String userID) => FirebaseFirestore.instance
-  //     .collection('users')
-  //     .doc(userID)
-  //     .snapshots()
-  //     .map((user) => UserData.fromJson(user.data() as Map<String, dynamic>));
-
-  // .snapshots()
-  // .map((snapshot) =>
-  //     snapshot() => UserData.fromJson(documentSnapshot.data);
-
-  // UserData? getUserData(String userID) {
-  //   FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(userID)
-  //       .get()
-  //       .then((DocumentSnapshot documentSnapshot) {
-  //     if (documentSnapshot.exists) {
-  //       //User currentUser;
-  //       //Map<String, dynamic> currentUser = documentSnapshot.data()! as Map<String, dynamic>;
-  //       //return currentUser;
-  //       //currentUser = jsonDecode(documentSnapshot);
-  //       print('Document data: ${documentSnapshot.data()}');
-
-  //       return UserData.fromJson(documentSnapshot.data as Map<String, dynamic>);
-  //       // User user
-  //     } else {
-  //       print('Document does not exist on the database');
-  //       return null;
-  //     }
-  //   });
-  //   return null;
-  // }
-
   Future<String> uploadImage(File file, String baseFolder) async {
     final fileName = basename(file.path);
     var uid = fireAuth.currentUser!.uid;
@@ -169,4 +134,11 @@ class FireMethods {
       return ("error");
     }
   }
+
+
+  // backgroundSave() async {
+  //     
+  //     print(user?.aboutMe);
+  //     SharedPref().storeUserData(user!);
+  // }
 }

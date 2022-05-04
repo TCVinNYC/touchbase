@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/event.dart';
-import 'package:lets_connect/firebase/fire_auth.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
+import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/mainpages/eventsPage/create_event.dart';
 import 'package:lets_connect/mainpages/eventsPage/filter_events_page.dart';
-import 'package:lets_connect/mainpages/eventsPage/view_event.dart';
 import 'package:lets_connect/widgets/event_card.dart';
 
 class EventsPage extends StatefulWidget {
@@ -23,6 +23,8 @@ class _EventsPageState extends State<EventsPage>
   void initState() {
     _tabController = TabController(vsync: this, length: 3);
     _scrollViewController = ScrollController(initialScrollOffset: 0.0);
+    //FireMethods().backgroundSave();
+    //SharedPref().initialGetSaved();
     super.initState();
   }
 

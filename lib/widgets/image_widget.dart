@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 class ImageWidget extends StatelessWidget {
   final File? image;
   final AssetImage? imageAsset;
-  final ValueChanged<ImageSource> onClicked;
+  final ValueChanged<ImageSource>? onClicked;
   final double width;
   final double height;
   final bool enableEditButton;
@@ -18,7 +18,7 @@ class ImageWidget extends StatelessWidget {
     this.image,
     required this.circular,
     this.imageAsset,
-    required this.onClicked,
+    this.onClicked,
     required this.width,
     required this.height,
     required this.enableEditButton,
@@ -80,7 +80,7 @@ class ImageWidget extends StatelessWidget {
           final source = await showImageSource(context);
           if (source == null) return;
 
-          onClicked(source);
+          onClicked!(source);
         }),
       ),
     );
@@ -111,7 +111,7 @@ class ImageWidget extends StatelessWidget {
                 final source = await showImageSource(context);
                 if (source == null) return;
 
-                onClicked(source);
+                onClicked!(source);
               },
               child: Container(
                 padding: EdgeInsets.all(all),
