@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lets_connect/widgets/image_widget.dart';
@@ -22,7 +21,8 @@ class _SetUpInfoState extends State<SetUpInfo> {
   final aboutMeController = TextEditingController();
 
   File? image;
-  AssetImage imageAsset = const AssetImage('assets/images/blank-pfp.png');
+  Image imageAsset = Image.asset('assets/images/blank-pfp.png');
+
   Future pickImage(context, ImageSource source) async {
     try {
       XFile? image = await ImagePicker().pickImage(
@@ -133,7 +133,7 @@ class _SetUpInfoState extends State<SetUpInfo> {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content:
                               Text("Congrats Your Account Has Been Created!")));
-                      
+
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const MainPage()));
                     } else {

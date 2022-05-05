@@ -4,7 +4,6 @@ import 'package:lets_connect/mainpages/eventsPage/view_event.dart';
 import 'package:lets_connect/widgets/showDate.dart';
 import 'package:lets_connect/widgets/showHost.dart';
 import 'package:lets_connect/widgets/showLocation.dart';
-import 'package:maps_launcher/maps_launcher.dart';
 
 class EventWidget extends StatelessWidget {
   final Event event;
@@ -67,7 +66,11 @@ class EventWidget extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         fontSize: 17),
                   ),
-                  showHost(event: event, width: 30, height: 30,)
+                  showHost(
+                    event: event,
+                    width: 30,
+                    height: 30,
+                  )
                 ],
               ),
               subtitle: Align(

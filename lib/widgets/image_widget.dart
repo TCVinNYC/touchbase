@@ -2,11 +2,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 
 class ImageWidget extends StatelessWidget {
   final File? image;
-  final AssetImage? imageAsset;
+  final Image? imageAsset;
   final ValueChanged<ImageSource>? onClicked;
   final double width;
   final double height;
@@ -72,7 +71,7 @@ class ImageWidget extends StatelessWidget {
       type: circular == false ? MaterialType.canvas : MaterialType.circle,
       color: Colors.transparent,
       child: Ink.image(
-        image: imageAsset!,
+        image: imageAsset!.image,
         fit: BoxFit.cover,
         width: width,
         height: height,

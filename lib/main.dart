@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/login_page.dart';
+import 'package:lets_connect/mainpages/unused_splash_screen';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
@@ -14,7 +15,9 @@ Future main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseAppCheck.instance.activate();
+  await FirebaseAppCheck.instance.activate(
+    webRecaptchaSiteKey: 'recaptcha-v3-site-key',
+  );
   FirebaseFirestore.instance.settings.persistenceEnabled;
   await UserPreferences.init();
   runApp(const MyApp());
@@ -53,6 +56,10 @@ class _MyHomePageState extends State<MyHomePage> {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              //return const SplashApp();
+              // return SplashApp(
+              //     key: UniqueKey(),
+              //     onInitializationComplete: () => runMainApp());
               return const MainPage();
             } else {
               return const LoginPage();
@@ -61,3 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+// void runMainApp() {
+//   runApp(
+//     MainPage(),
+//   );
+// }

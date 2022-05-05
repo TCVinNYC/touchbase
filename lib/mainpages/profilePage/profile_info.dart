@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
-import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_info_card.dart';
 import 'package:lets_connect/widgets/image_widget.dart';
 
@@ -13,11 +12,9 @@ class ProfileInfo extends StatefulWidget {
 }
 
 class _ProfileInfoState extends State<ProfileInfo> {
-  
-
   @override
   Widget build(BuildContext context) {
-     final user = UserPreferences.getUser();
+    UserData user = UserPreferences.getUser();
     return SizedBox(
       height: 330,
       width: MediaQuery.of(context).size.width,
@@ -42,13 +39,20 @@ class _ProfileInfoState extends State<ProfileInfo> {
               children: [
                 Row(children: [
                   //PROFILE PIC
-                  //change how to get profile pic
-                  //Image( image: user.profilePic!.image,),
-                  // CircleAvatar(
-                  //   backgroundImage: Image.network(user.profilePic.toString()),
-                  //   radius: 55,
+
+                  // Image(
+                  //   image: Image.network(user.profilePic).image,
+                  //   width: 2,
+                  //   height: 2,
                   // ),
-                  //ImageWidget(circular: true, width: 175, height: 175, enableEditButton: false, imageAsset: user.profilePic!.image),
+                  //change how to get profile pic
+                  ImageWidget(
+                      circular: true,
+                      width: 140,
+                      height: 140,
+                      enableEditButton: false,
+                      imageAsset: Image.network(user.profilePic)),
+
                   Expanded(
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
