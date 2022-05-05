@@ -43,7 +43,7 @@ class _CreateEventState extends State<CreateEventPage> {
   }
 
   File? image;
-  AssetImage imageAsset = const AssetImage('assets/images/upload_image.jpg');
+  Image imageAsset = Image.asset('assets/images/upload_image.jpg');
   Future pickImage(context, ImageSource source) async {
     try {
       XFile? image = await ImagePicker().pickImage(
@@ -454,11 +454,11 @@ class _CreateEventState extends State<CreateEventPage> {
 
                       UserData? user = await FireMethods()
                           .getUserData(FireMethods.fireAuth.currentUser!.uid);
-                     // SharedPref().storeUserData(user!);
+                      // SharedPref().storeUserData(user!);
                       List<dynamic> host = [
                         user?.name,
                         user?.title,
-                        user?.profilePicLinkOnly,
+                        user?.profilePic,
                         user?.userID
                       ];
 

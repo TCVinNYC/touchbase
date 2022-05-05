@@ -1,0 +1,182 @@
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutter/material.dart';
+// import 'package:lets_connect/datamodels/shared_preferences.dart';
+// import 'package:lets_connect/datamodels/user_model.dart';
+// import 'package:lets_connect/firebase/firestore.dart';
+// import 'package:lets_connect/mainpages/main_view_switcher.dart';
+
+// class SplashApp extends StatefulWidget {
+//   //VoidCallback onInitializationComplete;
+
+//   const SplashApp({
+//     Key? key,
+//     //required this.onInitializationComplete,
+//   }) : super(key: key);
+
+//   @override
+//   _SplashAppState createState() => _SplashAppState();
+// }
+
+// class _SplashAppState extends State<SplashApp> {
+//   bool _hasError = false;
+
+//   // @override
+//   // void initState() {
+//   //   super.initState();
+//   //   //_initializeAsyncDependencies();
+//   // }
+
+//   Future<String> getUser() async {
+//     if (FireMethods.fireAuth.currentUser?.uid == null) {
+//       _hasError = true;
+//       return "done";
+//     }
+//     print("getting userData");
+//     UserData? userData =
+//         await FireMethods().getUserData(FireMethods.fireAuth.currentUser!.uid);
+//     print("set userData");
+//     UserPreferences.setUser(userData!);
+//     Future.delayed(
+//       const Duration(milliseconds: 3500),
+//     );
+//     return "done";
+//   }
+
+//   // Future<void> _initializeAsyncDependencies() async {
+//   //   print("getting userData");
+//   //   UserData? userData =
+//   //       await FireMethods().getUserData(FireMethods.fireAuth.currentUser!.uid);
+//   //   print("set userData");
+//   //   UserPreferences.setUser(userData!);
+
+//   // Future.delayed(
+//   //   const Duration(milliseconds: 3500),
+//   //   () => widget.onInitializationComplete(),
+//   // );
+//   // }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return FutureBuilder(
+//         future: getUser(),
+//         builder: (context, snapshot) {
+//           if (snapshot.hasData) {
+//             return const MainPage();
+//           } else {
+//             return const Center(
+//               child: CircularProgressIndicator(),
+//             );
+//           }
+//         });
+//   }
+// }
+//   // Widget build(BuildContext context) {
+//   //   return MaterialApp(
+//   //     title: 'Splash Screen',
+//   //     theme: ThemeData(
+//   //       primarySwatch: Colors.orange,
+//   //     ),
+//   //     home: _buildBody(),
+//   //   );
+//   // }
+
+//   // Widget _buildBody() {
+//   //   return FutureBuilder(
+//   //       future: getUser(),
+//   //       builder: (context, snapshot) {
+//   //         if (snapshot.hasData) {
+//   //           const MainPage();
+//   //         } else {
+//   //           return Center(
+//   //             child: CircularProgressIndicator(),
+//   //           );
+//   //         }
+//   //       });
+//   // }
+
+//   // return FutureBuilder(
+//   //   future: getUser(),
+//   //   builder: (context, snapshot) {
+//   //     if (snapshot.hasData) {
+//   //       return MaterialApp(
+//   //         home: Scaffold(
+//   //           body: IndexedStack(
+//   //             index: _currentIndex,
+//   //             children: screens,
+//   //           ),
+//   //           resizeToAvoidBottomInset: false,
+//   //           bottomNavigationBar: Container(
+//   //             decoration: BoxDecoration(
+//   //               color: Colors.white,
+//   //               boxShadow: [
+//   //                 BoxShadow(
+//   //                   blurRadius: 5,
+//   //                   color: Colors.black.withOpacity(.7),
+//   //                 )
+//   //               ],
+//   //             ),
+//   //             child: SafeArea(
+//   //               child: Padding(
+//   //                 padding: const EdgeInsets.symmetric(
+//   //                     horizontal: 5.0, vertical: 9),
+//   //                 child: GNav(
+//   //                   rippleColor: Colors.orangeAccent,
+//   //                   hoverColor: Colors.orangeAccent,
+//   //                   gap: 1,
+//   //                   activeColor: Colors.white,
+//   //                   iconSize: 25,
+//   //                   padding: const EdgeInsets.symmetric(
+//   //                       horizontal: 15, vertical: 12),
+//   //                   duration: const Duration(milliseconds: 200),
+//   //                   tabBackgroundColor: Colors.orange,
+//   //                   color: Colors.black,
+//   //                   tabs: const [
+//   //                     GButton(
+//   //                       icon: Icons.home,
+//   //                       text: 'Feed',
+//   //                     ),
+//   //                     GButton(
+//   //                       icon: Icons.public_rounded,
+//   //                       text: 'Connect',
+//   //                     ),
+//   //                     GButton(
+//   //                       icon: Icons.event_available_rounded,
+//   //                       text: 'Events',
+//   //                     ),
+//   //                     GButton(
+//   //                       icon: Icons.person,
+//   //                       text: 'Profile',
+//   //                     ),
+//   //                   ],
+//   //                   selectedIndex: _currentIndex,
+//   //                   onTabChange: (index) {
+//   //                     setState(() {
+//   //                       _currentIndex = index;
+//   //                     });
+//   //                   },
+//   //                 ),
+//   //               ),
+//   //             ),
+//   //           ),
+//   //         ),
+//   //       );
+//   //     } else {
+//   //       return CircularProgressIndicator();
+//   //     }
+//   //   },
+//   // );
+
+        
+// //     if (_hasError) {
+// //       return Center(
+// //         child: ElevatedButton(
+// //           child: const Text('retry'),
+// //           onPressed: () => const MainPage(),
+// //         ),
+// //       );
+// //     }
+// //     return const Center(
+// //       child: CircularProgressIndicator(),
+// //     );
+// //   }
+// // }

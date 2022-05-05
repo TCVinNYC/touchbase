@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:lets_connect/datamodels/user_model.dart';
-import 'package:lets_connect/firebase/firestore.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/mainpages/profilePage/account_info.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_info.dart';
 import 'package:lets_connect/mainpages/profilePage/side_menu_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lets_connect/main.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,12 +118,20 @@ class ProfilePage extends StatelessWidget {
               InkWell(
                   onTap: () async {
                     await FirebaseAuth.instance.signOut();
+                    UserPreferences.resetUser();
 
-                    Navigator.of(context).pushReplacement(
+                    Navigator.pushAndRemoveUntil(
+                      context,
                       MaterialPageRoute(
-                        builder: (context) => const MyHomePage(),
+                        builder: (BuildContext context) => const MyHomePage(),
                       ),
+                      (route) => false,
                     );
+                    // Navigator.of(context).pushReplacement(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const MyHomePage(),
+                    //   ),
+                    // );
                   },
                   child: SideMenu(
                       icon: Icons.logout_rounded,
@@ -133,7 +145,7 @@ class ProfilePage extends StatelessWidget {
       //BODY
       body: SingleChildScrollView(
         child: Column(
-          children:  <Widget>[
+          children: <Widget>[
             ProfileInfo(),
           ],
         ),

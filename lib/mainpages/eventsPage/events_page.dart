@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/event.dart';
-import 'package:lets_connect/datamodels/shared_preferences.dart';
-import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/mainpages/eventsPage/create_event.dart';
 import 'package:lets_connect/mainpages/eventsPage/filter_events_page.dart';
 import 'package:lets_connect/widgets/event_card.dart';
@@ -164,7 +162,7 @@ class YourEventsPage extends StatelessWidget {
       child: StreamBuilder<List<Event>>(
         stream: getYourEvents(),
         builder: (context, snapshot) {
-        print(FirebaseAuth.instance.currentUser?.uid);
+          print(FirebaseAuth.instance.currentUser?.uid);
           if (snapshot.hasError) {
             return Text("Something when wrong!" + snapshot.error.toString());
           } else if (snapshot.hasData) {
@@ -227,7 +225,8 @@ Stream<List<Event>> getAllEvents() => FirebaseFirestore.instance
 
 Stream<List<Event>> getYourEvents() => FirebaseFirestore.instance
     .collection('events')
-    .where('attendees', arrayContainsAny: [FirebaseAuth.instance.currentUser?.uid])
+    .where('attendees',
+        arrayContainsAny: [FirebaseAuth.instance.currentUser?.uid])
     .where("time", isGreaterThanOrEqualTo: DateTime.now())
     .snapshots()
     .map((snapshot) =>
@@ -236,7 +235,8 @@ Stream<List<Event>> getYourEvents() => FirebaseFirestore.instance
 Stream<List<Event>> getPastEvents() => FirebaseFirestore.instance
     .collection('events')
     .where("time", isLessThan: DateTime.now())
-    .where('attendees', arrayContainsAny: [FirebaseAuth.instance.currentUser?.uid])
+    .where('attendees',
+        arrayContainsAny: [FirebaseAuth.instance.currentUser?.uid])
     .snapshots()
     .map((snapshot) =>
         snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList());
