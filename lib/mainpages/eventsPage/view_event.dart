@@ -17,23 +17,36 @@ class ViewEventPage extends StatelessWidget {
         slivers: [
           SliverAppBar(
             floating: true,
+            snap: true,
             backgroundColor: Colors.orange,
             flexibleSpace: FlexibleSpaceBar(
-              title: Positioned(
-                child: Text(
-                  event.sessionTitle,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Quicksand',
+              background: ShaderMask(
+                shaderCallback: (rect) {
+                  return LinearGradient(
+                    begin: Alignment.center,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.transparent, Colors.black.withOpacity(0.6)],
+                  ).createShader(
+                      Rect.fromLTRB(0, -140, rect.width, rect.height - 20));
+                },
+                blendMode: BlendMode.darken,
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: event.image.image,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
-              background: Image(
-                image: event.image.image,
-                fit: BoxFit.fill,
-                color: Colors.orangeAccent.withOpacity(.3),
-                colorBlendMode: BlendMode.colorBurn,
+              expandedTitleScale: 1.3,
+              title: Text(
+                event.sessionTitle,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Quicksand',
+                ),
               ),
             ),
             pinned: true,
@@ -45,12 +58,14 @@ class ViewEventPage extends StatelessWidget {
             SizedBox(
               height: 700,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    showHost(event: event, width: 35, height: 35, showName: true),
+                    showHost(
+                        event: event, width: 35, height: 35, showName: true),
                     showLocation(event: event, showName: true),
                     showDate(event: event, showIcon: true),
                     const SizedBox(height: 5),
@@ -61,7 +76,8 @@ class ViewEventPage extends StatelessWidget {
                       endIndent: 0,
                       color: Colors.grey,
                     ),
-                    const Text("Description", maxLines: 1,
+                    const Text("Description",
+                        maxLines: 1,
                         style: TextStyle(
                             fontFamily: 'Quicksand',
                             fontSize: 20,
@@ -106,7 +122,6 @@ class ViewEventPage extends StatelessWidget {
                             ? Icons.money_off_csred_rounded
                             : Icons.currency_exchange,
                         color: Colors.green),
-
                     const Divider(
                       height: 20,
                       thickness: 0.5,
@@ -114,7 +129,6 @@ class ViewEventPage extends StatelessWidget {
                       endIndent: 0,
                       color: Colors.grey,
                     ),
-
                     const Text("Attendees",
                         style: TextStyle(
                             fontFamily: 'Quicksand',

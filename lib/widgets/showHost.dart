@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/event.dart';
+import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/firestore.dart';
 
 class showHost extends StatelessWidget {
@@ -21,7 +22,7 @@ class showHost extends StatelessWidget {
     return InkWell(
       onTap: () async {
       //Stream<UserData> myUser = await FireMethods().getUserData(event.host[3]);
-      List<dynamic> myUser = await FireMethods().getUserData(event.host[3]);
+      UserData? myUser = await FireMethods().getUserData(event.host[3]);
        print(myUser);
       },
       child: Container(

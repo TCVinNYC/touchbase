@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/location_model.dart';
-import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lets_connect/mainpages/signupPage/userdetails.dart';
 import 'package:lottie/lottie.dart';
 import 'package:location/location.dart';

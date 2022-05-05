@@ -3,16 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:path/path.dart';
 
 class FireMethods {
-  // FireMethods();
-
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
-  static CollectionReference refEvents = firestore.collection('events');
   static var fireAuth = FirebaseAuth.instance;
-  static final myUserID = fireAuth.currentUser!.uid;
   static var today = DateFormat("MMMM, dd, yyyy").format(DateTime.now());
 
   Future<String> uploadEvent(
@@ -26,16 +23,17 @@ class FireMethods {
     String category,
     bool age,
     List<dynamic> host,
-    File image,
+    File? file,
   ) async {
-    String docID = refEvents.doc().id;
-    String url = await uploadImage(image, "events");
-    if (url != "error") {
-      await refEvents.doc(docID).set({
+    String docID = firestore.collection('events').doc().id;
+    String imageurl = await uploadImage(file!, 'events');
+
+    if (imageurl != "error") {
+      await firestore.collection('events').doc(docID).set({
         'id': docID,
         'sessionTitle': sessionTitle,
         'time': time,
-        'imageURL': url,
+        'imageURL': imageurl,
         'description': description,
         'locationName': locationName,
         'locationAddress': locationAddress,
@@ -46,11 +44,14 @@ class FireMethods {
         'host': host,
         'attendees': [host[3]]
       });
-      updateUserEventCount(docID, true);
+      UserData tempUser = UserPreferences.getUser();
+      tempUser.eventIDs.add(docID);
+      UserPreferences.setUser(tempUser);
+      await updateUserEventCount(docID, true);
       return "done";
-    } else {
-      return ("Some error occured, please try again!");
-    }
+   } else {
+     return ("Some error occured, please try again!");
+   }
   }
 
   Future<String> uploadUserData(
@@ -66,8 +67,8 @@ class FireMethods {
   ) async {
     String imageurl = await uploadImage(file!, 'users');
     if (imageurl != 'error') {
-      await firestore.collection('users').doc(myUserID).set({
-        'id': myUserID,
+      await firestore.collection('users').doc(fireAuth.currentUser!.uid).set({
+        'id': fireAuth.currentUser!.uid,
         'name': name,
         'pronouns': prounouns ?? "",
         'title': title,
@@ -78,32 +79,26 @@ class FireMethods {
         'connectionIDs': connectionIDs ?? [],
         'postIDs': postIDs ?? [],
       });
+    UserData? userData = await FireMethods().getUserData(FireMethods.fireAuth.currentUser!.uid);
+    UserPreferences.setUser(userData!);
       return 'done';
     } else {
       return 'Some error occured, please try again!';
     }
   }
 
-  Future<List> getUserData(String userID) async {
-     firestore.collection('users').doc(userID).snapshots().map(
-        (DocumentSnapshot<Map<String, dynamic>> snapshot){
-          print(snapshot);
-         UserData temp = UserData.fromJson(snapshot.data() as Map<String, dynamic>);
-         print(temp);
-          return [temp.name, temp.title, temp.profilePic, temp.userID];         
-    });
-    return [];
+  Future<UserData?> getUserData(String userID) async {
+    var docSnapshot = await firestore.collection('users').doc(userID).get();
+    if (docSnapshot.exists) {
+      return UserData.fromJson(docSnapshot.data());
+    }
+    return null;
   }
-
-//   Future<Stream<UserData>> getUserData (String userID) async {
-//    return firestore.collection('users').doc(userID).snapshots().map((DocumentSnapshot<Map<String, dynamic>> snapshot) =>
-//       UserData.fromJson(snapshot.data() as Map<String, dynamic>));
-// }
 
   Future<String> updateUserEventCount(String eventID, bool addToList) {
     return firestore
         .collection('users')
-        .doc(myUserID)
+        .doc(fireAuth.currentUser!.uid)
         .update({
           'eventIDs': addToList == true
               ? FieldValue.arrayUnion([eventID])
@@ -119,50 +114,18 @@ class FireMethods {
         .doc(eventID)
         .update({
           'attendees': addToList == true
-              ? FieldValue.arrayUnion([myUserID])
-              : FieldValue.arrayRemove([myUserID])
+              ? FieldValue.arrayUnion([fireAuth.currentUser!.uid])
+              : FieldValue.arrayRemove([fireAuth.currentUser!.uid])
         })
         .then((value) =>
             addToList == true ? "Added To Event" : "Removed From Event")
         .catchError((error) => "Failed to update User Event: $error");
   }
 
-  // Stream<UserData> getUserData(String userID) => FirebaseFirestore.instance
-  //     .collection('users')
-  //     .doc(userID)
-  //     .snapshots()
-  //     .map((user) => UserData.fromJson(user.data() as Map<String, dynamic>));
-
-  // .snapshots()
-  // .map((snapshot) =>
-  //     snapshot() => UserData.fromJson(documentSnapshot.data);
-
-  // UserData? getUserData(String userID) {
-  //   FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(userID)
-  //       .get()
-  //       .then((DocumentSnapshot documentSnapshot) {
-  //     if (documentSnapshot.exists) {
-  //       //User currentUser;
-  //       //Map<String, dynamic> currentUser = documentSnapshot.data()! as Map<String, dynamic>;
-  //       //return currentUser;
-  //       //currentUser = jsonDecode(documentSnapshot);
-  //       print('Document data: ${documentSnapshot.data()}');
-
-  //       return UserData.fromJson(documentSnapshot.data as Map<String, dynamic>);
-  //       // User user
-  //     } else {
-  //       print('Document does not exist on the database');
-  //       return null;
-  //     }
-  //   });
-  //   return null;
-  // }
-
   Future<String> uploadImage(File file, String baseFolder) async {
     final fileName = basename(file.path);
-    final destination = '$baseFolder/$myUserID/$fileName';
+    var uid = fireAuth.currentUser!.uid;
+    final destination = '$baseFolder/$uid/$fileName';
 
     try {
       final Reference ref = FirebaseStorage.instance.ref().child(destination);
@@ -170,7 +133,7 @@ class FireMethods {
       String url = await ref.getDownloadURL();
       return url;
     } on FirebaseException catch (e) {
-      print(e.stackTrace);
+      print(e.code);
       return ("error");
     }
   }
