@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lets_connect/datamodels/user_model.dart';
 
-class ProfileInfoCard extends StatelessWidget {
-  const ProfileInfoCard({
+class ProfileStatsCard extends StatelessWidget {
+  final UserData userdata;
+  const ProfileStatsCard({
     Key? key,
+    required this.userdata
   }) : super(key: key);
 
   @override
@@ -33,9 +36,10 @@ class ProfileInfoCard extends StatelessWidget {
                       ),
                     ),
                     //find a way to get connections amount
-                    const Text(
-                      '16',
-                      style: TextStyle(fontSize: 16, color: Colors.black),
+                     Text(
+                      userdata.connectionIDs.length.toString(),
+                      //'16',
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
                     ),
                   ],
                 ),
@@ -57,9 +61,9 @@ class ProfileInfoCard extends StatelessWidget {
                       ),
                     ),
                     //find a way to get connections amount
-                    const Text(
-                      '5',
-                      style: TextStyle(fontSize: 16, color: Colors.black),
+                    Text(
+                     userdata.postIDs.length.toString(),
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
                     ),
                   ],
                 ),
@@ -81,9 +85,9 @@ class ProfileInfoCard extends StatelessWidget {
                       ),
                     ),
                     //find a way to get connections amount
-                    const Text(
-                      '3',
-                      style: TextStyle(fontSize: 16, color: Colors.black),
+                     Text(
+                      userdata.eventIDs.length.toString(),
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
                     ),
                   ],
                 ),

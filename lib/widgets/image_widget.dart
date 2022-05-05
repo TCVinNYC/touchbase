@@ -11,13 +11,18 @@ class ImageWidget extends StatelessWidget {
   final double height;
   final bool enableEditButton;
   final bool circular;
+  final bool? colorInvert;
+  final bool? enableImageInk;
 
   const ImageWidget({
     Key? key,
     this.image,
+    this.enableImageInk,
+    this.colorInvert,
     required this.circular,
     this.imageAsset,
     this.onClicked,
+
     required this.width,
     required this.height,
     required this.enableEditButton,
@@ -75,23 +80,23 @@ class ImageWidget extends StatelessWidget {
         fit: BoxFit.cover,
         width: width,
         height: height,
-        child: InkWell(onTap: () async {
+        child: enableImageInk == true ? InkWell(onTap: () async {
           final source = await showImageSource(context);
           if (source == null) return;
 
           onClicked!(source);
-        }),
+        }) : Container(),
       ),
     );
   }
 
   Widget buildEditIcon(Color color, context) => buildCircle(
         context: context,
-        color: Colors.orange,
+        color: colorInvert == true ? Colors.white : Colors.orange,
         all: 8,
-        child: const Icon(
+        child:  Icon(
           Icons.edit,
-          color: Colors.white,
+          color: colorInvert == true ? Colors.orange : Colors.white,
           size: 20,
         ),
       );

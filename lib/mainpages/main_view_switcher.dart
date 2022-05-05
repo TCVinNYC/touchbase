@@ -4,7 +4,7 @@ import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/mainpages/eventsPage/events_page.dart';
-import 'package:lets_connect/mainpages/profilePage/profile_page.dart';
+import 'package:lets_connect/mainpages/profilePage/main_profile_page.dart';
 import 'package:lets_connect/mainpages/unused_splash_screen';
 
 class MainPage extends StatefulWidget {
@@ -22,7 +22,7 @@ class _MainPageState extends State<MainPage> {
         child: Text('Connect Page',
             style: TextStyle(fontSize: 60))), //ConnectPage(),
     const EventsPage(),
-    const ProfilePage(),
+    const MainProfilePage(),
   ];
 
   late final Future? myFuture = getUser();

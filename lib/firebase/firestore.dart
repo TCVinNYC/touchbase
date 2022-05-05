@@ -42,8 +42,11 @@ class FireMethods {
         'category': category,
         'age': age,
         'host': host,
-        'attendees': [host[2]]
+        'attendees': [host[3]]
       });
+      UserData tempUser = UserPreferences.getUser();
+      tempUser.eventIDs.add(docID);
+      UserPreferences.setUser(tempUser);
       await updateUserEventCount(docID, true);
       return "done";
    } else {
@@ -134,11 +137,4 @@ class FireMethods {
       return ("error");
     }
   }
-
-
-  // backgroundSave() async {
-  //     
-  //     print(user?.aboutMe);
-  //     SharedPref().storeUserData(user!);
-  // }
 }

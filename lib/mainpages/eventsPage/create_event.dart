@@ -232,6 +232,7 @@ class _CreateEventState extends State<CreateEventPage> {
                             width: 750,
                             enableEditButton: false,
                             circular: false,
+                            enableImageInk: true,
                           ),
                   )),
 
@@ -263,7 +264,6 @@ class _CreateEventState extends State<CreateEventPage> {
                       minLines: 1,
                       maxLines: 5,
                       inputFormatters: [MaxLinesTextInputFormatter(5)],
-                      //onChanged: widget.onChanged,
                     ),
                   ),
                 ],
@@ -454,7 +454,6 @@ class _CreateEventState extends State<CreateEventPage> {
 
                       UserData? user = await FireMethods()
                           .getUserData(FireMethods.fireAuth.currentUser!.uid);
-                      // SharedPref().storeUserData(user!);
                       List<dynamic> host = [
                         user?.name,
                         user?.title,
