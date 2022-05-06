@@ -7,6 +7,7 @@ import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lets_connect/widgets/image_widget.dart';
 import 'package:lets_connect/widgets/textfield_widget.dart';
 
+
 class SetUpInfo extends StatefulWidget {
   const SetUpInfo({Key? key}) : super(key: key);
 
@@ -158,3 +159,4 @@ class _SetUpInfoState extends State<SetUpInfo> {
     );
   }
 }
+

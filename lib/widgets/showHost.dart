@@ -23,7 +23,22 @@ class showHost extends StatelessWidget {
     return InkWell(
       onTap: () async {
         UserData? myUser = await FireMethods().getUserData(event.host[3]);
-        print(myUser);
+        Navigator.push(context, MaterialPageRoute<void>(
+          builder: (BuildContext context) {
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.orange,
+              ),
+              body: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    ProfileInfo(userData: myUser!),
+                  ],
+                ),
+              ),
+            );
+          },
+        ));
       },
       child: Container(
         alignment: const Alignment(-1.035, 0),
@@ -33,7 +48,7 @@ class showHost extends StatelessWidget {
           crossAxisAlignment: WrapCrossAlignment.start,
           spacing: 2.3,
           children: [
-            showName == null
+            showName == null || false
                 ? withOutTitle(event, width, height)
                 : withTitle(event, width, height),
           ],
