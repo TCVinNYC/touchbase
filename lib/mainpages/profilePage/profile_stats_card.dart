@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 
 class ProfileStatsCard extends StatelessWidget {
-  final UserData userdata;
-  const ProfileStatsCard({
-    Key? key,
-    required this.userdata
-  }) : super(key: key);
+  UserData userdata;
+  ProfileStatsCard({Key? key, required this.userdata}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +33,7 @@ class ProfileStatsCard extends StatelessWidget {
                       ),
                     ),
                     //find a way to get connections amount
-                     Text(
+                    Text(
                       userdata.connectionIDs.length.toString(),
                       //'16',
                       style: const TextStyle(fontSize: 16, color: Colors.black),
@@ -62,7 +59,7 @@ class ProfileStatsCard extends StatelessWidget {
                     ),
                     //find a way to get connections amount
                     Text(
-                     userdata.postIDs.length.toString(),
+                      userdata.postIDs.length.toString(),
                       style: const TextStyle(fontSize: 16, color: Colors.black),
                     ),
                   ],
@@ -85,7 +82,7 @@ class ProfileStatsCard extends StatelessWidget {
                       ),
                     ),
                     //find a way to get connections amount
-                     Text(
+                    Text(
                       userdata.eventIDs.length.toString(),
                       style: const TextStyle(fontSize: 16, color: Colors.black),
                     ),

@@ -39,7 +39,6 @@ class showHost extends StatelessWidget {
             );
           },
         ));
-        //print(myUser);
       },
       child: Container(
         alignment: const Alignment(-1.035, 0),

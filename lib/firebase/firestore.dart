@@ -12,6 +12,40 @@ class FireMethods {
   static var fireAuth = FirebaseAuth.instance;
   static var today = DateFormat("MMMM, dd, yyyy").format(DateTime.now());
 
+  Future<String> uploadUserData(
+    String? prounouns,
+    String name,
+    String title,
+    String company,
+    String aboutMe,
+    List<dynamic>? eventIDs,
+    List<dynamic>? postIDs,
+    List<dynamic>? connectionIDs,
+    File? file,
+  ) async {
+    String imageurl = await uploadImage(file!, 'users');
+    if (imageurl != 'error') {
+      await firestore.collection('users').doc(fireAuth.currentUser!.uid).set({
+        'id': fireAuth.currentUser!.uid,
+        'name': name,
+        'pronouns': prounouns ?? "",
+        'title': title,
+        'imageURL': imageurl,
+        'company': company,
+        'aboutMe': aboutMe,
+        'eventIDs': eventIDs ?? [],
+        'connectionIDs': connectionIDs ?? [],
+        'postIDs': postIDs ?? [],
+      });
+      UserData? userData = await FireMethods()
+          .getUserData(FireMethods.fireAuth.currentUser!.uid);
+      UserPreferences.setUser(userData!);
+      return 'done';
+    } else {
+      return 'Some error occured, please try again!';
+    }
+  }
+
   Future<String> uploadEvent(
     String sessionTitle,
     DateTime time,
@@ -49,50 +83,9 @@ class FireMethods {
       UserPreferences.setUser(tempUser);
       await updateUserEventCount(docID, true);
       return "done";
-   } else {
-     return ("Some error occured, please try again!");
-   }
-  }
-
-  Future<String> uploadUserData(
-    String? prounouns,
-    String name,
-    String title,
-    String company,
-    String aboutMe,
-    List<dynamic>? eventIDs,
-    List<dynamic>? postIDs,
-    List<dynamic>? connectionIDs,
-    File? file,
-  ) async {
-    String imageurl = await uploadImage(file!, 'users');
-    if (imageurl != 'error') {
-      await firestore.collection('users').doc(fireAuth.currentUser!.uid).set({
-        'id': fireAuth.currentUser!.uid,
-        'name': name,
-        'pronouns': prounouns ?? "",
-        'title': title,
-        'imageURL': imageurl,
-        'company': company,
-        'aboutMe': aboutMe,
-        'eventIDs': eventIDs ?? [],
-        'connectionIDs': connectionIDs ?? [],
-        'postIDs': postIDs ?? [],
-      });
-    UserData? userData = await FireMethods().getUserData(FireMethods.fireAuth.currentUser!.uid);
-    UserPreferences.setUser(userData!);
-      return 'done';
     } else {
-      return 'Some error occured, please try again!';
+      return ("Some error occured, please try again!");
     }
-  }
-
-  Future<UserData?> getUserData(String userID) async {
-    var docSnapshot = await firestore.collection('users').doc(userID).get();
-    if (docSnapshot.exists) {
-      return UserData.fromJson(docSnapshot.data());
-    }
-    return null;
   }
 
   Future<String> updateUserEventCount(String eventID, bool addToList) {
@@ -120,6 +113,14 @@ class FireMethods {
         .then((value) =>
             addToList == true ? "Added To Event" : "Removed From Event")
         .catchError((error) => "Failed to update User Event: $error");
+  }
+
+  Future<UserData?> getUserData(String userID) async {
+    var docSnapshot = await firestore.collection('users').doc(userID).get();
+    if (docSnapshot.exists) {
+      return UserData.fromJson(docSnapshot.data());
+    }
+    return null;
   }
 
   Future<String> uploadImage(File file, String baseFolder) async {

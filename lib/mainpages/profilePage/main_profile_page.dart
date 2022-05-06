@@ -13,8 +13,18 @@ class MainProfilePage extends StatefulWidget {
 
   @override
   State<MainProfilePage> createState() => _MainProfilePageState();
+  
 }
+
 class _MainProfilePageState extends State<MainProfilePage> {
+  late UserData user;
+
+  @override
+  void initState() {
+    super.initState();
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     UserData user = UserPreferences.getUser();
