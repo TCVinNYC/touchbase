@@ -17,10 +17,12 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends State<EventsPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin,  AutomaticKeepAliveClientMixin<EventsPage> {
   late TabController _tabController;
   late ScrollController _scrollViewController;
-
+  
+  @override
+  bool get wantKeepAlive => true;
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 3);
@@ -37,6 +39,7 @@ class _EventsPageState extends State<EventsPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: NestedScrollView(
         controller: _scrollViewController,

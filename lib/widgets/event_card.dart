@@ -27,8 +27,7 @@ class _EventWidgetState extends State<EventWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.event.attendees
-        .contains(FireMethods.fireAuth.currentUser!.uid)) {
+    if (widget.event.attendees.contains(FireMethods.fireAuth.currentUser!.uid)) {
       toggle = true;
     }
     if (widget.event.host.contains(FireMethods.fireAuth.currentUser!.uid)) {
