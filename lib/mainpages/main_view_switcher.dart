@@ -89,19 +89,19 @@ class _MainPageState extends State<MainPage> {
                       tabs: const [
                         GButton(
                           icon: Icons.home,
-                          text: 'Feed',
+                          text: ' Feed',
                         ),
                         GButton(
                           icon: Icons.public_rounded,
-                          text: 'Connect',
+                          text: ' Connect',
                         ),
                         GButton(
                           icon: Icons.event_available_rounded,
-                          text: 'Events',
+                          text: ' Events',
                         ),
                         GButton(
                           icon: Icons.person,
-                          text: 'Profile',
+                          text: ' Profile',
                         ),
                       ],
                       selectedIndex: _currentIndex,

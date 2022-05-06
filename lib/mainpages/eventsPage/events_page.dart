@@ -228,7 +228,8 @@ class PastEventsPage extends StatelessWidget {
   }
 }
 
-Stream<List<Event>> getAllEvents() => FirebaseFirestore.instance
+Stream<List<Event>> getAllEvents() => 
+FirebaseFirestore.instance
     .collection('events')
     .where('id', whereNotIn: UserPreferences.getUser().eventIDs)
     .snapshots()
