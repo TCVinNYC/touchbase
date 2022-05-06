@@ -111,7 +111,11 @@ class ProfileInfo extends StatelessWidget {
                 ),
               ],
             )),
-        Positioned(bottom: 0, right: 0, left: 0, child: ProfileStatsCard(userdata: userData))
+        Positioned(
+            bottom: 0,
+            right: 0,
+            left: 0,
+            child: ProfileStatsCard(userdata: userData))
       ]),
     );
   }

@@ -40,7 +40,7 @@ class SignUpImage extends StatelessWidget {
                         builder: (context) => const MainPage()));
                   },
                   child: const Text(
-                    'Enable Camera Roll',
+                    'Enable',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

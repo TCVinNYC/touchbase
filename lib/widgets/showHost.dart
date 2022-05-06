@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/event.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/firestore.dart';
+import 'package:lets_connect/mainpages/profilePage/profile_info.dart';
 
 class showHost extends StatelessWidget {
   const showHost({
@@ -21,9 +22,24 @@ class showHost extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-      //Stream<UserData> myUser = await FireMethods().getUserData(event.host[3]);
-      UserData? myUser = await FireMethods().getUserData(event.host[3]);
-       print(myUser);
+        UserData? myUser = await FireMethods().getUserData(event.host[3]);
+        Navigator.push(context, MaterialPageRoute<void>(
+          builder: (BuildContext context) {
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.orange,
+              ),
+              body: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    ProfileInfo(userData: myUser!),
+                  ],
+                ),
+              ),
+            );
+          },
+        ));
+        //print(myUser);
       },
       child: Container(
         alignment: const Alignment(-1.035, 0),
@@ -33,7 +49,7 @@ class showHost extends StatelessWidget {
           crossAxisAlignment: WrapCrossAlignment.start,
           spacing: 2.3,
           children: [
-            showName == null
+            showName == null || false
                 ? withOutTitle(event, width, height)
                 : withTitle(event, width, height),
           ],
