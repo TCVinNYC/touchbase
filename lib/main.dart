@@ -22,7 +22,7 @@ Future main() async {
   await UserPreferences.init();
   runApp(const MyApp());
 }
-
+GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey=GlobalKey<ScaffoldMessengerState>();
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Touchbase",
       theme: ThemeData(fontFamily: 'Frutiger'),
+      scaffoldMessengerKey: scaffoldMessengerKey,
       color: createMaterialColor(const Color.fromARGB(255, 255, 170, 12)),
       //fontFamily: 'Frutiger',
       //primaryColor: createMaterialColor(const Color.fromARGB(255, 255, 170, 12)),
