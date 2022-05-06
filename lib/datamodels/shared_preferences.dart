@@ -17,7 +17,8 @@ class UserPreferences {
           'https://cdn.sanity.io/images/ay6gmb6r/production/52566e987046623a25e2f40a11fa99bbd9f4d4d2-2240x1260.png',
       prounouns: 'Not/Here',
       title: 'Mr Title',
-      userID: '1234567890');
+      userID: '1234567890',
+      likedPostsIDs: []);
 
   static Future init() async =>
       _preferences = await SharedPreferences.getInstance();

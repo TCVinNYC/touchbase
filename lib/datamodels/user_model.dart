@@ -9,6 +9,7 @@ class UserData {
   final List<dynamic> eventIDs;
   final List<dynamic> postIDs;
   final List<dynamic> connectionIDs;
+  final List<dynamic> likedPostsIDs;
 
   const UserData({
     //this.profilePicLinkOnly,
@@ -22,6 +23,7 @@ class UserData {
     required this.eventIDs,
     required this.postIDs,
     required this.connectionIDs,
+    required this.likedPostsIDs
   });
 
   UserData copy(
@@ -34,7 +36,8 @@ class UserData {
           String? profilePic,
           List<dynamic>? eventIDs,
           List<dynamic>? postIDs,
-          List<dynamic>? connectionIDs}) =>
+          List<dynamic>? connectionIDs,
+          List<dynamic>? likedPostsIDs}) =>
       UserData(
           userID: userID ?? this.userID,
           name: name ?? this.name,
@@ -45,7 +48,9 @@ class UserData {
           profilePic: profilePic ?? this.profilePic,
           eventIDs: eventIDs ?? this.eventIDs,
           postIDs: postIDs ?? this.postIDs,
-          connectionIDs: connectionIDs ?? this.connectionIDs);
+          connectionIDs: connectionIDs ?? this.connectionIDs,
+          likedPostsIDs: likedPostsIDs ?? this.likedPostsIDs
+          );
 
 //info for uploading user
   Map<String, dynamic> toJson() {
@@ -74,5 +79,6 @@ class UserData {
       company: json['company'],
       postIDs: json['postIDs'],
       eventIDs: json['eventIDs'],
-      connectionIDs: json['connectionIDs']);
+      connectionIDs: json['connectionIDs'],
+      likedPostsIDs: json['likedPostsIDs'] ?? []);
 }
