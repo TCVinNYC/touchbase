@@ -6,6 +6,8 @@ import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/mainpages/eventsPage/events_page.dart';
 import 'package:lets_connect/mainpages/profilePage/main_profile_page.dart';
 
+import 'feedPage/feed_page.dart';
+
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
   @override
@@ -15,7 +17,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   late int _currentIndex;
   late List<Widget> _pages;
- // late PageController _pageController;
+  // late PageController _pageController;
 
   @override
   void initState() {
@@ -23,9 +25,10 @@ class _MainPageState extends State<MainPage> {
 
     _currentIndex = 0;
     _pages = [
-      const Center(
-          child:
-              Text('Feed Page', style: TextStyle(fontSize: 60))), //FeedPage()
+      const FeedPage(),
+      // Center(
+      //     child:
+      //         Text('Feed Page', style: TextStyle(fontSize: 60))), //FeedPage()
       const Center(
           child: Text('Connect Page',
               style: TextStyle(fontSize: 60))), //ConnectPage(),
