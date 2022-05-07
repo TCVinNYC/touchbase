@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lets_connect/firebase/event_data.dart';
-import 'package:lets_connect/mainpages/eventsPage/filter_events_page.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
+import 'package:lets_connect/datamodels/user_model.dart';
+import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/widgets/custom_category.dart';
 import 'package:lets_connect/widgets/image_widget.dart';
 import 'package:lets_connect/widgets/max_lines.dart';
@@ -43,8 +43,7 @@ class _CreateEventState extends State<CreateEventPage> {
   }
 
   File? image;
-  AssetImage imageAsset = const AssetImage('assets/images/upload_image.jpg');
-
+  Image imageAsset = Image.asset('assets/images/upload_image.jpg');
   Future pickImage(context, ImageSource source) async {
     try {
       XFile? image = await ImagePicker().pickImage(
@@ -224,6 +223,7 @@ class _CreateEventState extends State<CreateEventPage> {
                             height: 175,
                             width: 750,
                             enableEditButton: true,
+                            circular: false,
                           )
                         : ImageWidget(
                             imageAsset: imageAsset,
@@ -231,6 +231,8 @@ class _CreateEventState extends State<CreateEventPage> {
                             height: 175,
                             width: 750,
                             enableEditButton: false,
+                            circular: false,
+                            enableImageInk: true,
                           ),
                   )),
 
@@ -262,7 +264,6 @@ class _CreateEventState extends State<CreateEventPage> {
                       minLines: 1,
                       maxLines: 5,
                       inputFormatters: [MaxLinesTextInputFormatter(5)],
-                      //onChanged: widget.onChanged,
                     ),
                   ),
                 ],
@@ -450,11 +451,15 @@ class _CreateEventState extends State<CreateEventPage> {
                       if (priceEnable == false) {
                         priceController.text = "0";
                       }
-                      String name = FirebaseAuth
-                          .instance.currentUser!.displayName.toString();
-                      //String title = "title";
-                      String userID = FirebaseAuth.instance.currentUser!.uid;
-                      List<String> host = [name, "title", userID];
+
+                      UserData? user = await FireMethods()
+                          .getUserData(FireMethods.fireAuth.currentUser!.uid);
+                      List<dynamic> host = [
+                        user?.name,
+                        user?.title,
+                        user?.profilePic,
+                        user?.userID
+                      ];
 
                       finalDateTime = DateTime(
                           dateSelect.year,
@@ -462,10 +467,10 @@ class _CreateEventState extends State<CreateEventPage> {
                           dateSelect.day,
                           timeSelect!.hour,
                           timeSelect!.minute);
-                      String result = await uploadEvent(
+
+                      String result = await FireMethods().uploadEvent(
                           titleController.text,
                           finalDateTime,
-                          //DateTime.parse(finalDateTime),
                           descriptionController.text,
                           locationNameController.text,
                           locationAddressController.text,
@@ -474,7 +479,7 @@ class _CreateEventState extends State<CreateEventPage> {
                           selectedCategories.first,
                           adultEnable,
                           host,
-                          image!);
+                          image);
                       if (result == "done") {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

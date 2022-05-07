@@ -1,36 +1,124 @@
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/event.dart';
+import 'package:lets_connect/datamodels/user_model.dart';
+import 'package:lets_connect/firebase/firestore.dart';
+import 'package:lets_connect/mainpages/profilePage/profile_info.dart';
 
 class showHost extends StatelessWidget {
   const showHost({
     Key? key,
     required this.event,
     this.showName,
+    required this.width,
+    required this.height,
   }) : super(key: key);
 
   final Event event;
   final bool? showName;
+  final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: const Alignment(-1.035, 0),
-      padding: const EdgeInsets.fromLTRB(0, 10, 0, 3),
-      //alignment: Alignment.,
-      child: Wrap(
-        crossAxisAlignment: WrapCrossAlignment.start,
-        spacing: 2.3,
-        children: [
-          showName == null ? withOutIcon(event) : withIcon(event),
-        ],
+    return InkWell(
+      onTap: () async {
+        UserData? myUser = await FireMethods().getUserData(event.host[3]);
+        showModalBottomSheet(
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            context: context,
+            builder: (context) {
+              return DraggableScrollableSheet(
+                initialChildSize: 0.5,
+                minChildSize: 0.5,
+                maxChildSize: 0.9,
+                snap: true,
+                snapSizes: const [0.5, 0.9],
+                builder: (_, controller) {
+                  return Scaffold(
+                      appBar: AppBar(
+                        backgroundColor: Colors.orange,
+                      ),
+                      body: SingleChildScrollView(
+                        controller: controller,
+                        child: Column(
+                          children: <Widget>[
+                            ProfileInfo(userData: myUser!),
+                          ],
+                        ),
+                      ),
+                  );
+                  // return Container(
+                  //   decoration: BoxDecoration(
+                  //   color: Colors.white,
+                  //   borderRadius: BorderRadius.vertical(top: Radius.circular(20))
+                  //   ),
+                  //   child: ListView(
+                  //     controller: controller,
+                  //     children: [
+                  //       ProfileInfo(userData: myUser!),
+                  //     ],
+                  //   ),
+                  // );
+                },
+              );
+            });
+        // Navigator.push(context, MaterialPageRoute<void>(
+        //   // builder: (BuildContext context) {
+        // showModalBottomSheet(
+        // context: context,
+        //         builder: (context) {
+        //           return ProfileInfo(userData: myUser!);
+        // return Scaffold(
+        //   appBar: AppBar(
+        //     backgroundColor: Colors.orange,
+        //   ),
+        //   body: SingleChildScrollView(
+        //     child: Column(
+        //       children: <Widget>[
+        //         ProfileInfo(userData: myUser!),
+        //       ],
+        //     ),
+        //   ),
+        // );
+        // });
+        //   // return Container();
+        //   // },
+        // ));
+      },
+      child: Container(
+        alignment: const Alignment(-1.035, 0),
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 3),
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.start,
+          spacing: 2.3,
+          children: [
+            showName == null || false
+                ? withOutTitle(event, width, height)
+                : withTitle(event, width, height),
+          ],
+        ),
       ),
     );
   }
 }
 
-withOutIcon(Event event) {
+withOutTitle(Event event, width, height) {
   return Row(
     children: [
+      Material(
+        elevation: 2,
+        clipBehavior: Clip.antiAlias,
+        type: MaterialType.circle,
+        color: Colors.transparent,
+        child: Ink.image(
+          image: NetworkImage(event.host[2]),
+          fit: BoxFit.cover,
+          width: width,
+          height: height,
+        ),
+      ),
+      const SizedBox(width: 5),
       Text(
         event.host[0],
         style: TextStyle(
@@ -43,15 +131,22 @@ withOutIcon(Event event) {
   );
 }
 
-withIcon(Event event) {
+withTitle(Event event, width, height) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      const Icon(
-        Icons.power_off_outlined,
-        size: 32,
-        color: Colors.blueAccent,
+      Material(
+        elevation: 2,
+        clipBehavior: Clip.antiAlias,
+        type: MaterialType.circle,
+        color: Colors.transparent,
+        child: Ink.image(
+          image: NetworkImage(event.host[2]),
+          fit: BoxFit.cover,
+          width: width,
+          height: height,
+        ),
       ),
       const SizedBox(width: 8),
       Column(

@@ -1,9 +1,13 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/event.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
+import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/mainpages/eventsPage/create_event.dart';
 import 'package:lets_connect/mainpages/eventsPage/filter_events_page.dart';
-import 'package:lets_connect/mainpages/eventsPage/view_event.dart';
 import 'package:lets_connect/widgets/event_card.dart';
 
 class EventsPage extends StatefulWidget {
@@ -13,10 +17,12 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends State<EventsPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin,  AutomaticKeepAliveClientMixin<EventsPage> {
   late TabController _tabController;
   late ScrollController _scrollViewController;
-
+  
+  @override
+  bool get wantKeepAlive => true;
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 3);
@@ -33,6 +39,7 @@ class _EventsPageState extends State<EventsPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: NestedScrollView(
         controller: _scrollViewController,
@@ -68,7 +75,7 @@ class _EventsPageState extends State<EventsPage>
               ],
               pinned: true,
               floating: true,
-              snap: false,
+              snap: true,
               forceElevated: boxIsScrolled,
               bottom: TabBar(
                 physics: const NeverScrollableScrollPhysics(),
@@ -78,9 +85,9 @@ class _EventsPageState extends State<EventsPage>
                 indicatorWeight: 3.2,
                 isScrollable: false,
                 tabs: const <Widget>[
-                  Tab(text: "All Events"),
-                  Tab(text: "Your Events"),
-                  Tab(text: "Past Events")
+                  Tab(text: "New"),
+                  Tab(text: "Upcoming"),
+                  Tab(text: "Missed")
                 ],
                 controller: _tabController,
               ),
@@ -88,7 +95,7 @@ class _EventsPageState extends State<EventsPage>
           ];
         },
         body: TabBarView(
-          children: const <Widget>[
+          children: <Widget>[
             AllEventsPage(),
             YourEventsPage(),
             PastEventsPage(),
@@ -121,23 +128,25 @@ class AllEventsPage extends StatelessWidget {
       top: false,
       bottom: false,
       child: StreamBuilder<List<Event>>(
+        key: Key("${Random().nextDouble()}"),
         stream: getAllEvents(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            print(snapshot);
             return Text("Something when wrong!" + snapshot.error.toString());
           } else if (snapshot.hasData) {
             final events = snapshot.data!;
             return ListView.separated(
               itemBuilder: (BuildContext context, int index) {
-                return EventWidget(event: events[index],);
+                return EventWidget(
+                  event: events[index],
+                  showBookmark: true,
+                );
               },
               itemCount: events.length,
               separatorBuilder: (BuildContext context, int index) {
                 return Container();
               },
             );
-            //return ListView(children: events.map(buildEventTemplate(context)).toList());
           } else {
             return const Center(child: CircularProgressIndicator());
           }
@@ -162,9 +171,18 @@ class YourEventsPage extends StatelessWidget {
             return Text("Something when wrong!" + snapshot.error.toString());
           } else if (snapshot.hasData) {
             final events = snapshot.data!;
-            print(events);
-            return Container();
-            //return ListView(children: events.map(buildEventTemplate).toList());
+            return ListView.separated(
+              itemBuilder: (BuildContext context, int index) {
+                return EventWidget(
+                  event: events[index],
+                  showBookmark: true,
+                );
+              },
+              itemCount: events.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return Container();
+              },
+            );
           } else {
             return const Center(child: CircularProgressIndicator());
           }
@@ -186,11 +204,21 @@ class PastEventsPage extends StatelessWidget {
         stream: getPastEvents(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text("Something when wrong!" + snapshot.toString());
+            return Text("Something when wrong!" + snapshot.error.toString());
           } else if (snapshot.hasData) {
             final events = snapshot.data!;
-            return Container();
-            //return ListView(children: events.map(buildEventTemplate).toList());
+            return ListView.separated(
+              itemBuilder: (BuildContext context, int index) {
+                return EventWidget(
+                  event: events[index],
+                  showBookmark: false,
+                );
+              },
+              itemCount: events.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return Container();
+              },
+            );
           } else {
             return const Center(child: CircularProgressIndicator());
           }
@@ -200,15 +228,23 @@ class PastEventsPage extends StatelessWidget {
   }
 }
 
-Stream<List<Event>> getAllEvents() => FirebaseFirestore.instance
+Stream<List<Event>> getAllEvents() => 
+FirebaseFirestore.instance
     .collection('events')
-    .where("time", isGreaterThanOrEqualTo: DateTime.now())
+    .where('id', whereNotIn: UserPreferences.getUser().eventIDs)
     .snapshots()
     .map((snapshot) =>
-        snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList());
+        snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList())
+    .map((event) => event
+        .where((event) =>
+            event.time.millisecondsSinceEpoch >=
+            DateTime.now().millisecondsSinceEpoch)
+        .toList());
 
+UserData user = UserPreferences.getUser();
 Stream<List<Event>> getYourEvents() => FirebaseFirestore.instance
     .collection('events')
+    .where('attendees', arrayContainsAny: [user.userID])
     .where("time", isGreaterThanOrEqualTo: DateTime.now())
     .snapshots()
     .map((snapshot) =>
@@ -216,214 +252,23 @@ Stream<List<Event>> getYourEvents() => FirebaseFirestore.instance
 
 Stream<List<Event>> getPastEvents() => FirebaseFirestore.instance
     .collection('events')
-    .where("time", isGreaterThanOrEqualTo: DateTime.now())
+    .where('id', whereNotIn: UserPreferences.getUser().eventIDs)
     .snapshots()
     .map((snapshot) =>
-        snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList());
+        snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList())
+    .map((event) => event
+        .where((event) =>
+            event.time.millisecondsSinceEpoch <=
+            DateTime.now().millisecondsSinceEpoch)
+        .toList());
 
-
-
-//List<String> _tabs = ['All Events', 'Your Events', 'Past Events'];
-
-// return DefaultTabController(
-//   length: _tabs.length, // This is the number of tabs.
-//   child: NestedScrollView(
-//     headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-//       // These are the slivers that show up in the "outer" scroll view.
-//       return <Widget>[
-//         SliverOverlapAbsorber(
-//           handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-//           sliver: 
-// SliverAppBar(
-//             backgroundColor: Colors.white,
-//             centerTitle: false,
-//             title: const Text(
-//               'Search Events',
-//               style: TextStyle(
-//                   color: Colors.black,
-//                   fontFamily: 'Quicksand',
-//                   fontWeight: FontWeight.w800,
-//                   fontSize: 25),
-//               textAlign: TextAlign.start,
-//             ),
-//             actions: <Widget>[
-//               IconButton(
-//                 icon: const Icon(
-//                   Icons.menu_rounded,
-//                   color: Colors.black,
-//                 ),
-//                 tooltip: 'Filter Options',
-//                 onPressed: () {
-//                   Navigator.push(context, MaterialPageRoute<void>(
-//                     builder: (BuildContext context) {
-//                       return const FilterEventsPage();
-//                     },
-//                   ));
-//                 },
-//               )
-//             ],
-//             pinned: true,
-//             floating: true,
-//             snap: false,
-//             forceElevated: innerBoxIsScrolled,
-//             bottom: TabBar(
-//               // splashFactory: InkRipple.splashFactory,
-//               labelColor: Colors.black,
-//               unselectedLabelColor: const Color.fromARGB(255, 32, 29, 29),
-//               indicatorColor: Colors.amberAccent,
-//               indicatorWeight: 3.2,
-//               isScrollable: false,
-//               tabs: _tabs.map((String name) => Tab(text: name)).toList(),
-//             ),
-//           ),
-//         ),
-//       ];
-//     },
-
-//     //Tabs
-//     body: TabBarView(
-//       physics: const NeverScrollableScrollPhysics(),
-//       // These are the contents of the tab views, below the tabs.
-//       children: [
-//         //All Events
-//         SafeArea(
-          // top: false,
-          // bottom: false,
-//           child: Builder(
-//             builder: (BuildContext context) {
-//               return CustomScrollView(
-//                 key: const PageStorageKey<String>('All Events'),
-//                 slivers: <Widget>[
-//                   SliverOverlapInjector(
-//                     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-//                         context),
-//                   ),
-//                   SliverPadding(
-//                     padding: const EdgeInsets.fromLTRB(3, 3, 3, 20),
-//                     sliver: SliverList(
-//                       // itemExtent: 48.0,
-//                       delegate: SliverChildBuilderDelegate(
-//                         (BuildContext context, int index) {
-//                           return buildEventsList(context);
-//                           //return getEvents();
-//                           //return getAllEvents(context);
-//                           // return ListTile(
-//                           //   title: Text('Item $index'),
-//                           // );
-//                         },
-//                         childCount: 1,
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               );
-//             },
-//           ),
-//         ),
-
-//         //Your Events
-//         SafeArea(
-//           top: false,
-//           bottom: false,
-//           child: Builder(
-//             builder: (BuildContext context) {
-//               return CustomScrollView(
-//                 key: const PageStorageKey<String>('Your Events'),
-//                 slivers: <Widget>[
-//                   SliverOverlapInjector(
-//                     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-//                         context),
-//                   ),
-//                   SliverPadding(
-//                     padding: const EdgeInsets.fromLTRB(3, 3, 3, 20),
-//                     sliver: SliverList(
-//                       // itemExtent: 48.0,
-//                       delegate: SliverChildBuilderDelegate(
-//                         (BuildContext context, int index) {
-//                           // print(getEventsList());
-//                           //return getAllEvents2();
-//                           return ListTile(
-//                             title: Text('Item $index'),
-//                           );
-//                         },
-//                         childCount: 1,
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               );
-//             },
-//           ),
-//         ),
-
-//         //Past Events
-//         SafeArea(
-//           top: false,
-//           bottom: false,
-//           child: Builder(
-//             builder: (BuildContext context) {
-//               return CustomScrollView(
-//                 key: const PageStorageKey<String>('Past Events'),
-//                 slivers: <Widget>[
-//                   SliverOverlapInjector(
-//                     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-//                         context),
-//                   ),
-//                   SliverPadding(
-//                     padding: const EdgeInsets.fromLTRB(3, 3, 3, 20),
-//                     sliver: SliverList(
-//                       // itemExtent: 48.0,
-//                       delegate: SliverChildBuilderDelegate(
-//                         (BuildContext context, int index) {
-//                           //return getAllEvents3();
-//                         },
-//                         childCount: 1,
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               );
-//             },
-//           ),
-//         ),
-//       ],
-//     ),
-//   ),
-// );
-
-
-
-
-
-
-
-
-// getAllEvents(context) {
-//   var documents = getEventsList();
-//  return ListView.separated(
-//           itemBuilder: (BuildContext context, int index) {
-//             return eventsTemplate(context, documents);
-//           },
-//           itemCount: documents.length,
-//           separatorBuilder: (BuildContext context, int index) {
-//             return Divider(
-//               color: Colors.black,
-//             );
-//           },
-//         );
-// }
-
-// getAllEvents2() {
-//   return Column(
-//     children: posts2.map((post) => postTemplate(post)).toList(),
-//   );
-// }
-
-// getAllEvents3() {
-//   return Column(
-//     children: posts3.map((post) => postTemplate(post)).toList(),
-//   );
-// }
+// Stream<List<Event>> getPastEvents() => FirebaseFirestore.instance
+//     .collection('events')
+//     .where("time", isLessThan: DateTime.now())
+//     .where('attendees', arrayContainsAny: [user.userID])
+//     .snapshots()
+//     .map((snapshot) =>
+//         snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList());
 
 // //temp list for event posts
 // List<EventPost> posts = [
@@ -433,18 +278,7 @@ Stream<List<Event>> getPastEvents() => FirebaseFirestore.instance
 //       coordinator: "Jeff Chun",
 //       attendees: "ur mom 1",
 //       location: "New York, NY"),
-//   EventPost(
-//       time: "1:00 PM",
-//       sessionTitle: "Startup Panel",
-//       coordinator: "John Doe",
-//       attendees: "Your Mom",
-//       location: "San Franciso, CA"),
-//   EventPost(
-//       time: "9:45 PM",
-//       sessionTitle: "Happy Hour Meet & Greet",
-//       coordinator: "Kison Patel",
-//       attendees: "Your Mom",
-//       location: "Chicago, IL"),
+
 //   EventPost(
 //       time: "2:30PM",
 //       sessionTitle: "Boy Genius Talk",

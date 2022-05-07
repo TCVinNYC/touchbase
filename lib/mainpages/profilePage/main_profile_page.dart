@@ -1,18 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:lets_connect/mainpages/profilePage/account_info.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
+import 'package:lets_connect/datamodels/user_model.dart';
+import 'package:lets_connect/mainpages/profilePage/profile_details.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_info.dart';
 import 'package:lets_connect/mainpages/profilePage/side_menu_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:lets_connect/login_page.dart';
 import 'package:lets_connect/main.dart';
-import 'package:lets_connect/mainpages/main_view_switcher.dart';
+import 'package:lets_connect/widgets/image_widget.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+class MainProfilePage extends StatefulWidget {
+  const MainProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<MainProfilePage> createState() => _MainProfilePageState();
+}
+
+class _MainProfilePageState extends State<MainProfilePage> {
+  late UserData user;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    UserData user = UserPreferences.getUser();
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -23,13 +36,6 @@ class ProfilePage extends StatelessWidget {
               fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.orange,
-        // actions: <Widget>[
-        //   IconButton(
-        //     onPressed: () => Scaffold.of(context).openDrawer(),
-        //     icon: const Icon(Icons.menu_rounded),
-        //     iconSize: 30,
-        //   )
-        // ],
       ),
       endDrawer: SizedBox(
         width: MediaQuery.of(context).size.width * 0.65,
@@ -38,50 +44,28 @@ class ProfilePage extends StatelessWidget {
             children: <Widget>[
               Container(
                 alignment: Alignment.bottomCenter,
-                padding: const EdgeInsets.only(bottom: 30),
+                padding: const EdgeInsets.fromLTRB(0, 50, 0, 30),
                 width: MediaQuery.of(context).size.width,
                 height: 230,
                 decoration: const BoxDecoration(
                   color: Colors.orangeAccent,
-                  //  Color.fromARGB(255, 255, 215, 155),
                 ),
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    // change how to get image
-                    const CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          'https://i.pinimg.com/originals/94/25/93/9425933cef85981844778fe55327f5da.jpg'),
-                      radius:
-                          55, //change to 60 if u want edit icon on the bottom
-                    ),
-
-                    //BUTTON TO CHANGE IMAGE
-                    Positioned(
-                        bottom: -10,
-                        right: -15,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            //function to change image
-                          },
-                          child: const Icon(
-                            Icons.create_rounded,
-                            color: Colors.blue,
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            shape: const CircleBorder(),
-                            primary: Colors.white,
-                          ),
-                        )),
-                  ],
-                ),
+                //CHANGE IMAGE
+                child: ImageWidget(
+                    circular: true,
+                    width: 150,
+                    height: 150,
+                    enableEditButton: true,
+                    colorInvert: true,
+                    enableImageInk: false,
+                    imageAsset: Image.network(user.profilePic)),
               ),
               //ACOUNT INFORMATION
               InkWell(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const AccountInfo()));
                     //navigate to account info form
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => AccountInfo(userData: user)));
                   },
                   child: SideMenu(
                       icon: Icons.account_circle_rounded,
@@ -92,6 +76,8 @@ class ProfilePage extends StatelessWidget {
               InkWell(
                   onTap: () {
                     //navigate to notifications form
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Coming Soon")));
                   },
                   child: SideMenu(
                       icon: Icons.notifications_rounded,
@@ -104,6 +90,8 @@ class ProfilePage extends StatelessWidget {
               InkWell(
                 onTap: () {
                   //navigate to settings form
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Coming Soon")));
                 },
                 child: SideMenu(
                     icon: Icons.settings_rounded,
@@ -115,11 +103,14 @@ class ProfilePage extends StatelessWidget {
               InkWell(
                   onTap: () async {
                     await FirebaseAuth.instance.signOut();
+                    UserPreferences.resetUser();
 
-                    Navigator.of(context).pushReplacement(
+                    Navigator.pushAndRemoveUntil(
+                      context,
                       MaterialPageRoute(
-                        builder: (context) => const MyHomePage(),
+                        builder: (BuildContext context) => const MyHomePage(),
                       ),
+                      (route) => false,
                     );
                   },
                   child: SideMenu(
@@ -134,22 +125,11 @@ class ProfilePage extends StatelessWidget {
       //BODY
       body: SingleChildScrollView(
         child: Column(
-          children: const <Widget>[
-            ProfileInfo(),
+          children: <Widget>[
+            ProfileInfo(userData: user),
           ],
         ),
       ),
-      // body: SingleChildScrollView(
-      //     child: Column(
-      //   children: [
-      //     Container(
-      //       width: 200,
-      //       height: 200,
-      //       decoration: const BoxDecoration(color: Colors.blueAccent),
-      //     )
-      //   ],
-      // )),
-      // ),
     );
   }
 }

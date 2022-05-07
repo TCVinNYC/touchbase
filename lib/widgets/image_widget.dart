@@ -2,21 +2,27 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 
 class ImageWidget extends StatelessWidget {
   final File? image;
-  final AssetImage? imageAsset;
-  final ValueChanged<ImageSource> onClicked;
+  final Image? imageAsset;
+  final ValueChanged<ImageSource>? onClicked;
   final double width;
   final double height;
   final bool enableEditButton;
+  final bool circular;
+  final bool? colorInvert;
+  final bool? enableImageInk;
 
   const ImageWidget({
     Key? key,
     this.image,
+    this.enableImageInk,
+    this.colorInvert,
+    required this.circular,
     this.imageAsset,
-    required this.onClicked,
+    this.onClicked,
+
     required this.width,
     required this.height,
     required this.enableEditButton,
@@ -28,8 +34,8 @@ class ImageWidget extends StatelessWidget {
         child: Stack(
       children: [
         image != null
-            ? buildImage(context, width, height)
-            : buildImageAsset(context, width, height),
+            ? buildImage(context, width, height, circular)
+            : buildImageAsset(context, width, height, circular),
         Positioned(
           bottom: 4,
           right: 5,
@@ -41,13 +47,17 @@ class ImageWidget extends StatelessWidget {
     ));
   }
 
-  Widget buildImage(BuildContext context, double width, double height) {
+  Widget buildImage(
+      BuildContext context, double width, double height, bool circular) {
     final imagePath = this.image!.path;
     final image = imagePath.contains('https://')
         ? NetworkImage(imagePath)
         : FileImage(File(imagePath));
 
     return Material(
+      elevation: 2,
+      clipBehavior: Clip.antiAlias,
+      type: circular == false ? MaterialType.canvas : MaterialType.circle,
       color: Colors.transparent,
       child: Ink.image(
         image: image as ImageProvider,
@@ -58,31 +68,35 @@ class ImageWidget extends StatelessWidget {
     );
   }
 
-  Widget buildImageAsset(BuildContext context, double width, double height) {
+  Widget buildImageAsset(
+      BuildContext context, double width, double height, bool circular) {
     return Material(
+      elevation: 2,
+      clipBehavior: circular == false ? Clip.none : Clip.antiAlias,
+      type: circular == false ? MaterialType.canvas : MaterialType.circle,
       color: Colors.transparent,
       child: Ink.image(
-        image: imageAsset!,
+        image: imageAsset!.image,
         fit: BoxFit.cover,
         width: width,
         height: height,
-        child: InkWell(onTap: () async {
+        child: enableImageInk == true ? InkWell(onTap: () async {
           final source = await showImageSource(context);
           if (source == null) return;
 
-          onClicked(source);
-        }),
+          onClicked!(source);
+        }) : Container(),
       ),
     );
   }
 
   Widget buildEditIcon(Color color, context) => buildCircle(
         context: context,
-        color: Colors.orange,
+        color: colorInvert == true ? Colors.white : Colors.orange,
         all: 8,
-        child: const Icon(
+        child:  Icon(
           Icons.edit,
-          color: Colors.white,
+          color: colorInvert == true ? Colors.orange : Colors.white,
           size: 20,
         ),
       );
@@ -101,7 +115,7 @@ class ImageWidget extends StatelessWidget {
                 final source = await showImageSource(context);
                 if (source == null) return;
 
-                onClicked(source);
+                onClicked!(source);
               },
               child: Container(
                 padding: EdgeInsets.all(all),
