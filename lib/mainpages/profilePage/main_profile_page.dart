@@ -13,7 +13,6 @@ class MainProfilePage extends StatefulWidget {
 
   @override
   State<MainProfilePage> createState() => _MainProfilePageState();
-  
 }
 
 class _MainProfilePageState extends State<MainProfilePage> {
@@ -22,7 +21,6 @@ class _MainProfilePageState extends State<MainProfilePage> {
   @override
   void initState() {
     super.initState();
-    
   }
 
   @override

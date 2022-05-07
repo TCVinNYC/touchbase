@@ -7,6 +7,8 @@ import 'package:lets_connect/mainpages/eventsPage/events_page.dart';
 import 'package:lets_connect/mainpages/feedPage/feed_page.dart';
 import 'package:lets_connect/mainpages/profilePage/main_profile_page.dart';
 
+import 'feedPage/feed_page.dart';
+
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
   @override
