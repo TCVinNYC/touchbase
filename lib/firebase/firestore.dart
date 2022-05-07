@@ -115,6 +115,68 @@ class FireMethods {
         .catchError((error) => "Failed to update User Event: $error");
   }
 
+  Future<String> uploadPost(
+    DateTime timeOfPost,
+    String? postText,
+    List<dynamic> poster,
+    List<dynamic> likers,
+    File? file,
+  ) async {
+    String docID = firestore.collection('posts').doc().id;
+    String? imageurl;
+    if (file != null) {
+      imageurl = await uploadImage(file, 'posts');
+      if (imageurl == "error") {
+        return ("Some error occured, please try again!");
+      }
+    } else {
+      imageurl = null;
+    }
+    await firestore.collection('posts').doc(docID).set({
+      'id': docID,
+      'timeOfPost': timeOfPost,
+      'image': imageurl,
+      'postText': postText,
+      'poster': poster,
+      'likers': likers,
+    });
+    UserData tempUser = UserPreferences.getUser();
+    tempUser.postIDs.add(docID);
+    UserPreferences.setUser(tempUser);
+    await updateUserPostCount(docID, true);
+    return "done";
+  }
+
+    Future<String> updateUserPostCount(String postID, bool addToList) {
+    return firestore
+        .collection('users')
+        .doc(fireAuth.currentUser!.uid)
+        .update({
+          'postIDs': addToList == true
+              ? FieldValue.arrayUnion([postID])
+              : FieldValue.arrayRemove([postID])
+        })
+        .then((value) => addToList == true ? "Post Created" : "Post Removed")
+        .catchError((error) => "Failed to update User Post: $error");
+  }
+
+  Future<String> updateLikeList(String postID, bool addToList) {
+    UserData tempUser = UserPreferences.getUser();
+    tempUser.likedPostsIDs.add(postID);
+    UserPreferences.setUser(tempUser);
+    return firestore
+        .collection('posts')
+        .doc(postID)
+        .update({
+          'likes': addToList == true
+              ? FieldValue.arrayUnion([fireAuth.currentUser!.uid])
+              : FieldValue.arrayRemove([fireAuth.currentUser!.uid])
+        })
+        .then((value) =>
+            addToList == true ? "Liked Post" : "Unliked Post")
+        .catchError((error) => "Failed to update Post Action: $error");
+  }
+
   Future<UserData?> getUserData(String userID) async {
     var docSnapshot = await firestore.collection('users').doc(userID).get();
     if (docSnapshot.exists) {
