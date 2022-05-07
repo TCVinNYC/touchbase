@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/event.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/firestore.dart';
+import 'package:lets_connect/mainpages/profilePage/profile_info.dart';
 
 class showHost extends StatelessWidget {
   const showHost({
@@ -21,19 +22,78 @@ class showHost extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-      //Stream<UserData> myUser = await FireMethods().getUserData(event.host[3]);
-      UserData? myUser = await FireMethods().getUserData(event.host[3]);
-       print(myUser);
+        UserData? myUser = await FireMethods().getUserData(event.host[3]);
+        showModalBottomSheet(
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            context: context,
+            builder: (context) {
+              return DraggableScrollableSheet(
+                initialChildSize: 0.5,
+                minChildSize: 0.5,
+                maxChildSize: 0.9,
+                snap: true,
+                snapSizes: const [0.5, 0.9],
+                builder: (_, controller) {
+                  return Scaffold(
+                      appBar: AppBar(
+                        backgroundColor: Colors.orange,
+                      ),
+                      body: SingleChildScrollView(
+                        controller: controller,
+                        child: Column(
+                          children: <Widget>[
+                            ProfileInfo(userData: myUser!),
+                          ],
+                        ),
+                      ),
+                  );
+                  // return Container(
+                  //   decoration: BoxDecoration(
+                  //   color: Colors.white,
+                  //   borderRadius: BorderRadius.vertical(top: Radius.circular(20))
+                  //   ),
+                  //   child: ListView(
+                  //     controller: controller,
+                  //     children: [
+                  //       ProfileInfo(userData: myUser!),
+                  //     ],
+                  //   ),
+                  // );
+                },
+              );
+            });
+        // Navigator.push(context, MaterialPageRoute<void>(
+        //   // builder: (BuildContext context) {
+        // showModalBottomSheet(
+        // context: context,
+        //         builder: (context) {
+        //           return ProfileInfo(userData: myUser!);
+        // return Scaffold(
+        //   appBar: AppBar(
+        //     backgroundColor: Colors.orange,
+        //   ),
+        //   body: SingleChildScrollView(
+        //     child: Column(
+        //       children: <Widget>[
+        //         ProfileInfo(userData: myUser!),
+        //       ],
+        //     ),
+        //   ),
+        // );
+        // });
+        //   // return Container();
+        //   // },
+        // ));
       },
       child: Container(
         alignment: const Alignment(-1.035, 0),
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 3),
-        //alignment: Alignment.,
         child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.start,
           spacing: 2.3,
           children: [
-            showName == null
+            showName == null || false
                 ? withOutTitle(event, width, height)
                 : withTitle(event, width, height),
           ],

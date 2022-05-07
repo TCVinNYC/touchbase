@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
-import 'package:lets_connect/mainpages/profilePage/profile_info_card.dart';
-import 'package:lets_connect/widgets/image_widget.dart';
+import 'package:lets_connect/firebase/fire_auth.dart';
+import 'package:lets_connect/mainpages/profilePage/profile_stats_card.dart';
 
-class ProfileInfo extends StatefulWidget {
-  const ProfileInfo({Key? key}) : super(key: key);
+class ProfileInfo extends StatelessWidget {
+  final UserData userData;
+  const ProfileInfo({required this.userData, Key? key}) : super(key: key);
 
-  @override
-  State<ProfileInfo> createState() => _ProfileInfoState();
-}
-
-class _ProfileInfoState extends State<ProfileInfo> {
   @override
   Widget build(BuildContext context) {
-    UserData user = UserPreferences.getUser();
     return SizedBox(
       height: 330,
       width: MediaQuery.of(context).size.width,
@@ -29,7 +23,6 @@ class _ProfileInfoState extends State<ProfileInfo> {
                 //   image: AssetImage('assets/images/profile_bg.jpg'),
                 // ),
                 color: Colors.orangeAccent,
-                // color: Color.fromARGB(255, 255, 237, 210),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(35),
                   bottomRight: Radius.circular(35),
@@ -39,19 +32,10 @@ class _ProfileInfoState extends State<ProfileInfo> {
               children: [
                 Row(children: [
                   //PROFILE PIC
-
-                  // Image(
-                  //   image: Image.network(user.profilePic).image,
-                  //   width: 2,
-                  //   height: 2,
-                  // ),
-                  //change how to get profile pic
-                  ImageWidget(
-                      circular: true,
-                      width: 140,
-                      height: 140,
-                      enableEditButton: false,
-                      imageAsset: Image.network(user.profilePic)),
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(userData.profilePic),
+                    radius: 65,
+                  ),
 
                   Expanded(
                       child: Column(
@@ -59,12 +43,10 @@ class _ProfileInfoState extends State<ProfileInfo> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                         //NAME
-                        //change how to get name
                         Padding(
                           padding: const EdgeInsets.only(left: 30, bottom: 5),
                           child: Text(
-                            //'Stevenson Chittumuri',
-                            user.name,
+                            userData.name,
                             maxLines: 3,
                             style: const TextStyle(
                                 color: Colors.white,
@@ -74,12 +56,10 @@ class _ProfileInfoState extends State<ProfileInfo> {
                           ),
                         ),
                         //PRONOUNS
-                        //change how to get pronouns
                         Padding(
                           padding: const EdgeInsets.only(left: 30, bottom: 5),
                           child: Text(
-                            //'He/Him',
-                            user.prounouns,
+                            userData.prounouns,
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Frutiger',
@@ -88,12 +68,10 @@ class _ProfileInfoState extends State<ProfileInfo> {
                           ),
                         ),
                         // TITLE
-                        //change how to get info
                         Padding(
                           padding: const EdgeInsets.only(left: 30, bottom: 5),
                           child: Text(
-                            //'ProfessionalCrastinator',
-                            user.title,
+                            userData.title,
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Frutiger',
@@ -102,12 +80,10 @@ class _ProfileInfoState extends State<ProfileInfo> {
                           ),
                         ),
                         //COMPANY
-                        //change how to get info
                         Padding(
                           padding: const EdgeInsets.only(left: 30),
                           child: Text(
-                            //'New York Institute of Tech',
-                            user.company,
+                            userData.company,
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Frutiger',
@@ -124,9 +100,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                   height: 100,
                   padding: const EdgeInsets.all(10),
                   child: Text(
-                    // aboutMe,
-                    //'pretend i wrote something really intriguing about myself. i like steven universe and ice cream. i have a very lovely gf :)',
-                    user.aboutMe,
+                    userData.aboutMe,
                     style: const TextStyle(
                         color: Colors.white,
                         fontFamily: 'Frutiger',
@@ -137,7 +111,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
                 ),
               ],
             )),
-        const Positioned(bottom: 0, right: 0, left: 0, child: ProfileInfoCard())
+        Positioned(
+            bottom: 0,
+            right: 0,
+            left: 0,
+            child: ProfileStatsCard(userdata: userData))
       ]),
     );
   }

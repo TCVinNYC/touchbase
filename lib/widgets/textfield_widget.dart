@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class TextFieldWidget extends StatelessWidget {
-  final String text;
+  final String labelText;
   final TextEditingController controller;
   const TextFieldWidget({
     Key? key,
-    required this.text,
+    required this.labelText,
     required this.controller
   }) : super(key: key);
 
@@ -14,7 +14,7 @@ class TextFieldWidget extends StatelessWidget {
     return TextField(
       controller: controller,
         decoration: InputDecoration(
-      labelText: text,
+      labelText: labelText,
       floatingLabelBehavior: FloatingLabelBehavior.always,
       labelStyle: const TextStyle(
           fontFamily: 'Quicksand',

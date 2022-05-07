@@ -4,8 +4,10 @@ import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/mainpages/eventsPage/events_page.dart';
-import 'package:lets_connect/mainpages/profilePage/profile_page.dart';
-import 'package:lets_connect/mainpages/unused_splash_screen';
+import 'package:lets_connect/mainpages/feedPage/feed_page.dart';
+import 'package:lets_connect/mainpages/profilePage/main_profile_page.dart';
+
+import 'feedPage/feed_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -14,16 +16,32 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _currentIndex = 0;
-  final screens = [
-    const Center(
-        child: Text('Feed Page', style: TextStyle(fontSize: 60))), //FeedPage()
-    const Center(
-        child: Text('Connect Page',
-            style: TextStyle(fontSize: 60))), //ConnectPage(),
-    const EventsPage(),
-    const ProfilePage(),
-  ];
+  late int _currentIndex;
+  late List<Widget> _pages;
+  // late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _currentIndex = 0;
+    _pages = [
+      const FeedPage(),
+      const Center(
+          child: Text('Connect Page',
+              style: TextStyle(fontSize: 60))), //ConnectPage(),
+      const EventsPage(),
+      const MainProfilePage(),
+    ];
+    //_pageController = PageController(initialPage: _currentIndex);
+  }
+
+  @override
+  void dispose() {
+    //_pageController.dispose();
+
+    super.dispose();
+  }
 
   late final Future? myFuture = getUser();
 
@@ -35,9 +53,14 @@ class _MainPageState extends State<MainPage> {
         if (snapshot.hasData) {
           return MaterialApp(
             home: Scaffold(
+              // body: PageView(
+              //   controller: _pageController,
+              //   physics: NeverScrollableScrollPhysics(),
+              //   children: _pages,
+              // ),
               body: IndexedStack(
                 index: _currentIndex,
-                children: screens,
+                children: _pages,
               ),
               resizeToAvoidBottomInset: false,
               bottomNavigationBar: Container(
@@ -68,25 +91,26 @@ class _MainPageState extends State<MainPage> {
                       tabs: const [
                         GButton(
                           icon: Icons.home,
-                          text: 'Feed',
+                          text: ' Feed',
                         ),
                         GButton(
                           icon: Icons.public_rounded,
-                          text: 'Connect',
+                          text: ' Connect',
                         ),
                         GButton(
                           icon: Icons.event_available_rounded,
-                          text: 'Events',
+                          text: ' Events',
                         ),
                         GButton(
                           icon: Icons.person,
-                          text: 'Profile',
+                          text: ' Profile',
                         ),
                       ],
                       selectedIndex: _currentIndex,
                       onTabChange: (index) {
                         setState(() {
                           _currentIndex = index;
+                          //_pageController.jumpToPage(_currentIndex);
                         });
                       },
                     ),
