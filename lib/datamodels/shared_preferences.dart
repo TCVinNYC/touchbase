@@ -18,7 +18,7 @@ class UserPreferences {
       prounouns: 'Not/Here',
       title: 'Mr Title',
       userID: '1234567890',
-      likedPostsIDs: []);
+      likedPosts: []);
 
   static Future init() async =>
       _preferences = await SharedPreferences.getInstance();

@@ -7,13 +7,13 @@ import 'package:lets_connect/mainpages/profilePage/profile_info.dart';
 class showHost extends StatelessWidget {
   const showHost({
     Key? key,
-    required this.event,
+    required this.host,
     this.showName,
     required this.width,
     required this.height,
   }) : super(key: key);
 
-  final Event event;
+  final List<dynamic> host;
   final bool? showName;
   final double width;
   final double height;
@@ -22,7 +22,7 @@ class showHost extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        UserData? myUser = await FireMethods().getUserData(event.host[3]);
+        UserData? myUser = await FireMethods().getUserData(host[3]);
         showModalBottomSheet(
             isScrollControlled: true,
             backgroundColor: Colors.transparent,
@@ -94,8 +94,8 @@ class showHost extends StatelessWidget {
           spacing: 2.3,
           children: [
             showName == null || false
-                ? withOutTitle(event, width, height)
-                : withTitle(event, width, height),
+                ? withOutTitle(host, width, height)
+                : withTitle(host, width, height),
           ],
         ),
       ),
@@ -103,7 +103,7 @@ class showHost extends StatelessWidget {
   }
 }
 
-withOutTitle(Event event, width, height) {
+withOutTitle(List<dynamic> host, width, height) {
   return Row(
     children: [
       Material(
@@ -112,7 +112,7 @@ withOutTitle(Event event, width, height) {
         type: MaterialType.circle,
         color: Colors.transparent,
         child: Ink.image(
-          image: NetworkImage(event.host[2]),
+          image: NetworkImage(host[2]),
           fit: BoxFit.cover,
           width: width,
           height: height,
@@ -120,7 +120,7 @@ withOutTitle(Event event, width, height) {
       ),
       const SizedBox(width: 5),
       Text(
-        event.host[0],
+        host[0],
         style: TextStyle(
             fontFamily: 'Quicksand',
             color: Colors.black.withOpacity(0.8),
@@ -131,7 +131,7 @@ withOutTitle(Event event, width, height) {
   );
 }
 
-withTitle(Event event, width, height) {
+withTitle(List<dynamic> host, width, height) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.center,
@@ -142,7 +142,7 @@ withTitle(Event event, width, height) {
         type: MaterialType.circle,
         color: Colors.transparent,
         child: Ink.image(
-          image: NetworkImage(event.host[2]),
+          image: NetworkImage(host[2]),
           fit: BoxFit.cover,
           width: width,
           height: height,
@@ -154,7 +154,7 @@ withTitle(Event event, width, height) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            event.host[0],
+            host[0],
             style: const TextStyle(
                 fontFamily: 'Quicksand',
                 color: Colors.black,
@@ -162,7 +162,7 @@ withTitle(Event event, width, height) {
                 fontSize: 18),
           ),
           Text(
-            event.host[1],
+            host[1],
             style: TextStyle(
                 fontFamily: 'Quicksand',
                 color: Colors.black45.withOpacity(0.7),

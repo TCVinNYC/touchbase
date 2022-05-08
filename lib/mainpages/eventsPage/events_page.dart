@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/event.dart';
@@ -17,12 +16,15 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends State<EventsPage>
-    with SingleTickerProviderStateMixin,  AutomaticKeepAliveClientMixin<EventsPage> {
+    with
+        SingleTickerProviderStateMixin,
+        AutomaticKeepAliveClientMixin<EventsPage> {
   late TabController _tabController;
   late ScrollController _scrollViewController;
-  
+
   @override
   bool get wantKeepAlive => true;
+
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 3);
@@ -228,24 +230,37 @@ class PastEventsPage extends StatelessWidget {
   }
 }
 
-Stream<List<Event>> getAllEvents() => 
-FirebaseFirestore.instance
-    .collection('events')
-    .where('id', whereNotIn: UserPreferences.getUser().eventIDs)
-    .snapshots()
-    .map((snapshot) =>
-        snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList())
-    .map((event) => event
-        .where((event) =>
-            event.time.millisecondsSinceEpoch >=
-            DateTime.now().millisecondsSinceEpoch)
-        .toList());
-
 UserData user = UserPreferences.getUser();
+Stream<List<Event>> getAllEvents() {
+  if (UserPreferences.getUser().eventIDs.isNotEmpty) {
+    return FirebaseFirestore.instance
+        .collection('events')
+        .where('id', whereNotIn: UserPreferences.getUser().eventIDs)
+        .orderBy('time', descending: false)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList())
+        .map((event) => event
+            .where((event) =>
+                event.time.millisecondsSinceEpoch >=
+                DateTime.now().millisecondsSinceEpoch)
+            .toList());
+  } else {
+    return FirebaseFirestore.instance
+        .collection('events')
+        .where('time', isGreaterThanOrEqualTo: DateTime.now())
+        .orderBy('time', descending: false)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList());
+  }
+}
+
 Stream<List<Event>> getYourEvents() => FirebaseFirestore.instance
     .collection('events')
     .where('attendees', arrayContainsAny: [user.userID])
     .where("time", isGreaterThanOrEqualTo: DateTime.now())
+    .orderBy('time', descending: false)
     .snapshots()
     .map((snapshot) =>
         snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList());
@@ -253,6 +268,7 @@ Stream<List<Event>> getYourEvents() => FirebaseFirestore.instance
 Stream<List<Event>> getPastEvents() => FirebaseFirestore.instance
     .collection('events')
     .where('id', whereNotIn: UserPreferences.getUser().eventIDs)
+    .orderBy('time', descending: true)
     .snapshots()
     .map((snapshot) =>
         snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList())

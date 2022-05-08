@@ -21,6 +21,7 @@ class FireMethods {
     List<dynamic>? eventIDs,
     List<dynamic>? postIDs,
     List<dynamic>? connectionIDs,
+    List<dynamic>? likedPosts,
     File? file,
   ) async {
     String imageurl = await uploadImage(file!, 'users');
@@ -36,6 +37,7 @@ class FireMethods {
         'eventIDs': eventIDs ?? [],
         'connectionIDs': connectionIDs ?? [],
         'postIDs': postIDs ?? [],
+        'likedPosts': likedPosts ?? [],
       });
       UserData? userData = await FireMethods()
           .getUserData(FireMethods.fireAuth.currentUser!.uid);
@@ -119,7 +121,7 @@ class FireMethods {
     DateTime timeOfPost,
     String? postText,
     List<dynamic> poster,
-    List<dynamic> likers,
+    List<dynamic> likes,
     File? file,
   ) async {
     String docID = firestore.collection('posts').doc().id;
@@ -138,7 +140,7 @@ class FireMethods {
       'image': imageurl,
       'postText': postText,
       'poster': poster,
-      'likers': likers,
+      'likes': likes,
     });
     UserData tempUser = UserPreferences.getUser();
     tempUser.postIDs.add(docID);
@@ -147,7 +149,7 @@ class FireMethods {
     return "done";
   }
 
-    Future<String> updateUserPostCount(String postID, bool addToList) {
+  Future<String> updateUserPostCount(String postID, bool addToList) {
     return firestore
         .collection('users')
         .doc(fireAuth.currentUser!.uid)
@@ -161,9 +163,6 @@ class FireMethods {
   }
 
   Future<String> updateLikeList(String postID, bool addToList) {
-    UserData tempUser = UserPreferences.getUser();
-    tempUser.likedPostsIDs.add(postID);
-    UserPreferences.setUser(tempUser);
     return firestore
         .collection('posts')
         .doc(postID)
@@ -172,8 +171,25 @@ class FireMethods {
               ? FieldValue.arrayUnion([fireAuth.currentUser!.uid])
               : FieldValue.arrayRemove([fireAuth.currentUser!.uid])
         })
-        .then((value) =>
-            addToList == true ? "Liked Post" : "Unliked Post")
+        .then((value) => addToList == true ? "Liked Post" : "Unliked Post")
+        .catchError((error) => "Failed to update Post Action: $error");
+  }
+
+  Future<String> updateMyLikeList(String postID, bool addToList) {
+    UserData tempUser = UserPreferences.getUser();
+    addToList
+        ? tempUser.likedPosts.add(postID)
+        : tempUser.likedPosts.remove(postID);
+    UserPreferences.setUser(tempUser);
+    return firestore
+        .collection('users')
+        .doc(fireAuth.currentUser!.uid)
+        .update({
+          'likedPosts': addToList == true
+              ? FieldValue.arrayUnion([postID])
+              : FieldValue.arrayRemove([postID])
+        })
+        .then((value) => addToList == true ? "Liked Post" : "Unliked Post")
         .catchError((error) => "Failed to update Post Action: $error");
   }
 

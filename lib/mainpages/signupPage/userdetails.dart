@@ -63,6 +63,7 @@ class _SetUpInfoState extends State<SetUpInfo> {
                     )
                   : ImageWidget(
                       imageAsset: imageAsset,
+                      enableImageInk: true,
                       onClicked: (source) => pickImage(context, source),
                       height: 175,
                       width: 175,
@@ -126,6 +127,7 @@ class _SetUpInfoState extends State<SetUpInfo> {
                         titleController.text,
                         companyController.text,
                         aboutMeController.text,
+                        [],
                         [],
                         [],
                         [],
