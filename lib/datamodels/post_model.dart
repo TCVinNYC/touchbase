@@ -25,7 +25,7 @@ class Post {
       'image': image ?? '',
       'postText': postText ?? '',
       'poster': poster,
-      'likers': likes,
+      'likes': likes,
     };
   }
 

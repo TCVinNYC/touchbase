@@ -8,23 +8,23 @@ class UserData {
   final String profilePic;
   final List<dynamic> eventIDs;
   final List<dynamic> postIDs;
-  final List<dynamic> connectionIDs;
-  final List<dynamic> likedPostsIDs;
+  final List<dynamic> followers;
+  final List<dynamic> following;
+  final List<dynamic> likedPosts;
 
-  const UserData({
-    //this.profilePicLinkOnly,
-    required this.name,
-    required this.userID,
-    required this.prounouns,
-    required this.title,
-    required this.company,
-    required this.aboutMe,
-    required this.profilePic,
-    required this.eventIDs,
-    required this.postIDs,
-    required this.connectionIDs,
-    required this.likedPostsIDs
-  });
+  const UserData(
+      {required this.name,
+      required this.userID,
+      required this.prounouns,
+      required this.title,
+      required this.company,
+      required this.aboutMe,
+      required this.profilePic,
+      required this.eventIDs,
+      required this.postIDs,
+      required this.followers,
+      required this.following,
+      required this.likedPosts});
 
   UserData copy(
           {String? userID,
@@ -36,8 +36,9 @@ class UserData {
           String? profilePic,
           List<dynamic>? eventIDs,
           List<dynamic>? postIDs,
-          List<dynamic>? connectionIDs,
-          List<dynamic>? likedPostsIDs}) =>
+          List<dynamic>? following,
+          List<dynamic>? followers,
+          List<dynamic>? likedPosts}) =>
       UserData(
           userID: userID ?? this.userID,
           name: name ?? this.name,
@@ -48,9 +49,9 @@ class UserData {
           profilePic: profilePic ?? this.profilePic,
           eventIDs: eventIDs ?? this.eventIDs,
           postIDs: postIDs ?? this.postIDs,
-          connectionIDs: connectionIDs ?? this.connectionIDs,
-          likedPostsIDs: likedPostsIDs ?? this.likedPostsIDs
-          );
+          followers: followers ?? this.followers,
+          following: following ?? this.following,
+          likedPosts: likedPosts ?? this.likedPosts);
 
 //info for uploading user
   Map<String, dynamic> toJson() {
@@ -63,22 +64,27 @@ class UserData {
       'company': company,
       'aboutMe': aboutMe,
       'eventIDs': eventIDs,
-      'connectionIDs': connectionIDs,
+      'followers': followers,
+      'following': following,
+      'likedPosts': likedPosts,
       'postIDs': postIDs,
     };
   }
 
 //info for reading user
-  static UserData fromJson(Map<String, dynamic>? json) => UserData(
-      userID: json!['id'],
-      name: json['name'],
-      prounouns: json['pronouns'],
-      title: json['title'],
-      profilePic: json['imageURL'],
-      aboutMe: json['aboutMe'],
-      company: json['company'],
-      postIDs: json['postIDs'],
-      eventIDs: json['eventIDs'],
-      connectionIDs: json['connectionIDs'],
-      likedPostsIDs: json['likedPostsIDs'] ?? []);
+  static UserData fromJson(Map<String, dynamic>? json) {
+    return UserData(
+        userID: json!['id'],
+        name: json['name'],
+        prounouns: json['pronouns'],
+        title: json['title'],
+        profilePic: json['imageURL'],
+        aboutMe: json['aboutMe'],
+        company: json['company'],
+        postIDs: json['postIDs'],
+        eventIDs: json['eventIDs'],
+        following: json['following'],
+        followers: json['followers'],
+        likedPosts: json['likedPosts']);
+  }
 }

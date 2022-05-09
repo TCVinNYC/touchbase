@@ -129,7 +129,7 @@ class _EventWidgetState extends State<EventWidget> {
                   ],
                 ),
                 showHost(
-                  event: widget.event,
+                  host: widget.event.host,
                   width: 30,
                   height: 30,
                 ),
