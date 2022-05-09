@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lets_connect/datamodels/user_model.dart';
+import 'package:lets_connect/firebase/firestore.dart';
+import 'package:lets_connect/mainpages/feedPage/feed_page.dart';
+import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lets_connect/widgets/image_widget.dart';
 
 class CreatePostPage extends StatefulWidget {
@@ -41,15 +45,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   @override
   Widget build(BuildContext context) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.65,
-          maxChildSize: 0.9,
-          minChildSize: 0.4,
-          snap: true,
-          snapSizes: const [0.4, 0.65, 0.9],
-          builder: (_, controller) => Scaffold(
-              resizeToAvoidBottomInset: false,
-              appBar: AppBar(
+    return DraggableScrollableSheet(
+      initialChildSize: 0.65,
+      maxChildSize: 0.9,
+      minChildSize: 0.4,
+      snap: true,
+      snapSizes: const [0.4, 0.65, 0.9],
+      builder: (_, controller) => Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
           backgroundColor: Colors.orange,
           centerTitle: false,
           iconTheme: const IconThemeData(color: Colors.white),
@@ -62,8 +66,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 fontSize: 25),
             textAlign: TextAlign.start,
           ),
-              ),
-              body: GestureDetector(
+        ),
+        body: GestureDetector(
           onTap: () {
             FocusScopeNode currentFocus = FocusScope.of(context);
             if (!currentFocus.hasPrimaryFocus) {
@@ -72,7 +76,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
           },
           child: Container(
             padding: const EdgeInsets.all(20),
-             color: Colors.white,
+            color: Colors.white,
             child: ListView(
               controller: controller,
               children: <Widget>[
@@ -108,7 +112,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   thickness: 0.5,
                   color: Colors.black38,
                 ),
-        
+
                 //Photo
                 const Text(
                   "Featured photo",
@@ -118,7 +122,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       fontWeight: FontWeight.w700,
                       fontSize: 18),
                 ),
-        
+
                 Padding(
                     padding: const EdgeInsets.all(10),
                     child: Container(
@@ -144,16 +148,16 @@ class _CreatePostPageState extends State<CreatePostPage> {
                               enableImageInk: true,
                             ),
                     )),
-        
+
                 const Divider(
                   thickness: 0.5,
                   color: Colors.black38,
                 ),
-        
+
                 const SizedBox(
                   height: 25,
                 ),
-        
+
                 Container(
                   padding: const EdgeInsets.all(15),
                   width: MediaQuery.of(context).size.width / 1.1,
@@ -162,78 +166,47 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15))),
-                    onPressed: () {},
-                    // onPressed: () async {
-                    //   if (titleController.text.isEmpty) {
-                    //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    //         content: Text('Event title cannot be empty!')));
-                    //   } else if (image == null) {
-                    //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    //         content: Text('Must upload an image!')));
-                    //   } else if (descriptionController.text.isEmpty) {
-                    //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    //         content: Text(
-                    //             'Please add a description for your event!')));
-                    //   } else if (locationNameController.text.isEmpty) {
-                    //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    //         content: Text(
-                    //             'Please provide the name of the location!')));
-                    //   } else if (locationAddressController.text.isEmpty) {
-                    //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    //         content: Text(
-                    //             'Please provide the address of the location!')));
-                    //   } else if (priceEnable == true &&
-                    //       priceController.text.isEmpty) {
-                    //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    //         content:
-                    //             Text('Must provide a price for your event!')));
-                    //   } else {
-                    //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    //         content: Text('Uploading, Please wait...')));
-                    //     if (priceEnable == false) {
-                    //       priceController.text = "0";
-                    //     }
-        
-                    //     UserData? user = await FireMethods()
-                    //         .getUserData(FireMethods.fireAuth.currentUser!.uid);
-                    //     List<dynamic> host = [
-                    //       user?.name,
-                    //       user?.title,
-                    //       user?.profilePic,
-                    //       user?.userID
-                    //     ];
-        
-                    //     finalDateTime = DateTime(
-                    //         dateSelect.year,
-                    //         dateSelect.month,
-                    //         dateSelect.day,
-                    //         timeSelect!.hour,
-                    //         timeSelect!.minute);
-        
-                    //     String result = await FireMethods().uploadEvent(
-                    //         titleController.text,
-                    //         finalDateTime,
-                    //         descriptionController.text,
-                    //         locationNameController.text,
-                    //         locationAddressController.text,
-                    //         priceController.text,
-                    //         priceEnable,
-                    //         selectedCategories.first,
-                    //         adultEnable,
-                    //         host,
-                    //         image);
-                    //     if (result == "done") {
-                    //       ScaffoldMessenger.of(context).showSnackBar(
-                    //           const SnackBar(
-                    //               content: Text(
-                    //                   "Congrats Your Event Has Been Created!")));
-                    //       Navigator.of(context).pop();
-                    //     } else {
-                    //       ScaffoldMessenger.of(context)
-                    //           .showSnackBar(SnackBar(content: Text(result)));
-                    //     }
-                    //   }
-                    // },
+                    onPressed: () async {
+                      if (textController.text.isEmpty && image == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Cannot upload an empty post!')));
+                      } else {
+                        UserData? user = await FireMethods()
+                            .getUserData(FireMethods.fireAuth.currentUser!.uid);
+                        List<dynamic> poster = [
+                          user?.name,
+                          user?.title,
+                          user?.profilePic,
+                          user?.userID
+                        ];
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Uploading, Please wait...')));
+                        String result = await FireMethods().uploadPost(
+                            DateTime.now(),
+                            textController.text.isEmpty
+                                ? null
+                                : textController.text,
+                            poster,
+                            [],
+                            image);
+                        if (result == "done") {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => const MainPage()),
+                            (Route<dynamic> route) => false,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      "Congrats Your Post Has Been Uploaded!")));
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text(result)));
+                        }
+                      }
+                    },
                     child: const Text(
                       'Upload Post',
                       style: TextStyle(
@@ -247,8 +220,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
               ],
             ),
           ),
-              ),
-            ),
-        );
+        ),
+      ),
+    );
   }
 }

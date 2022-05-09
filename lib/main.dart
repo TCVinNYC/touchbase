@@ -33,9 +33,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(fontFamily: 'Frutiger'),
       scaffoldMessengerKey: scaffoldMessengerKey,
       color: createMaterialColor(const Color.fromARGB(255, 255, 170, 12)),
-      //fontFamily: 'Frutiger',
-      //primaryColor: createMaterialColor(const Color.fromARGB(255, 255, 170, 12)),
-      //primarySwatch: createMaterialColor(Color.fromARGB(255, 255, 170, 12)),
       home: const MyHomePage(),
     );
   }
@@ -57,10 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              //return const SplashApp();
-              // return SplashApp(
-              //     key: UniqueKey(),
-              //     onInitializationComplete: () => runMainApp());
               return const MainPage();
             } else {
               return const LoginPage();
@@ -69,9 +62,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-// void runMainApp() {
-//   runApp(
-//     MainPage(),
-//   );
-// }

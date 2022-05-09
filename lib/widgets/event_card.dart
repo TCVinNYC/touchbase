@@ -89,7 +89,7 @@ class _EventWidgetState extends State<EventWidget> {
                             if (!mounted) return;
                             //enable to disable
                             if (toggle) {
-                              UserData tempUser = UserPreferences.getUser();
+                              UserData? tempUser = UserPreferences.getUser();
                               tempUser.eventIDs.remove(widget.event.documentID);
                               UserPreferences.setUser(tempUser);
                               await FireMethods().updateUserEventCount(
@@ -101,7 +101,7 @@ class _EventWidgetState extends State<EventWidget> {
                             }
                             //disable to enable
                             else {
-                              UserData tempUser = UserPreferences.getUser();
+                              UserData? tempUser = UserPreferences.getUser();
                               tempUser.eventIDs.add(widget.event.documentID);
                               UserPreferences.setUser(tempUser);
                               await FireMethods().updateUserEventCount(
@@ -129,7 +129,7 @@ class _EventWidgetState extends State<EventWidget> {
                   ],
                 ),
                 showHost(
-                  event: widget.event,
+                  host: widget.event.host,
                   width: 30,
                   height: 30,
                 ),
