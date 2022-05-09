@@ -178,7 +178,7 @@ class FireMethods {
   }
 
   Future<String> updateMyLikeList(String postID, bool addToList) {
-    UserData tempUser = UserPreferences.getUser();
+    UserData? tempUser = UserPreferences.getUser();
     addToList
         ? tempUser.likedPosts.add(postID)
         : tempUser.likedPosts.remove(postID);
@@ -231,7 +231,9 @@ class FireMethods {
   Future<UserData?> getUserData(String userID) async {
     var docSnapshot = await firestore.collection('users').doc(userID).get();
     if (docSnapshot.exists) {
-      return UserData.fromJson(docSnapshot.data());
+      if(docSnapshot.data() != null){
+        return UserData.fromJson(docSnapshot.data());
+      }
     }
     return null;
   }

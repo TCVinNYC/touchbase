@@ -264,126 +264,25 @@ Stream<List<Event>> getYourEvents() => FirebaseFirestore.instance
     .map((snapshot) =>
         snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList());
 
-Stream<List<Event>> getPastEvents() => FirebaseFirestore.instance
-    .collection('events')
-    .where('id', whereNotIn: UserPreferences.getUser().eventIDs)
-    // .orderBy('time', descending: true)
-    .snapshots()
-    .map((snapshot) =>
-        snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList())
-    .map((event) => event
-        .where((event) =>
-            event.time.millisecondsSinceEpoch <=
-            DateTime.now().millisecondsSinceEpoch)
-        .toList());
-
-// Stream<List<Event>> getPastEvents() => FirebaseFirestore.instance
-//     .collection('events')
-//     .where("time", isLessThan: DateTime.now())
-//     .where('attendees', arrayContainsAny: [user.userID])
-//     .snapshots()
-//     .map((snapshot) =>
-//         snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList());
-
-// //temp list for event posts
-// List<EventPost> posts = [
-//   EventPost(
-//       time: "12:30 PM",
-//       sessionTitle: "TALKING WITH JEFF",
-//       coordinator: "Jeff Chun",
-//       attendees: "ur mom 1",
-//       location: "New York, NY"),
-
-//   EventPost(
-//       time: "2:30PM",
-//       sessionTitle: "Boy Genius Talk",
-//       coordinator: "Jimmy Neutron",
-//       attendees: "Your Mom",
-//       location: "St. Augustine, FL"),
-//   EventPost(
-//       time: "8:10 AM",
-//       sessionTitle: "Kooking with Spongebob",
-//       coordinator: "Spongebob Squarepants",
-//       attendees: "Your Mom",
-//       location: "Bikini Bottom, SEA"),
-//   EventPost(
-//       time: "10:00 AM",
-//       sessionTitle: "Exploring w/ Dora",
-//       coordinator: "Dora the Explorer",
-//       attendees: "Your Mom",
-//       location: "Peruvian Jungle, Peru"),
-//   EventPost(
-//       time: "9:40 AM",
-//       sessionTitle: "Apple One Keynote",
-//       coordinator: "Tim Cook",
-//       attendees: "Your Mom",
-//       location: "Cupertino, CA"),
-//   EventPost(
-//       time: "6:00 AM",
-//       sessionTitle: "Getting Hooked",
-//       coordinator: "Patrick Star",
-//       attendees: "Your Mom",
-//       location: "Bikini Bottom, SEA"),
-//   EventPost(
-//       time: "9:00 AM",
-//       sessionTitle: "Beating Depression with Magic",
-//       coordinator: "Timmy Turner",
-//       attendees: "Your Mom",
-//       location: "Somewhere, AR"),
-//   EventPost(
-//       time: "5:00 PM",
-//       sessionTitle: "Fight the blue man",
-//       coordinator: "Kim Possible",
-//       attendees: "Your Mom",
-//       location: "Somewhere, Alabama"),
-// ];
-
-// //temp list for event posts
-// List<EventPost> posts2 = [
-//   EventPost(
-//       time: "2:30PM",
-//       sessionTitle: "Boy Genius Talk",
-//       coordinator: "Jimmy Neutron",
-//       attendees: "Your Mom",
-//       location: "St. Augustine, FL"),
-//   EventPost(
-//       time: "8:10 AM",
-//       sessionTitle: "Kooking with Spongebob",
-//       coordinator: "Spongebob Squarepants",
-//       attendees: "Your Mom",
-//       location: "Bikini Bottom, SEA"),
-//   EventPost(
-//       time: "9:00 AM",
-//       sessionTitle: "Beating Depression with Magic",
-//       coordinator: "Timmy Turner",
-//       attendees: "Your Mom",
-//       location: "Somewhere, AR"),
-//   EventPost(
-//       time: "5:00 PM",
-//       sessionTitle: "Fight the blue man",
-//       coordinator: "Kim Possible",
-//       attendees: "Your Mom",
-//       location: "Somewhere, Alabama"),
-// ];
-
-// //temp list for event posts
-// List<EventPost> posts3 = [
-//   EventPost(
-//       time: "12:30 PM",
-//       sessionTitle: "TALKING WITH JEFF",
-//       coordinator: "Jeff Chun",
-//       attendees: "ur mom 1",
-//       location: "New York, NY"),
-//   EventPost(
-//       time: "8:10 AM",
-//       sessionTitle: "Kooking with Spongebob",
-//       coordinator: "Spongebob Squarepants",
-//       attendees: "Your Mom",
-//       location: "Bikini Bottom, SEA"),
-//   EventPost(
-//       time: "10:00 AM",
-//       sessionTitle: "Exploring w/ Dora",
-//       coordinator: "Dora the Explorer",
-//       attendees: "Your Mom",
-//       location: "Peruvian Jungle, Peru"),
-// ];
+Stream<List<Event>> getPastEvents() {
+  if (UserPreferences.getUser().eventIDs.isNotEmpty) {
+    return FirebaseFirestore.instance
+        .collection('events')
+        .where('id', whereNotIn: UserPreferences.getUser().eventIDs)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList())
+        .map((event) => event
+            .where((event) =>
+                event.time.millisecondsSinceEpoch <
+                DateTime.now().millisecondsSinceEpoch)
+            .toList());
+  }else{
+        return FirebaseFirestore.instance
+        .collection('events')
+        .where('time', isLessThan: DateTime.now())
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList());
+  }
+}

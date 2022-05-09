@@ -170,8 +170,8 @@ class _StatListPageState extends State<StatList> {
         });
   }
 
-  FutureBuilder<List<UserData>> getFollowing(UserData user) {
-    return FutureBuilder<List<UserData>>(
+  FutureBuilder<List<UserData?>> getFollowing(UserData user) {
+    return FutureBuilder<List<UserData?>>(
         future: FirebaseFirestore.instance
             .collection('users')
             .where('id', whereIn: user.following)
@@ -187,8 +187,8 @@ class _StatListPageState extends State<StatList> {
             return ListView.separated(
               itemBuilder: (BuildContext context, int index) {
                 return ConnectWidget(
-                  user: users[index],
-                  myUser: UserPreferences.getUser(),
+                  user: users[index] as UserData,
+                  myUser: UserPreferences.getUser() as UserData,
                 );
               },
               itemCount: users.length,
@@ -202,8 +202,8 @@ class _StatListPageState extends State<StatList> {
         });
   }
 
-  FutureBuilder<List<UserData>> getFollowers(UserData user) {
-    return FutureBuilder<List<UserData>>(
+  FutureBuilder<List<UserData?>> getFollowers(UserData user) {
+    return FutureBuilder<List<UserData?>>(
         future: FirebaseFirestore.instance
             .collection('users')
             .where('id', whereIn: user.followers)
@@ -219,8 +219,8 @@ class _StatListPageState extends State<StatList> {
             return ListView.separated(
               itemBuilder: (BuildContext context, int index) {
                 return ConnectWidget(
-                  user: users[index],
-                  myUser: UserPreferences.getUser(),
+                  user: users[index] as UserData,
+                  myUser: UserPreferences.getUser() as UserData,
                 );
               },
               itemCount: users.length,
