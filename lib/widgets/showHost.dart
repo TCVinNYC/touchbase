@@ -36,55 +36,21 @@ class showHost extends StatelessWidget {
                 snapSizes: const [0.5, 0.9],
                 builder: (_, controller) {
                   return Scaffold(
-                      appBar: AppBar(
-                        backgroundColor: Colors.orange,
+                    appBar: AppBar(
+                      backgroundColor: Colors.orange,
+                    ),
+                    body: SingleChildScrollView(
+                      controller: controller,
+                      child: Column(
+                        children: <Widget>[
+                          ProfileInfo(userData: myUser!),
+                        ],
                       ),
-                      body: SingleChildScrollView(
-                        controller: controller,
-                        child: Column(
-                          children: <Widget>[
-                            ProfileInfo(userData: myUser!),
-                          ],
-                        ),
-                      ),
+                    ),
                   );
-                  // return Container(
-                  //   decoration: BoxDecoration(
-                  //   color: Colors.white,
-                  //   borderRadius: BorderRadius.vertical(top: Radius.circular(20))
-                  //   ),
-                  //   child: ListView(
-                  //     controller: controller,
-                  //     children: [
-                  //       ProfileInfo(userData: myUser!),
-                  //     ],
-                  //   ),
-                  // );
                 },
               );
             });
-        // Navigator.push(context, MaterialPageRoute<void>(
-        //   // builder: (BuildContext context) {
-        // showModalBottomSheet(
-        // context: context,
-        //         builder: (context) {
-        //           return ProfileInfo(userData: myUser!);
-        // return Scaffold(
-        //   appBar: AppBar(
-        //     backgroundColor: Colors.orange,
-        //   ),
-        //   body: SingleChildScrollView(
-        //     child: Column(
-        //       children: <Widget>[
-        //         ProfileInfo(userData: myUser!),
-        //       ],
-        //     ),
-        //   ),
-        // );
-        // });
-        //   // return Container();
-        //   // },
-        // ));
       },
       child: Container(
         alignment: const Alignment(-1.035, 0),
@@ -173,3 +139,27 @@ withTitle(List<dynamic> host, width, height) {
     ],
   );
 }
+
+
+        // Navigator.push(context, MaterialPageRoute<void>(
+        //   // builder: (BuildContext context) {
+        // showModalBottomSheet(
+        // context: context,
+        //         builder: (context) {
+        //           return ProfileInfo(userData: myUser!);
+        // return Scaffold(
+        //   appBar: AppBar(
+        //     backgroundColor: Colors.orange,
+        //   ),
+        //   body: SingleChildScrollView(
+        //     child: Column(
+        //       children: <Widget>[
+        //         ProfileInfo(userData: myUser!),
+        //       ],
+        //     ),
+        //   ),
+        // );
+        // });
+        //   // return Container();
+        //   // },
+        // ));

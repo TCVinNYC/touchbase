@@ -56,7 +56,7 @@ class _EventsPageState extends State<EventsPage>
                     color: Colors.black,
                     fontFamily: 'Quicksand',
                     fontWeight: FontWeight.w800,
-                    fontSize: 25),
+                    fontSize: 24),
                 textAlign: TextAlign.start,
               ),
               actions: <Widget>[
@@ -236,7 +236,7 @@ Stream<List<Event>> getAllEvents() {
     return FirebaseFirestore.instance
         .collection('events')
         .where('id', whereNotIn: UserPreferences.getUser().eventIDs)
-        .orderBy('time', descending: false)
+        // .orderBy('time', descending: false)
         .snapshots()
         .map((snapshot) =>
             snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList())
@@ -249,7 +249,6 @@ Stream<List<Event>> getAllEvents() {
     return FirebaseFirestore.instance
         .collection('events')
         .where('time', isGreaterThanOrEqualTo: DateTime.now())
-        .orderBy('time', descending: false)
         .snapshots()
         .map((snapshot) =>
             snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList());
@@ -260,7 +259,7 @@ Stream<List<Event>> getYourEvents() => FirebaseFirestore.instance
     .collection('events')
     .where('attendees', arrayContainsAny: [user.userID])
     .where("time", isGreaterThanOrEqualTo: DateTime.now())
-    .orderBy('time', descending: false)
+    //.orderBy('time', descending: false)
     .snapshots()
     .map((snapshot) =>
         snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList());
@@ -268,7 +267,7 @@ Stream<List<Event>> getYourEvents() => FirebaseFirestore.instance
 Stream<List<Event>> getPastEvents() => FirebaseFirestore.instance
     .collection('events')
     .where('id', whereNotIn: UserPreferences.getUser().eventIDs)
-    .orderBy('time', descending: true)
+    // .orderBy('time', descending: true)
     .snapshots()
     .map((snapshot) =>
         snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList())

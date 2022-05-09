@@ -7,7 +7,6 @@ import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lets_connect/widgets/image_widget.dart';
 import 'package:lets_connect/widgets/textfield_widget.dart';
 
-
 class SetUpInfo extends StatefulWidget {
   const SetUpInfo({Key? key}) : super(key: key);
 
@@ -71,11 +70,13 @@ class _SetUpInfoState extends State<SetUpInfo> {
                       circular: true,
                     ),
             ),
-            TextFieldWidget(labelText: 'Pronouns', controller: pronounsController),
+            TextFieldWidget(
+                labelText: 'Pronouns', controller: pronounsController),
             const Padding(padding: EdgeInsets.only(bottom: 25)),
             TextFieldWidget(labelText: 'Title', controller: titleController),
             const Padding(padding: EdgeInsets.only(bottom: 25)),
-            TextFieldWidget(labelText: 'Company', controller: companyController),
+            TextFieldWidget(
+                labelText: 'Company', controller: companyController),
             const Padding(padding: EdgeInsets.only(bottom: 25)),
             SizedBox(
               // height: 190,
@@ -131,6 +132,7 @@ class _SetUpInfoState extends State<SetUpInfo> {
                         [],
                         [],
                         [],
+                        [],
                         image);
                     if (result == "done") {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -161,4 +163,3 @@ class _SetUpInfoState extends State<SetUpInfo> {
     );
   }
 }
-

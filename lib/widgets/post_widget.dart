@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/post_model.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
-import 'package:lets_connect/widgets/like_button.dart';
+import 'package:lets_connect/widgets/icon_button.dart';
 import 'package:lets_connect/widgets/showHost.dart';
 import 'package:intl/intl.dart';
 
@@ -15,8 +15,6 @@ class FeedPost extends StatefulWidget {
 }
 
 class _FeedPostState extends State<FeedPost> {
-  bool toggle = false;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -100,7 +98,9 @@ class _FeedPostState extends State<FeedPost> {
                           isLiked: widget.user.likedPosts
                               .contains(widget.post.documentID),
                           likeCount: widget.post.likes.length,
-                          postID: widget.post.documentID,
+                          id: widget.post.documentID,
+                          fontSize: 16,
+                          iconSize: 17,
                         ),
                       ],
                     ),

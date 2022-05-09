@@ -9,7 +9,6 @@ class UserPreferences {
   static const myNullUser = UserData(
       aboutMe: 'About Me Section',
       company: 'Some Company',
-      connectionIDs: [],
       eventIDs: [],
       name: 'John Doe',
       postIDs: [],
@@ -18,7 +17,9 @@ class UserPreferences {
       prounouns: 'Not/Here',
       title: 'Mr Title',
       userID: '1234567890',
-      likedPosts: []);
+      likedPosts: [],
+      followers: [],
+      following: []);
 
   static Future init() async =>
       _preferences = await SharedPreferences.getInstance();

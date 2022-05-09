@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/post_model.dart';
 import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
-import 'package:lets_connect/firebase/firestore.dart';
-import 'package:lets_connect/mainpages/eventsPage/events_page.dart';
 import 'package:lets_connect/mainpages/feedPage/create_post.dart';
 import 'package:lets_connect/widgets/post_widget.dart';
 
@@ -50,33 +47,34 @@ class _FeedPageState extends State<FeedPage> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _getData,
-      child: Scaffold(
-        appBar: AppBar(
-            backgroundColor: Colors.white,
-            actions: [
-              IconButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      context: context,
-                      builder: (context) => const CreatePostPage());
-                },
-                icon: const Icon(Icons.add_box_rounded),
-                color: Colors.orange,
-              )
-            ],
-            title: const Text(
-              'TouchBase',
-              style: TextStyle(
-                  fontFamily: 'Quicksand',
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.orange),
-            )),
-        body: SafeArea(
+    return Scaffold(
+      appBar: AppBar(
+          centerTitle: false,
+          backgroundColor: Colors.white,
+          actions: [
+            IconButton(
+              onPressed: () {
+                showModalBottomSheet(
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    context: context,
+                    builder: (context) => const CreatePostPage());
+              },
+              icon: const Icon(Icons.add_box_rounded),
+              color: Colors.orange,
+            )
+          ],
+          title: const Text(
+            'TouchBase',
+            style: TextStyle(
+                fontFamily: 'Quicksand',
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.orange),
+          )),
+      body: RefreshIndicator(
+        onRefresh: _getData,
+        child: SafeArea(
           top: false,
           child: ListView.builder(
               padding: const EdgeInsets.all(8),

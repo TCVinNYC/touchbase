@@ -65,7 +65,10 @@ class ViewEventPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     showHost(
-                        host: event.host, width: 35, height: 35, showName: true),
+                        host: event.host,
+                        width: 35,
+                        height: 35,
+                        showName: true),
                     showLocation(event: event, showName: true),
                     showDate(event: event, showIcon: true),
                     const SizedBox(height: 5),

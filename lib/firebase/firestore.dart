@@ -20,7 +20,8 @@ class FireMethods {
     String aboutMe,
     List<dynamic>? eventIDs,
     List<dynamic>? postIDs,
-    List<dynamic>? connectionIDs,
+    List<dynamic>? followers,
+    List<dynamic>? following,
     List<dynamic>? likedPosts,
     File? file,
   ) async {
@@ -35,7 +36,8 @@ class FireMethods {
         'company': company,
         'aboutMe': aboutMe,
         'eventIDs': eventIDs ?? [],
-        'connectionIDs': connectionIDs ?? [],
+        'followers': followers ?? [],
+        'following': following ?? [],
         'postIDs': postIDs ?? [],
         'likedPosts': likedPosts ?? [],
       });
@@ -191,6 +193,39 @@ class FireMethods {
         })
         .then((value) => addToList == true ? "Liked Post" : "Unliked Post")
         .catchError((error) => "Failed to update Post Action: $error");
+  }
+
+  Future<String> updateMyFollowing(String userID, bool addToList) {
+    UserData tempUser = UserPreferences.getUser();
+    addToList
+        ? tempUser.following.add(userID)
+        : tempUser.following.remove(userID);
+    UserPreferences.setUser(tempUser);
+    return firestore
+        .collection('users')
+        .doc(fireAuth.currentUser!.uid)
+        .update({
+          'following': addToList == true
+              ? FieldValue.arrayUnion([userID])
+              : FieldValue.arrayRemove([userID])
+        })
+        .then(
+            (value) => addToList == true ? "Following User" : "Unfollowed User")
+        .catchError((error) => "Failed to update Following: $error");
+  }
+
+  Future<String> updateFollowing(String userID, bool addToList) {
+    return firestore
+        .collection('users')
+        .doc(userID)
+        .update({
+          'followers': addToList == true
+              ? FieldValue.arrayUnion([fireAuth.currentUser!.uid])
+              : FieldValue.arrayRemove([fireAuth.currentUser!.uid])
+        })
+        .then(
+            (value) => addToList == true ? "Following User" : "Unfollowed User")
+        .catchError((error) => "Failed to update Following: $error");
   }
 
   Future<UserData?> getUserData(String userID) async {

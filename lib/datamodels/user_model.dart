@@ -8,7 +8,8 @@ class UserData {
   final String profilePic;
   final List<dynamic> eventIDs;
   final List<dynamic> postIDs;
-  final List<dynamic> connectionIDs;
+  final List<dynamic> followers;
+  final List<dynamic> following;
   final List<dynamic> likedPosts;
 
   const UserData(
@@ -21,7 +22,8 @@ class UserData {
       required this.profilePic,
       required this.eventIDs,
       required this.postIDs,
-      required this.connectionIDs,
+      required this.followers,
+      required this.following,
       required this.likedPosts});
 
   UserData copy(
@@ -34,7 +36,8 @@ class UserData {
           String? profilePic,
           List<dynamic>? eventIDs,
           List<dynamic>? postIDs,
-          List<dynamic>? connectionIDs,
+          List<dynamic>? following,
+          List<dynamic>? followers,
           List<dynamic>? likedPosts}) =>
       UserData(
           userID: userID ?? this.userID,
@@ -46,7 +49,8 @@ class UserData {
           profilePic: profilePic ?? this.profilePic,
           eventIDs: eventIDs ?? this.eventIDs,
           postIDs: postIDs ?? this.postIDs,
-          connectionIDs: connectionIDs ?? this.connectionIDs,
+          followers: followers ?? this.followers,
+          following: following ?? this.following,
           likedPosts: likedPosts ?? this.likedPosts);
 
 //info for uploading user
@@ -60,7 +64,8 @@ class UserData {
       'company': company,
       'aboutMe': aboutMe,
       'eventIDs': eventIDs,
-      'connectionIDs': connectionIDs,
+      'followers': followers,
+      'following': following,
       'likedPosts': likedPosts,
       'postIDs': postIDs,
     };
@@ -78,7 +83,8 @@ class UserData {
         company: json['company'],
         postIDs: json['postIDs'],
         eventIDs: json['eventIDs'],
-        connectionIDs: json['connectionIDs'],
+        following: json['following'],
+        followers: json['followers'],
         likedPosts: json['likedPosts']);
   }
 }
