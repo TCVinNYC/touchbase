@@ -12,7 +12,7 @@ class ProfileStatsCard extends StatelessWidget {
         margin: const EdgeInsets.only(top: 60),
         height: 90,
         child: Card(
-          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 35),
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
           elevation: 3,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

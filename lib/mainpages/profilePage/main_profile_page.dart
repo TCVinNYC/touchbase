@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
+import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_details.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_info.dart';
 import 'package:lets_connect/mainpages/profilePage/side_menu_button.dart';
@@ -18,33 +22,21 @@ class MainProfilePage extends StatefulWidget {
 class _MainProfilePageState extends State<MainProfilePage> {
   UserData userData = UserPreferences.getUser();
 
-  void getUser() async {
-    // UserData? userData =
-    //     await FireMethods().getUserData(FireMethods.fireAuth.currentUser!.uid);
-    var userTemp = UserPreferences.getUser();
-    setState(() {
-      userData = userTemp;
-      print("refreshing");
-    });
-  }
-
-  Future<void> _getData() async {
-    setState(() {
-      getUser();
-    });
-  }
-
-  @override
-  void initState() {
-    _getData();
-    super.initState();
-  }
-  // late UserData user;
-
-  // @override
-  // void initState() {
-  //   super.initState();
+  // Stream<UserData> updateUserData() {
+  //   return FirebaseFirestore.instance
+  //       .collection("users")
+  //       .doc(FireMethods.fireAuth.currentUser!.uid)
+  //       .snapshots()
+  //       .map((event) => UserData.fromJson(event.data()));
   // }
+
+  Stream<UserData> updateUserData() {
+    return FirebaseFirestore.instance
+        .collection("users")
+        .doc(FireMethods.fireAuth.currentUser!.uid)
+        .snapshots()
+        .map((event) => UserData.fromJson(event.data()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +143,20 @@ class _MainProfilePageState extends State<MainProfilePage> {
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              ProfileInfo(userData: userData),
+              StreamBuilder<UserData>(
+                  stream: updateUserData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text(
+                          "Something when wrong!" + snapshot.error.toString());
+                    } else if (snapshot.hasData) {
+                      final userDown = snapshot.data!;
+
+                      return ProfileInfo(userData: userDown);
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  }),
             ],
           ),
         ));

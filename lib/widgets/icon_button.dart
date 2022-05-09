@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/firebase/firestore.dart';
 import 'package:like_button/like_button.dart';
 
@@ -15,6 +16,7 @@ class LikeButtonWidget extends StatefulWidget {
 
   LikeButtonWidget({
     Key? key,
+    //Key? key,
     required this.id,
     this.enableText,
     //required this.iconData,
@@ -24,7 +26,7 @@ class LikeButtonWidget extends StatefulWidget {
     this.isFollowButton,
     this.likeCount,
     required this.isLiked,
-  });
+  }) : super(key: key);
   @override
   State<LikeButtonWidget> createState() => _LikeButtonWidgetState();
 }
@@ -40,6 +42,10 @@ class _LikeButtonWidgetState extends State<LikeButtonWidget> {
         likeBuilder: (isOn) {
           final color = isOn ? Colors.amber : Colors.grey;
           if (widget.isFollowButton == true) {
+            if (widget.id == UserPreferences.getUser().userID) {
+              return Icon(Icons.face_rounded,
+                  color: Colors.deepOrangeAccent, size: widget.iconSize);
+            }
             return Icon(Icons.check_circle,
                 color: color, size: widget.iconSize);
           } else if (widget.isBookmark == true) {
@@ -65,16 +71,19 @@ class _LikeButtonWidgetState extends State<LikeButtonWidget> {
           } else {
             Container();
           }
+          return null;
         },
         onTap: (isOn) async {
           widget.isLiked = !isOn;
           if (widget.isFollowButton == true) {
-            if (widget.isLiked) {
-              await FireMethods().updateFollowing(widget.id, true);
-              await FireMethods().updateMyFollowing(widget.id, true);
-            } else {
-              await FireMethods().updateFollowing(widget.id, false);
-              await FireMethods().updateMyFollowing(widget.id, false);
+            if (widget.id != UserPreferences.getUser().userID) {
+              if (widget.isLiked) {
+                await FireMethods().updateFollowing(widget.id, true);
+                await FireMethods().updateMyFollowing(widget.id, true);
+              } else {
+                await FireMethods().updateFollowing(widget.id, false);
+                await FireMethods().updateMyFollowing(widget.id, false);
+              }
             }
           } else if (widget.isBookmark == true) {
           } else {

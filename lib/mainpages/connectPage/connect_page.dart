@@ -27,8 +27,11 @@ class _ConnectPageState extends State<ConnectPage> {
           .then((value) =>
               value.where((value) => value.userID != userTemp.userID).toList());
     } else {
-      temp = await FirebaseFirestore.instance.collection('users').get().then(
-          (snapshot) => snapshot.docs
+      temp = await FirebaseFirestore.instance
+          .collection('users')
+          .where('id', isNotEqualTo: userTemp.userID)
+          .get()
+          .then((snapshot) => snapshot.docs
               .map((doc) => UserData.fromJson(doc.data()))
               .toList());
     }

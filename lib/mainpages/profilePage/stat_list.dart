@@ -53,7 +53,7 @@ class _StatListPageState extends State<StatList> {
             child: SafeArea(
               top: false,
               bottom: false,
-              child: widget.user.likedPosts.isEmpty
+              child: widget.user.postIDs.isEmpty
                   ? const Center(
                       child: Text(
                       "No Posts",
