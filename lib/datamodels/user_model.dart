@@ -73,18 +73,18 @@ class UserData {
 
 //info for reading user
   static UserData fromJson(Map<String, dynamic>? json) {
-    return UserData(
-        userID: json!['id'],
-        name: json['name'],
-        prounouns: json['pronouns'],
-        title: json['title'],
-        profilePic: json['imageURL'],
-        aboutMe: json['aboutMe'],
-        company: json['company'],
-        postIDs: json['postIDs'],
-        eventIDs: json['eventIDs'],
-        following: json['following'],
-        followers: json['followers'],
-        likedPosts: json['likedPosts']);
+      return UserData(
+          userID: json!['id'],
+          name: json['name'],
+          prounouns: json['pronouns'],
+          title: json['title'],
+          profilePic: json['imageURL'],
+          aboutMe: json['aboutMe'],
+          company: json['company'],
+          postIDs: json['postIDs'],
+          eventIDs: json['eventIDs'],
+          following: json['following'],
+          followers: json['followers'],
+          likedPosts: json['likedPosts']);
   }
 }

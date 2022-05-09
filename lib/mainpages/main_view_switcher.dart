@@ -7,6 +7,7 @@ import 'package:lets_connect/mainpages/connectPage/connect_page.dart';
 import 'package:lets_connect/mainpages/eventsPage/events_page.dart';
 import 'package:lets_connect/mainpages/feedPage/feed_page.dart';
 import 'package:lets_connect/mainpages/profilePage/main_profile_page.dart';
+import 'package:lets_connect/mainpages/signupPage/userdetails.dart';
 
 import 'feedPage/feed_page.dart';
 
@@ -136,8 +137,16 @@ class _MainPageState extends State<MainPage> {
     print("getting userData");
     UserData? userData =
         await FireMethods().getUserData(FireMethods.fireAuth.currentUser!.uid);
-    print("set userData");
-    UserPreferences.setUser(userData!);
+    if (userData != null) {
+      print("set userData");
+      UserPreferences.setUser(userData);
+    } else {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const SetUpInfo()),
+        (Route<dynamic> route) => false,
+      );
+    }
     return "done";
   }
 }
