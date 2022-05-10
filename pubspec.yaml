@@ -59,6 +59,7 @@ dependencies:
   shared_preferences: ^2.0.13
   like_button: ^2.0.4
   google_sign_in: ^5.3.0
+  sign_in_with_apple: ^3.3.0
 
 dev_dependencies:
   flutter_test:

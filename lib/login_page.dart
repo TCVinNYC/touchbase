@@ -158,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
                   onPressed: () async {
-                    signInWithGoogle(context: context);
+                    signInWithGoogle();
                   },
                   child: Image.asset(
                     "assets/images/googleLogo.png",
@@ -177,8 +177,8 @@ class _LoginPageState extends State<LoginPage> {
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
-                  onPressed: () {
-                    // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignupPage()));
+                  onPressed: () async {
+                    signInWithApple();
                   },
                   child: Image.asset(
                     "assets/images/appleLogo.png",

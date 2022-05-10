@@ -146,7 +146,7 @@ class SignUp extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12))),
                         onPressed: () async {
-                          signInWithGoogle(context: context);
+                          signInWithGoogle();
                         },
                         child: Image.asset(
                           "assets/images/googleLogo.png",
@@ -167,8 +167,8 @@ class SignUp extends StatelessWidget {
                             primary: Colors.white.withOpacity(0.92),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12))),
-                        onPressed: () {
-                          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignupPage()));
+                        onPressed: () async {
+                          signInWithApple();
                         },
                         child: Image.asset(
                           "assets/images/appleLogo.png",
@@ -200,8 +200,7 @@ class SignUp extends StatelessWidget {
             elevation: 0, //No shadow
           ),
         ),
-
       ]),
-      );
+    );
   }
 }
