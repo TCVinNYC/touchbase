@@ -145,8 +145,8 @@ class SignUp extends StatelessWidget {
                             primary: Colors.white.withOpacity(0.92),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12))),
-                        onPressed: () {
-                          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignupPage()));
+                        onPressed: () async {
+                          signInWithGoogle(context: context);
                         },
                         child: Image.asset(
                           "assets/images/googleLogo.png",

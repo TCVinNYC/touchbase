@@ -16,6 +16,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -156,8 +157,8 @@ class _LoginPageState extends State<LoginPage> {
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
-                  onPressed: () {
-                    // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignupPage()));
+                  onPressed: () async {
+                    signInWithGoogle(context: context);
                   },
                   child: Image.asset(
                     "assets/images/googleLogo.png",
