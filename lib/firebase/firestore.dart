@@ -20,7 +20,9 @@ class FireMethods {
     String aboutMe,
     List<dynamic>? eventIDs,
     List<dynamic>? postIDs,
-    List<dynamic>? connectionIDs,
+    List<dynamic>? followers,
+    List<dynamic>? following,
+    List<dynamic>? likedPosts,
     File? file,
   ) async {
     String imageurl = await uploadImage(file!, 'users');
@@ -34,8 +36,10 @@ class FireMethods {
         'company': company,
         'aboutMe': aboutMe,
         'eventIDs': eventIDs ?? [],
-        'connectionIDs': connectionIDs ?? [],
+        'followers': followers ?? [],
+        'following': following ?? [],
         'postIDs': postIDs ?? [],
+        'likedPosts': likedPosts ?? [],
       });
       UserData? userData = await FireMethods()
           .getUserData(FireMethods.fireAuth.currentUser!.uid);
@@ -119,7 +123,7 @@ class FireMethods {
     DateTime timeOfPost,
     String? postText,
     List<dynamic> poster,
-    List<dynamic> likers,
+    List<dynamic> likes,
     File? file,
   ) async {
     String docID = firestore.collection('posts').doc().id;
@@ -138,7 +142,7 @@ class FireMethods {
       'image': imageurl,
       'postText': postText,
       'poster': poster,
-      'likers': likers,
+      'likes': likes,
     });
     UserData tempUser = UserPreferences.getUser();
     tempUser.postIDs.add(docID);
@@ -147,7 +151,7 @@ class FireMethods {
     return "done";
   }
 
-    Future<String> updateUserPostCount(String postID, bool addToList) {
+  Future<String> updateUserPostCount(String postID, bool addToList) {
     return firestore
         .collection('users')
         .doc(fireAuth.currentUser!.uid)
@@ -161,9 +165,6 @@ class FireMethods {
   }
 
   Future<String> updateLikeList(String postID, bool addToList) {
-    UserData tempUser = UserPreferences.getUser();
-    tempUser.likedPostsIDs.add(postID);
-    UserPreferences.setUser(tempUser);
     return firestore
         .collection('posts')
         .doc(postID)
@@ -172,15 +173,67 @@ class FireMethods {
               ? FieldValue.arrayUnion([fireAuth.currentUser!.uid])
               : FieldValue.arrayRemove([fireAuth.currentUser!.uid])
         })
-        .then((value) =>
-            addToList == true ? "Liked Post" : "Unliked Post")
+        .then((value) => addToList == true ? "Liked Post" : "Unliked Post")
         .catchError((error) => "Failed to update Post Action: $error");
+  }
+
+  Future<String> updateMyLikeList(String postID, bool addToList) {
+    UserData? tempUser = UserPreferences.getUser();
+    addToList
+        ? tempUser.likedPosts.add(postID)
+        : tempUser.likedPosts.remove(postID);
+    UserPreferences.setUser(tempUser);
+    return firestore
+        .collection('users')
+        .doc(fireAuth.currentUser!.uid)
+        .update({
+          'likedPosts': addToList == true
+              ? FieldValue.arrayUnion([postID])
+              : FieldValue.arrayRemove([postID])
+        })
+        .then((value) => addToList == true ? "Liked Post" : "Unliked Post")
+        .catchError((error) => "Failed to update Post Action: $error");
+  }
+
+  Future<String> updateMyFollowing(String userID, bool addToList) {
+    UserData tempUser = UserPreferences.getUser();
+    addToList
+        ? tempUser.following.add(userID)
+        : tempUser.following.remove(userID);
+    UserPreferences.setUser(tempUser);
+    return firestore
+        .collection('users')
+        .doc(fireAuth.currentUser!.uid)
+        .update({
+          'following': addToList == true
+              ? FieldValue.arrayUnion([userID])
+              : FieldValue.arrayRemove([userID])
+        })
+        .then(
+            (value) => addToList == true ? "Following User" : "Unfollowed User")
+        .catchError((error) => "Failed to update Following: $error");
+  }
+
+  Future<String> updateFollowing(String userID, bool addToList) {
+    return firestore
+        .collection('users')
+        .doc(userID)
+        .update({
+          'followers': addToList == true
+              ? FieldValue.arrayUnion([fireAuth.currentUser!.uid])
+              : FieldValue.arrayRemove([fireAuth.currentUser!.uid])
+        })
+        .then(
+            (value) => addToList == true ? "Following User" : "Unfollowed User")
+        .catchError((error) => "Failed to update Following: $error");
   }
 
   Future<UserData?> getUserData(String userID) async {
     var docSnapshot = await firestore.collection('users').doc(userID).get();
     if (docSnapshot.exists) {
-      return UserData.fromJson(docSnapshot.data());
+      if(docSnapshot.data() != null){
+        return UserData.fromJson(docSnapshot.data());
+      }
     }
     return null;
   }
