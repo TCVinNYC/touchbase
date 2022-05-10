@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/widgets/textfield_widget.dart';
 
-class AccountInfo extends StatefulWidget {
+class ProfileDetails extends StatefulWidget {
   final UserData userData;
-  const AccountInfo({Key? key, required this.userData}) : super(key: key);
+  const ProfileDetails({Key? key, required this.userData}) : super(key: key);
 
   @override
-  State<AccountInfo> createState() => _AccountInfoState();
+  State<ProfileDetails> createState() => _ProfileDetailsState();
 }
 
-class _AccountInfoState extends State<AccountInfo> {
+class _ProfileDetailsState extends State<ProfileDetails> {
   var nameController = TextEditingController();
   var pronounsController = TextEditingController();
   var titleController = TextEditingController();

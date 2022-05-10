@@ -86,7 +86,16 @@ class _ConnectPageState extends State<ConnectPage> {
                 fontWeight: FontWeight.bold,
                 color: Colors.black),
           )),
-      body: RefreshIndicator(
+      body:
+          // Container(
+          //   decoration: const BoxDecoration(
+          //     gradient: LinearGradient(
+          //         begin: Alignment.topLeft,
+          //         end: Alignment.bottomRight,
+          //         colors: [Colors.orangeAccent, Colors.deepOrangeAccent]),
+          //   ),
+          //   child:
+          RefreshIndicator(
         onRefresh: _getData,
         child: SafeArea(
           top: false,
@@ -102,6 +111,7 @@ class _ConnectPageState extends State<ConnectPage> {
               }),
         ),
       ),
+      // ),
     );
   }
 }

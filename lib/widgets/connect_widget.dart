@@ -22,6 +22,7 @@ class _ConnectWidgetState extends State<ConnectWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shadowColor: Colors.orangeAccent,
       elevation: 5,
       child: Column(
         mainAxisSize: MainAxisSize.min,
