@@ -6,6 +6,7 @@ import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/fire_auth.dart';
 import 'package:lets_connect/firebase/firestore.dart';
+import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_details.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_info.dart';
 import 'package:lets_connect/mainpages/profilePage/side_menu_button.dart';
@@ -121,7 +122,6 @@ class _MainProfilePageState extends State<MainProfilePage> {
                 InkWell(
                     onTap: () async {
                       signOutFromGoogle();
-                      await FirebaseAuth.instance.signOut();
                       UserPreferences.resetUser();
 
                       Navigator.pushAndRemoveUntil(
@@ -137,6 +137,27 @@ class _MainProfilePageState extends State<MainProfilePage> {
                         icon_color: Colors.red,
                         text_color: Colors.red,
                         text: 'Log Out')),
+                //Delete Account
+                InkWell(
+                    onTap: () async {
+                      String result = await deleteAllData();
+                      print(result);
+                      if (result == "done") {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                const MyHomePage(),
+                          ),
+                          (route) => false,
+                        );
+                      }
+                    },
+                    child: SideMenu(
+                        icon: Icons.logout_rounded,
+                        icon_color: Colors.red,
+                        text_color: Colors.red,
+                        text: 'DELETE ACCOUNT')),
               ],
             ),
           ),

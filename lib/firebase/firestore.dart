@@ -3,8 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:lets_connect/datamodels/event.dart';
 import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
+import 'package:lets_connect/firebase/fire_auth.dart';
 import 'package:path/path.dart';
 
 class FireMethods {
@@ -254,14 +256,5 @@ class FireMethods {
     }
   }
 
-  Future<String> deleteAllData(String userID) {
-    return firestore
-        .collection('users')
-        .doc(userID)
-        .update({
-          'followers': FieldValue.arrayRemove([fireAuth.currentUser!.uid])
-        })
-        .then((value) => "Unfollowed User")
-        .catchError((error) => "Failed to update Following: $error");
-  }
+
 }

@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:lets_connect/datamodels/shared_preferences.dart';
+import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/login_page.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'dart:convert';
@@ -187,4 +191,134 @@ Future<User?> refreshUser(User user) async {
   User? refreshedUser = auth.currentUser;
 
   return refreshedUser;
+}
+
+Future<String> deleteAllData() async {
+  final instance = FirebaseFirestore.instance;
+  UserData currentUser = UserPreferences.getUser();
+  var users = instance.collection('users');
+
+  print("deleting user");
+  //checks if my user has any events associated otherwise skip
+  if (currentUser.eventIDs.isNotEmpty) {
+    print("deleting eventIDs");
+    var events = instance.collection('events');
+    //remove myself from all attendeed events
+    var eventsAttendeesCollection = await events
+        .where('attendees', arrayContains: currentUser.userID)
+        .get();
+    for (var event in eventsAttendeesCollection.docs) {
+      print("@ attendee list");
+      event.reference.update({
+        "attendees": FieldValue.arrayRemove([currentUser.userID])
+      });
+    }
+
+    //delete my events
+    var myEventsCollection =
+        await events.where('host', arrayContains: currentUser.userID).get();
+    for (var event in myEventsCollection.docs) {
+      print("deleting my events");
+      event.reference.delete();
+    }
+
+    //remove traces of my events from other users
+    var userAttendeesCollection =
+        await users.where('eventIDs', whereIn: currentUser.eventIDs).get();
+    for (var user in userAttendeesCollection.docs) {
+      print("remove my events from others");
+      user.reference.update({
+        "eventIDs": FieldValue.arrayRemove([currentUser.eventIDs])
+      });
+    }
+  }
+
+  //checks if my user has any posts associated otherwise skip
+  if (currentUser.postIDs.isNotEmpty || currentUser.likedPosts.isNotEmpty) {
+    print("removing posts");
+    var posts = instance.collection('posts');
+    if (currentUser.postIDs.isNotEmpty) {
+      //delete all my posts
+      var myPostCollection =
+          await posts.where('id', whereIn: currentUser.postIDs).get();
+      for (var posts in myPostCollection.docs) {
+        posts.reference.delete();
+      }
+    }
+    //remove myself from any posts i liked
+    if (currentUser.likedPosts.isNotEmpty) {
+      var eventsAttendeesCollection =
+          await posts.where('likes', arrayContains: currentUser.userID).get();
+      for (var posts in eventsAttendeesCollection.docs) {
+        posts.reference.update({
+          "likes": FieldValue.arrayRemove([currentUser.userID])
+        });
+      }
+    }
+  }
+
+  //checks if my user has any followers/following associated otherwise skip
+  if (currentUser.followers.isNotEmpty || currentUser.following.isNotEmpty) {
+    //remove any traces of myself on other users following list
+    if (currentUser.followers.isNotEmpty) {
+      var myfollowersCollection = await users
+          .where('following', arrayContains: currentUser.userID)
+          .get();
+      for (var user in myfollowersCollection.docs) {
+        user.reference.update({
+          "following": FieldValue.arrayRemove([currentUser.userID])
+        });
+      }
+    }
+
+    //remove any traces of myself on other users followers list
+    if (currentUser.following.isNotEmpty) {
+      var myfollowingCollection = await users
+          .where('followers', arrayContains: currentUser.userID)
+          .get();
+      for (var user in myfollowingCollection.docs) {
+        user.reference.update({
+          "followers": FieldValue.arrayRemove([currentUser.userID])
+        });
+      }
+    }
+  }
+
+  //final Reference ref = FirebaseStorage.instance.ref();
+  //remove any traces of myself in all storage units
+  // if (currentUser.eventIDs.isNotEmpty) {
+  //   String userID = currentUser.userID;
+  //   final eventsFolder = 'events/$userID';
+  //   try {
+  //     await ref.child(eventsFolder).delete();
+  //   } on FirebaseException catch (e) {
+  //     print(e.code);
+  //   }
+  // }
+  // if (currentUser.postIDs.isNotEmpty) {
+  //   String userID = currentUser.userID;
+  //   final eventsFolder = 'posts/$userID';
+  //   try {
+  //     await ref.child(eventsFolder).delete();
+  //   } on FirebaseException catch (e) {
+  //     print(e.code);
+  //   }
+  // }
+  // if (currentUser.eventIDs.isNotEmpty) {
+  //   String userID = currentUser.userID;
+  //   final eventsFolder = 'users/$userID';
+  //   try {
+  //     await ref.child(eventsFolder).delete();
+  //   } on FirebaseException catch (e) {
+  //     print(e.code);
+  //   }
+  // }
+
+  print("completed deleting all references, now the big finale");
+  users.doc(currentUser.userID).delete();
+  await FirebaseAuth.instance.currentUser!.delete();
+  await signOutFromGoogle();
+  UserPreferences.resetUser();
+
+  return ("done");
 }
