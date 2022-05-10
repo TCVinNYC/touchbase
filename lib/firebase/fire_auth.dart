@@ -33,6 +33,9 @@ Future<User?> signInUsingEmailPassword({
     } else if (e.code == 'user-not-found') {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Wrong Email. Please try again!')));
+    } else if (e.code == 'account-exists-with-different-credential') {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Try Sign In with Google or Apple')));
     } else if (e.code == 'wrong-password') {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Wrong Password. Please try again!')));
@@ -72,6 +75,9 @@ Future<User?> registerUsingEmailPassword({
     } else if (e.code == 'weak-password') {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('The password provided is too weak.')));
+    } else if (e.code == 'account-exists-with-different-credential') {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Try Sign In with Google or Apple')));
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
@@ -98,76 +104,8 @@ Future<UserCredential> signInWithGoogle() async {
   return await FirebaseAuth.instance.signInWithCredential(credential);
 }
 
-// Future<User?> signInWithGoogle({required BuildContext context}) async {
-//   final GoogleSignIn googleSignIn = GoogleSignIn();
-
-//   final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
-
-//   if (kIsWeb) {
-//     GoogleAuthProvider authProvider = GoogleAuthProvider();
-
-//     try {
-//       final UserCredential userCredential =
-//           await auth.signInWithPopup(authProvider);
-
-//       user = userCredential.user;
-//     } catch (e) {
-//       Navigator.pushAndRemoveUntil(
-//         context,
-//         MaterialPageRoute(builder: (context) => const LoginPage()),
-//         (Route<dynamic> route) => false,
-//       );
-//     }
-//   } else {
-//     final GoogleSignIn googleSignIn = GoogleSignIn();
-
-//     final GoogleSignInAccount? googleSignInAccount =
-//         await googleSignIn.signIn();
-
-//     if (googleSignInAccount != null) {
-//       final GoogleSignInAuthentication googleSignInAuthentication =
-//           await googleSignInAccount.authentication;
-
-//       final AuthCredential credential = GoogleAuthProvider.credential(
-//         accessToken: googleSignInAuthentication.accessToken,
-//         idToken: googleSignInAuthentication.idToken,
-//       );
-
-//       try {
-//         final UserCredential userCredential =
-//             await auth.signInWithCredential(credential);
-
-//         user = userCredential.user;
-//       } on FirebaseAuthException catch (e) {
-//         if (e.code == 'account-exists-with-different-credential') {
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             customSnackBar(
-//               content:
-//                   'The account already exists with a different credential.',
-//             ),
-//           );
-//         } else if (e.code == 'invalid-credential') {
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             customSnackBar(
-//               content: 'Error occurred while accessing credentials. Try again.',
-//             ),
-//           );
-//         }
-//       } catch (e) {
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           customSnackBar(
-//             content: 'Error occurred using Google Sign-In. Try again.',
-//           ),
-//         );
-//       }
-//     }
-//   }
-
-//   return user;
-// }
-
 String generateNonce([int length = 32]) {
-  final charset =
+  const charset =
       '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
   final random = Random.secure();
   return List.generate(length, (_) => charset[random.nextInt(charset.length)])
@@ -224,6 +162,17 @@ SnackBar customSnackBar({required String content}) {
       style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
     ),
   );
+}
+
+Future resetPassword(String email, context) async {
+  try {
+    await auth.sendPasswordResetEmail(email: email);
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Password Reset Email Sent!')));
+  } on FirebaseAuthException catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message.toString())));
+  }
 }
 
 Future<User?> refreshUser(User user) async {

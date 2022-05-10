@@ -60,6 +60,7 @@ dependencies:
   like_button: ^2.0.4
   google_sign_in: ^5.3.0
   sign_in_with_apple: ^3.3.0
+  sign_in_with_apple_web: ^1.0.1
 
 dev_dependencies:
   flutter_test:
