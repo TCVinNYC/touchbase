@@ -31,8 +31,8 @@ class _CreateEventState extends State<CreateEventPage> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: dateSelect, // Refer step 1
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
+      firstDate: DateTime(2022),
+      lastDate: DateTime(2100),
     );
     if (picked != null && picked != dateSelect) {
       setState(() {
