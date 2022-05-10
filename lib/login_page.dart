@@ -16,6 +16,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool isLoading = false;
+  var countDown = 3;
 
   @override
   void dispose() {
@@ -26,200 +28,246 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      // resizeToAvoidBottomInset : false,
-      // child: Column(
-      //   mainAxisSize: MainAxisSize.min,
-      //   crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
-        //Orange Guy GIF
-        Container(
-            padding: const EdgeInsets.all(10),
-            child: Lottie.asset(
-              "assets/images/orange-coder.json",
-              repeat: true,
-              // animate: true,
-              fit: BoxFit.fitWidth,
-            )),
-        //Login Text
-        Container(
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.fromLTRB(30, 30, 0, 20),
-          child: const Text(
-            "Login",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontFamily: 'Quicksand',
-              fontWeight: FontWeight.bold,
-              fontSize: 32,
-            ),
-          ),
-        ),
-        //Email Field
-        Container(
-          padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-          child: TextField(
-            controller: emailController,
-            keyboardType: TextInputType.emailAddress,
-            // scrollPadding: EdgeInsets.only(bottom: 40),
-            decoration: const InputDecoration(
-                hintText: "someone@example.com",
-                prefixIcon: Icon(Icons.alternate_email_rounded),
-                // suffixIcon: _controller.text.isEmpty
-                //     ? null // Show nothing if the text field is empty
-                //     : IconButton(
-                //         icon: const Icon(Icons.clear),
-                //         onPressed: _clearTextField,
-                //       ), // Show the clear button if the text field has something
-                border: OutlineInputBorder(),
-                labelText: "Email ID"),
-          ),
-        ),
-        //Password Field
-        Container(
-          padding: const EdgeInsets.fromLTRB(25, 5, 25, 15),
-          child: TextField(
-            controller: passwordController,
-            //scrollPadding: EdgeInsets.only(bottom: 40),
-            keyboardType: TextInputType.visiblePassword,
-            decoration: const InputDecoration(
-                focusedBorder: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock),
-                border: OutlineInputBorder(),
-                // suffixIcon: Icon(
-                //  Icons.error,
-                // ),
-                labelText: "Password"),
-            obscureText: true,
-          ),
-        ),
-        //Login Button
-        Container(
-          padding: const EdgeInsets.all(15),
-          width: MediaQuery.of(context).size.width / 1.1,
-          height: MediaQuery.of(context).size.height / 10,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15))),
-            onPressed: () async {
-              User? user = await signInUsingEmailPassword(
-                email: emailController.text.trim(),
-                password: passwordController.text.trim(),
-                context: context,
-              );
-
-              if (user != null) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const MainPage()),
-                );
-              } else {
-                print("null error");
-                print(user);
-              }
-            },
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: ListView(
+        shrinkWrap: true,
+        // resizeToAvoidBottomInset : false,
+        // child: Column(
+        //   mainAxisSize: MainAxisSize.min,
+        //   crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          //Orange Guy GIF
+          Container(
+              padding: const EdgeInsets.all(10),
+              child: Lottie.asset(
+                "assets/images/orange-coder.json",
+                repeat: true,
+                // animate: true,
+                fit: BoxFit.fitWidth,
+              )),
+          //Login Text
+          Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.fromLTRB(30, 30, 0, 20),
             child: const Text(
-              'Login',
+              "Login",
+              textAlign: TextAlign.left,
               style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
                 fontFamily: 'Quicksand',
+                fontWeight: FontWeight.bold,
+                fontSize: 32,
               ),
             ),
           ),
-        ),
-        //bottom text
-        Container(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
-          child: const Text(
-            "Or, log in with...",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'Quicksand',
-              fontWeight: FontWeight.w400,
-              fontSize: 15,
+          //Email Field
+          Container(
+            padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
+            child: TextField(
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              // scrollPadding: EdgeInsets.only(bottom: 40),
+              decoration: const InputDecoration(
+                  hintText: "someone@example.com",
+                  prefixIcon: Icon(Icons.alternate_email_rounded),
+                  // suffixIcon: _controller.text.isEmpty
+                  //     ? null // Show nothing if the text field is empty
+                  //     : IconButton(
+                  //         icon: const Icon(Icons.clear),
+                  //         onPressed: _clearTextField,
+                  //       ), // Show the clear button if the text field has something
+                  border: OutlineInputBorder(),
+                  labelText: "Email ID"),
             ),
           ),
-        ),
-        //Google Button
-        Container(
-          padding: const EdgeInsets.all(5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //const Spacer(flex: 4),
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 3.3,
-                height: MediaQuery.of(context).size.height / 13,
-                child: OutlinedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12))),
-                  onPressed: () {
-                    // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignupPage()));
-                  },
-                  child: Image.asset(
-                    "assets/images/googleLogo.png",
-                    height: 35,
-                    width: 35,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 30),
-              // const Spacer(flex: ),
-              //Apple Button
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 3.3,
-                height: MediaQuery.of(context).size.height / 13,
-                child: OutlinedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12))),
-                  onPressed: () {
-                    // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignupPage()));
-                  },
-                  child: Image.asset(
-                    "assets/images/appleLogo.png",
-                    height: 35,
-                    width: 35,
-                  ),
-                ),
-              ),
-              //const Spacer(flex: 4),
-            ],
+          //Password Field
+          Container(
+            padding: const EdgeInsets.fromLTRB(25, 5, 25, 15),
+            child: TextField(
+              controller: passwordController,
+              //scrollPadding: EdgeInsets.only(bottom: 40),
+              keyboardType: TextInputType.visiblePassword,
+              decoration: const InputDecoration(
+                  focusedBorder: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.lock),
+                  border: OutlineInputBorder(),
+                  // suffixIcon: Icon(
+                  //  Icons.error,
+                  // ),
+                  labelText: "Password"),
+              obscureText: true,
+            ),
           ),
-          //Register Text and Button
-        ),
-        // const Spacer(flex: 2),
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(children: [
-              const TextSpan(
-                text: "New to Touchbase? ",
+          //Login Button
+          Container(
+            padding: const EdgeInsets.fromLTRB(25, 15, 25, 15),
+            width: MediaQuery.of(context).size.width / 1.1,
+            height: MediaQuery.of(context).size.height / 10,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10))),
+              onPressed: () async {
+                User? user = await signInUsingEmailPassword(
+                  email: emailController.text.trim(),
+                  password: passwordController.text.trim(),
+                  context: context,
+                );
+
+                if (user != null) {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const MainPage()),
+                  );
+                } else {
+                  setState(() {
+                    countDown -= 1;
+                  });
+
+                  print("null error");
+                  print(user);
+                }
+              },
+              child: const Text(
+                'Login',
                 style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
                   fontFamily: 'Quicksand',
-                  color: Colors.black,
                 ),
               ),
-              TextSpan(
-                  text: 'Sign Up',
-                  style: const TextStyle(
-                    fontFamily: 'Quicksand',
-                    color: Colors.blue,
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => SignUp()));
-                    }),
-            ]),
+            ),
           ),
-        ),
-        // const Spacer(flex: 1),
-      ],
+
+          countDown <= 0
+              ? AnimatedOpacity(
+                  opacity: countDown <= 0 ? 1.0 : 0.0,
+                  duration: const Duration(seconds: 3),
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 30, 30),
+                    child: GestureDetector(
+                      onTap: () {
+                        if (emailController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Please Enter Your Email First!')));
+                        } else {
+                          resetPassword(emailController.text, context);
+                        }
+                      },
+                      child: const Text(
+                        "Forgot password?",
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                            fontFamily: 'Quicksand',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15,
+                            color: Colors.redAccent),
+                      ),
+                    ),
+                  ),
+                )
+              :
+              // bottom text
+              AnimatedOpacity(
+                  opacity: countDown <= 0 ? 0.0 : 1.0,
+                  duration: const Duration(seconds: 3),
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
+                    child: const Text(
+                      "Or, log in with...",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Quicksand',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+          //Google Button
+          Container(
+            padding: const EdgeInsets.all(5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //const Spacer(flex: 4),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 3.3,
+                  height: MediaQuery.of(context).size.height / 13,
+                  child: OutlinedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12))),
+                    onPressed: () async {
+                      signInWithGoogle();
+                    },
+                    child: Image.asset(
+                      "assets/images/googleLogo.png",
+                      height: 35,
+                      width: 35,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 30),
+                // const Spacer(flex: ),
+                //Apple Button
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 3.3,
+                  height: MediaQuery.of(context).size.height / 13,
+                  child: OutlinedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12))),
+                    onPressed: () async {
+                      signInWithApple();
+                    },
+                    child: Image.asset(
+                      "assets/images/appleLogo.png",
+                      height: 35,
+                      width: 35,
+                    ),
+                  ),
+                ),
+                //const Spacer(flex: 4),
+              ],
+            ),
+            //Register Text and Button
+          ),
+          // const Spacer(flex: 2),
+          Container(
+            padding: const EdgeInsets.all(10),
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(children: [
+                const TextSpan(
+                  text: "New to Touchbase? ",
+                  style: TextStyle(
+                    fontFamily: 'Quicksand',
+                    color: Colors.black,
+                  ),
+                ),
+                TextSpan(
+                    text: 'Sign Up',
+                    style: const TextStyle(
+                      fontFamily: 'Quicksand',
+                      color: Colors.blue,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => SignUp()));
+                      }),
+              ]),
+            ),
+          ),
+          // const Spacer(flex: 1),
+        ],
+      ),
     );
   }
 }

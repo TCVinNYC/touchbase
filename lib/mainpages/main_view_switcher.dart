@@ -7,6 +7,7 @@ import 'package:lets_connect/mainpages/connectPage/connect_page.dart';
 import 'package:lets_connect/mainpages/eventsPage/events_page.dart';
 import 'package:lets_connect/mainpages/feedPage/feed_page.dart';
 import 'package:lets_connect/mainpages/profilePage/main_profile_page.dart';
+import 'package:lets_connect/mainpages/signupPage/enable_location.dart';
 import 'package:lets_connect/mainpages/signupPage/userdetails.dart';
 
 import 'feedPage/feed_page.dart';
@@ -143,7 +144,7 @@ class _MainPageState extends State<MainPage> {
     } else {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const SetUpInfo()),
+        MaterialPageRoute(builder: (context) => const LocationPage()),
         (Route<dynamic> route) => false,
       );
     }

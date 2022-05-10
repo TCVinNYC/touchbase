@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/location_model.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
+import 'package:lets_connect/firebase/fire_auth.dart';
+import 'package:lets_connect/main.dart';
 import 'package:lets_connect/mainpages/signupPage/userdetails.dart';
 import 'package:lottie/lottie.dart';
 import 'package:location/location.dart';
@@ -115,12 +118,22 @@ class _LocationPageState extends State<LocationPage> {
           child: AppBar(
             title: const Text(''),
             toolbarHeight: 50,
+            leading: TextButton(
+              onPressed: () async {
+                
+                signOutFromGoogle();
+                UserPreferences.resetUser();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const MyHomePage()),
+                );
+              },
+              child: const Text('Back', style: TextStyle(color: Colors.red,),),
+            ),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                        builder: (context) => const LocationPage()),
+                    MaterialPageRoute(builder: (context) => const SetUpInfo()),
                   );
                 },
                 child: const Text('Skip'),
