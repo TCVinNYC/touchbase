@@ -4,8 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
+import 'package:lets_connect/firebase/fire_auth.dart';
 import 'package:lets_connect/firebase/firestore.dart';
+import 'package:lets_connect/mainpages/profilePage/account_settings.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_details.dart';
+// import 'package:lets_connect/mainpages/profilePage/unused/profile_info.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_info.dart';
 import 'package:lets_connect/mainpages/profilePage/side_menu_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -52,6 +55,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                 color: Colors.white),
           ),
           backgroundColor: Colors.orange,
+          // iconTheme: const IconThemeData(color: Colors.orange),
         ),
         endDrawer: SizedBox(
           width: MediaQuery.of(context).size.width * 0.65,
@@ -79,10 +83,10 @@ class _MainProfilePageState extends State<MainProfilePage> {
                 //ACOUNT INFORMATION
                 InkWell(
                     onTap: () {
-                      //navigate to account info form
+                      //navigate to profile details form
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) =>
-                              AccountInfo(userData: userData)));
+                              ProfileDetails(userData: userData)));
                     },
                     child: SideMenu(
                         icon: Icons.account_circle_rounded,
@@ -93,6 +97,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                 InkWell(
                     onTap: () {
                       //navigate to notifications form
+
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("Coming Soon")));
                     },
@@ -107,6 +112,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                 InkWell(
                   onTap: () {
                     //navigate to settings form
+
                     ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("Coming Soon")));
                   },
