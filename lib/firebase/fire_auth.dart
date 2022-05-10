@@ -86,7 +86,7 @@ Future<User?> registerUsingEmailPassword({
   return user;
 }
 
-Future<UserCredential> signInWithGoogle() async {
+Future<String> signInWithGoogle() async {
   // Trigger the authentication flow
   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -100,8 +100,15 @@ Future<UserCredential> signInWithGoogle() async {
     idToken: googleAuth?.idToken,
   );
 
+  try {
+    // Attempt to sign in the user in with Google
+    UserCredential authResult =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+  } on FirebaseAuthException catch (e) {
+    print(e);
+  }
   // Once signed in, return the UserCredential
-  return await FirebaseAuth.instance.signInWithCredential(credential);
+  return 'signInWithGoogle succeeded: $user';
 }
 
 String generateNonce([int length = 32]) {
@@ -170,8 +177,8 @@ Future resetPassword(String email, context) async {
     ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Password Reset Email Sent!')));
   } on FirebaseAuthException catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message.toString())));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(e.message.toString())));
   }
 }
 

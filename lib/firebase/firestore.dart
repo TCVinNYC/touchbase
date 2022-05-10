@@ -231,7 +231,7 @@ class FireMethods {
   Future<UserData?> getUserData(String userID) async {
     var docSnapshot = await firestore.collection('users').doc(userID).get();
     if (docSnapshot.exists) {
-      if(docSnapshot.data() != null){
+      if (docSnapshot.data() != null) {
         return UserData.fromJson(docSnapshot.data());
       }
     }
@@ -252,5 +252,16 @@ class FireMethods {
       print(e.code);
       return ("error");
     }
+  }
+
+  Future<String> deleteAllData(String userID) {
+    return firestore
+        .collection('users')
+        .doc(userID)
+        .update({
+          'followers': FieldValue.arrayRemove([fireAuth.currentUser!.uid])
+        })
+        .then((value) => "Unfollowed User")
+        .catchError((error) => "Failed to update Following: $error");
   }
 }
