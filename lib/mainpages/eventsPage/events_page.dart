@@ -9,123 +9,139 @@ import 'package:lets_connect/mainpages/eventsPage/create_event.dart';
 import 'package:lets_connect/mainpages/eventsPage/filter_events_page.dart';
 import 'package:lets_connect/widgets/event_card.dart';
 
-class EventsPage extends StatefulWidget {
-  const EventsPage({Key? key}) : super(key: key);
-  @override
-  State<EventsPage> createState() => _EventsPageState();
-}
+class EventsPage extends StatelessWidget {
+  //const EventsPage({Key? key}) : super(key: key);
+  //@override
+  //State<EventsPage> createState() => _EventsPageState();
+//}
 
-class _EventsPageState extends State<EventsPage>
-    with
-        SingleTickerProviderStateMixin,
-        AutomaticKeepAliveClientMixin<EventsPage> {
-  late TabController _tabController;
-  late ScrollController _scrollViewController;
+// class _EventsPageState extends State<EventsPage>
+//     with
+//         SingleTickerProviderStateMixin,
+//         AutomaticKeepAliveClientMixin<EventsPage> {
+  // late TabController _tabController;
+  // late ScrollController _scrollViewController;
 
-  @override
-  bool get wantKeepAlive => true;
+  // @override
+  // bool get wantKeepAlive => true;
 
-  @override
-  void initState() {
-    _tabController = TabController(vsync: this, length: 3);
-    _scrollViewController = ScrollController(initialScrollOffset: 0.0);
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   _tabController = TabController(vsync: this, length: 3);
+  //   _scrollViewController = ScrollController(initialScrollOffset: 0.0);
+  //   super.initState();
+  // }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    _scrollViewController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _tabController.dispose();
+  //   _scrollViewController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    return Scaffold(
-      body: NestedScrollView(
-        controller: _scrollViewController,
-        headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              backgroundColor: Colors.white,
-              centerTitle: false,
-              title: const Text(
-                'Search Events',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Quicksand',
-                    fontWeight: FontWeight.w800,
-                    fontSize: 24),
-                textAlign: TextAlign.start,
-              ),
-              actions: <Widget>[
-                IconButton(
-                  icon: const Icon(
-                    Icons.menu_rounded,
-                    color: Colors.black,
-                  ),
-                  tooltip: 'Filter Options',
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute<void>(
-                      builder: (BuildContext context) {
-                        return const FilterEventsPage();
-                      },
-                    ));
-                  },
-                )
-              ],
-              pinned: true,
-              floating: true,
-              snap: true,
-              forceElevated: boxIsScrolled,
-              bottom: TabBar(
-                physics: const NeverScrollableScrollPhysics(),
-                labelColor: Colors.black,
-                unselectedLabelColor: const Color.fromARGB(255, 32, 29, 29),
-                indicatorColor: Colors.amberAccent,
-                indicatorWeight: 3.2,
-                isScrollable: false,
-                tabs: const <Widget>[
-                  Tab(text: "New"),
-                  Tab(text: "Upcoming"),
-                  Tab(text: "Missed")
+    // super.build(context);
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        body: NestedScrollView(
+          //controller: _scrollViewController,
+          headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
+            return <Widget>[
+              SliverAppBar(
+                backgroundColor: Colors.white,
+                centerTitle: false,
+                title: const Text(
+                  'Search Events',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Quicksand',
+                      fontWeight: FontWeight.w800,
+                      fontSize: 24),
+                  textAlign: TextAlign.start,
+                ),
+                actions: <Widget>[
+                  IconButton(
+                    icon: const Icon(
+                      Icons.menu_rounded,
+                      color: Colors.black,
+                    ),
+                    tooltip: 'Filter Options',
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute<void>(
+                        builder: (BuildContext context) {
+                          return const FilterEventsPage();
+                        },
+                      ));
+                    },
+                  )
                 ],
-                controller: _tabController,
-              ),
-            )
-          ];
-        },
-        body: TabBarView(
-          children: <Widget>[
-            AllEventsPage(),
-            YourEventsPage(),
-            PastEventsPage(),
-          ],
-          controller: _tabController,
+                pinned: true,
+                floating: true,
+                snap: true,
+                forceElevated: boxIsScrolled,
+                bottom: TabBar(
+                  physics: const NeverScrollableScrollPhysics(),
+                  labelColor: Colors.black,
+                  unselectedLabelColor: const Color.fromARGB(255, 32, 29, 29),
+                  indicatorColor: Colors.amberAccent,
+                  indicatorWeight: 3.2,
+                  isScrollable: false,
+                  tabs: const <Widget>[
+                    Tab(text: "New"),
+                    Tab(text: "Upcoming"),
+                    Tab(text: "Missed")
+                  ],
+                  //controller: _tabController,
+                ),
+              )
+            ];
+          },
+          body: TabBarView(
+            //controller: _tabController,
+            children: <Widget>[
+              AllEventsPage(),
+              YourEventsPage(),
+              PastEventsPage(),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.orange,
-        splashColor: Colors.amber,
-        child: const Icon(Icons.add, color: Colors.white),
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute<void>(
-            builder: (BuildContext context) {
-              return const CreateEventPage();
-            },
-          ));
-        },
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.orange,
+          splashColor: Colors.amber,
+          child: const Icon(Icons.add, color: Colors.white),
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute<void>(
+              builder: (BuildContext context) {
+                return const CreateEventPage();
+              },
+            ));
+          },
+        ),
       ),
     );
   }
 }
 
-class AllEventsPage extends StatelessWidget {
+class AllEventsPage extends StatefulWidget {
   const AllEventsPage({Key? key}) : super(key: key);
+  @override
+  _AllEventsPageState createState() => _AllEventsPageState();
+}
+
+class _AllEventsPageState extends State<AllEventsPage>
+    with AutomaticKeepAliveClientMixin<AllEventsPage> {
+// class AllEventsPage extends StatelessWidget {
+//   const AllEventsPage({Key? key}) : super(key: key);
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       top: false,
       bottom: false,
@@ -156,13 +172,29 @@ class AllEventsPage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
-class YourEventsPage extends StatelessWidget {
+class YourEventsPage extends StatefulWidget {
   const YourEventsPage({Key? key}) : super(key: key);
+  @override
+  _YourEventsPageState createState() => _YourEventsPageState();
+}
+
+class _YourEventsPageState extends State<YourEventsPage>
+    with AutomaticKeepAliveClientMixin<YourEventsPage> {
+// class YourEventsPage extends StatelessWidget {
+//   const YourEventsPage({Key? key}) : super(key: key);
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       top: false,
       bottom: false,
@@ -192,13 +224,34 @@ class YourEventsPage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
-class PastEventsPage extends StatelessWidget {
+class PastEventsPage extends StatefulWidget {
   const PastEventsPage({Key? key}) : super(key: key);
+  @override
+  _PastEventsPageState createState() => _PastEventsPageState();
+}
+
+class _PastEventsPageState extends State<PastEventsPage>
+    with AutomaticKeepAliveClientMixin<PastEventsPage> {
+// class YourEventsPage extends StatelessWidget {
+//   const YourEventsPage({Key? key}) : super(key: key);
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+// class PastEventsPage extends StatelessWidget {
+//   const PastEventsPage({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
       bottom: false,
@@ -228,6 +281,9 @@ class PastEventsPage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 UserData user = UserPreferences.getUser();
@@ -277,8 +333,8 @@ Stream<List<Event>> getPastEvents() {
                 event.time.millisecondsSinceEpoch <
                 DateTime.now().millisecondsSinceEpoch)
             .toList());
-  }else{
-        return FirebaseFirestore.instance
+  } else {
+    return FirebaseFirestore.instance
         .collection('events')
         .where('time', isLessThan: DateTime.now())
         .snapshots()

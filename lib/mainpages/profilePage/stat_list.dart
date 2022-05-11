@@ -12,7 +12,8 @@ import 'package:lets_connect/widgets/post_widget.dart';
 class StatList extends StatefulWidget {
   final String listName;
   final UserData user;
-  const StatList({Key? key, required this.listName, required this.user})
+  Event? events;
+  StatList({Key? key, required this.listName, required this.user, this.events})
       : super(key: key);
 
   @override
@@ -102,6 +103,26 @@ class _StatListPageState extends State<StatList> {
                   : getFollowers(widget.user),
             )),
       );
+    } else if (widget.listName == "attendees") {
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: false,
+          backgroundColor: Colors.orange,
+        ),
+        body: Container(
+            color: Colors.white,
+            child: SafeArea(
+              top: false,
+              bottom: false,
+              child: widget.user.postIDs.isEmpty
+                  ? const Center(
+                      child: Text(
+                      "No Posts",
+                      style: TextStyle(fontSize: 20),
+                    ))
+                  : getAllAttendees(widget.events!),
+            )),
+      );
     }
     return Container();
   }
@@ -188,7 +209,7 @@ class _StatListPageState extends State<StatList> {
               itemBuilder: (BuildContext context, int index) {
                 return ConnectWidget(
                   user: users[index] as UserData,
-                  myUser: UserPreferences.getUser() as UserData,
+                  myUser: UserPreferences.getUser(),
                 );
               },
               itemCount: users.length,
@@ -220,7 +241,7 @@ class _StatListPageState extends State<StatList> {
               itemBuilder: (BuildContext context, int index) {
                 return ConnectWidget(
                   user: users[index] as UserData,
-                  myUser: UserPreferences.getUser() as UserData,
+                  myUser: UserPreferences.getUser(),
                 );
               },
               itemCount: users.length,
@@ -233,7 +254,42 @@ class _StatListPageState extends State<StatList> {
           }
         });
   }
+
+
 }
+  FutureBuilder<List<UserData>> getAllAttendees(Event event) {
+    return FutureBuilder<List<UserData>>(
+        future: FirebaseFirestore.instance
+            .collection('users')
+            .where('id', whereIn: event.attendees)
+            .get()
+            .then((snapshot) => snapshot.docs
+                .map((doc) => UserData.fromJson(doc.data()))
+                .toList())
+            .then((user) =>
+                user.where((user) => user.userID != event.host[3]).toList()),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text("Something when wrong!" + snapshot.error.toString());
+          } else if (snapshot.hasData) {
+            final users = snapshot.data!;
+            return ListView.separated(
+              itemBuilder: (BuildContext context, int index) {
+                return ConnectWidget(
+                  user: users[index],
+                  myUser: UserPreferences.getUser(),
+                );
+              },
+              itemCount: users.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return Container();
+              },
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        });
+  }
 
 // Future<List<Post>> getPosts(UserData user) {
 //   return 

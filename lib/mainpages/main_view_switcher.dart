@@ -31,7 +31,7 @@ class _MainPageState extends State<MainPage> {
     _pages = [
       const FeedPage(),
       const ConnectPage(),
-      const EventsPage(),
+       EventsPage(),
       const MainProfilePage(),
     ];
     //_pageController = PageController(initialPage: _currentIndex);

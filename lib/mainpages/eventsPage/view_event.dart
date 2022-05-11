@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/event.dart';
 import 'package:lets_connect/datamodels/shared_preferences.dart';
+import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/fire_auth.dart';
+import 'package:lets_connect/mainpages/profilePage/stat_list.dart';
+import 'package:lets_connect/widgets/connect_widget.dart';
 import 'package:lets_connect/widgets/showDate.dart';
 import 'package:lets_connect/widgets/showHost.dart';
 import 'package:lets_connect/widgets/showLocation.dart';
@@ -14,26 +18,27 @@ class ViewEventPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserData myUser = UserPreferences.getUser();
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             actions: [
               event.host[3] == UserPreferences.getUser().userID
-                      ? GestureDetector(
-                          onTap: () {
-                            showAlertDialog(context, event.documentID);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Icon(
-                              Icons.delete,
-                              size: 23,
-                              color: Colors.red.shade500,
-                            ),
-                          ),
-                        )
-                      : Container(),
+                  ? GestureDetector(
+                      onTap: () {
+                        showAlertDialog(context, event.documentID);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Icon(
+                          Icons.delete,
+                          size: 23,
+                          color: Colors.red.shade500,
+                        ),
+                      ),
+                    )
+                  : Container(),
             ],
             floating: true,
             snap: true,
@@ -67,7 +72,6 @@ class ViewEventPage extends StatelessWidget {
                   fontFamily: 'Quicksand',
                 ),
               ),
-              
             ),
             pinned: true,
             forceElevated: true,
@@ -75,9 +79,11 @@ class ViewEventPage extends StatelessWidget {
           ),
           SliverList(
               delegate: SliverChildListDelegate([
-            SizedBox(
-              height: 700,
-              child: Padding(
+                
+            // Flexible (
+            //  // height: 700,
+            //   child: 
+              Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
                 child: Column(
@@ -157,20 +163,13 @@ class ViewEventPage extends StatelessWidget {
                             fontFamily: 'Quicksand',
                             fontSize: 20,
                             fontWeight: FontWeight.bold)),
+                    event.attendees.length != 1
+                    ? SizedBox(height: 500, child: getAllAttendees(event)) :
+                         const SizedBox(height: 300, child: Text("No Attendees for now :(")),
                   ],
                 ),
               ),
-            ),
-
-            // const SizedBox(
-            //   height: 1000,
-            //   child: Center(
-            //     child: Text(
-            //       "Scroll",
-            //       textAlign: TextAlign.center,
-            //     ),
-            //   ),
-            // )
+      //      ),
           ]))
         ],
       ),
@@ -223,4 +222,39 @@ showAlertDialog(BuildContext context, String postID) {
       return alert;
     },
   );
+}
+
+FutureBuilder<List<UserData>> getAllAttendees(Event event) {
+  return FutureBuilder<List<UserData>>(
+      future: FirebaseFirestore.instance
+          .collection('users')
+          .where('id', whereIn: event.attendees)
+          .get()
+          .then((snapshot) => snapshot.docs
+              .map((doc) => UserData.fromJson(doc.data()))
+              .toList())
+          .then((user) =>
+              user.where((user) => user.userID != event.host[3]).toList()),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text("Something when wrong!" + snapshot.error.toString());
+        } else if (snapshot.hasData) {
+          final users = snapshot.data!;
+          return ListView.separated(
+            shrinkWrap: true,
+            itemBuilder: (BuildContext context, int index) {
+              return ConnectWidget(
+                user: users[index],
+                myUser: UserPreferences.getUser(),
+              );
+            },
+            itemCount: users.length,
+            separatorBuilder: (BuildContext context, int index) {
+              return Container();
+            },
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      });
 }
