@@ -315,6 +315,12 @@ Future<String> deleteAllData() async {
 
   print("completed deleting all references, now the big finale");
   users.doc(currentUser.userID).delete();
+ main
+
+  // await FirebaseAuth.instance.currentUser!.delete();
+  // await signOutFromGoogle();
+  // UserPreferences.resetUser();
+ main
 
   return ("done");
 }

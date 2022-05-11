@@ -6,11 +6,11 @@ import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/fire_auth.dart';
 import 'package:lets_connect/firebase/firestore.dart';
- main
+
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
-=======
+
 import 'package:lets_connect/mainpages/profilePage/account_settings.dart';
- main
+
 import 'package:lets_connect/mainpages/profilePage/profile_details.dart';
 // import 'package:lets_connect/mainpages/profilePage/unused/profile_info.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_info.dart';
@@ -116,9 +116,10 @@ class _MainProfilePageState extends State<MainProfilePage> {
                 InkWell(
                   onTap: () {
                     //navigate to settings form
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Coming Soon")));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => AccountSettings()));
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //     const SnackBar(content: Text("Coming Soon")));
                   },
                   child: SideMenu(
                       icon: Icons.settings_rounded,
@@ -146,26 +147,26 @@ class _MainProfilePageState extends State<MainProfilePage> {
                         text_color: Colors.red,
                         text: 'Log Out')),
                 //Delete Account
-                InkWell(
-                    onTap: () async {
-                      String result = await deleteAllData();
-                      print(result);
-                      if (result == "done") {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const MyHomePage(),
-                          ),
-                          (route) => false,
-                        );
-                      }
-                    },
-                    child: SideMenu(
-                        icon: Icons.logout_rounded,
-                        icon_color: Colors.red,
-                        text_color: Colors.red,
-                        text: 'DELETE ACCOUNT')),
+                // InkWell(
+                //     onTap: () async {
+                //       String result = await deleteAllData();
+                //       print(result);
+                //       if (result == "done") {
+                //         Navigator.pushAndRemoveUntil(
+                //           context,
+                //           MaterialPageRoute(
+                //             builder: (BuildContext context) =>
+                //                 const MyHomePage(),
+                //           ),
+                //           (route) => false,
+                //         );
+                //       }
+                //     },
+                //     child: SideMenu(
+                //         icon: Icons.logout_rounded,
+                //         icon_color: Colors.red,
+                //         text_color: Colors.red,
+                //         text: 'DELETE ACCOUNT')),
               ],
             ),
           ),
