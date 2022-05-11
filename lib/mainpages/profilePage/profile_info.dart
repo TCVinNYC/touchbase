@@ -166,7 +166,7 @@ class ProfileInfo extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        padding: const EdgeInsets.only(bottom: 5),
+                        padding: const EdgeInsets.all(4),
                         child: const Text(
                           'Followers',
                           style: TextStyle(
@@ -205,7 +205,7 @@ class ProfileInfo extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        padding: const EdgeInsets.only(bottom: 5),
+                        padding: const EdgeInsets.all(4),
                         child: const Text(
                           'Following',
                           style: TextStyle(
@@ -245,7 +245,7 @@ class ProfileInfo extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        padding: const EdgeInsets.only(bottom: 5),
+                        padding: const EdgeInsets.all(4),
                         child: const Text(
                           'Posts',
                           style: TextStyle(
@@ -284,7 +284,7 @@ class ProfileInfo extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        padding: const EdgeInsets.only(bottom: 5),
+                        padding: const EdgeInsets.all(4),
                         child: const Text(
                           'Events',
                           style: TextStyle(

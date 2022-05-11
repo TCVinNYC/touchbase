@@ -110,13 +110,11 @@ showAlertDialog(BuildContext context) {
   Widget okButton = TextButton.icon(
       onPressed: () async {
         String result = await deleteAllData();
-        User user = await FirebaseAuth.instance.currentUser!;
-        user.delete();
-        await signOutFromGoogle();
-        UserPreferences.resetUser();
-        FirebaseAuth.instance.currentUser?.reload();
-        // await
-        FirebaseAuth.instance.authStateChanges;
+        // User user = await FirebaseAuth.instance.currentUser!;
+        // user.delete();
+        // await signOutFromGoogle();
+        // UserPreferences.resetUser();
+        // FirebaseAuth.instance.authStateChanges;
         print(result);
         if (result == "done") {
           Navigator.of(context, rootNavigator: true).pop();

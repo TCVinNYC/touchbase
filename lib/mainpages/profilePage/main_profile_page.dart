@@ -129,7 +129,8 @@ class _MainProfilePageState extends State<MainProfilePage> {
                 // LOGOUT
                 InkWell(
                     onTap: () async {
-                      signOutFromGoogle();
+                      await FirebaseAuth.instance.currentUser!.reload();
+                      await signOutFromGoogle();
                       UserPreferences.resetUser();
 
                       Navigator.pushAndRemoveUntil(

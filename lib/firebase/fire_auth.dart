@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'dart:convert';
 import 'dart:math';
@@ -28,6 +29,8 @@ Future<User?> signInUsingEmailPassword({
     );
     user = userCredential.user;
     user = auth.currentUser;
+
+    UserPreferences.setCred(userCredential);
   } on FirebaseAuthException catch (e) {
     if (email == "") {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -63,6 +66,7 @@ Future<User?> registerUsingEmailPassword({
       email: email,
       password: password,
     );
+    UserPreferences.setCred(userCredential);
     user = userCredential.user;
     await user!.updateDisplayName(name);
     await user?.reload();
@@ -109,6 +113,7 @@ Future<String> signInWithGoogle() async {
     // Attempt to sign in the user in with Google
     UserCredential authResult =
         await FirebaseAuth.instance.signInWithCredential(credential);
+    UserPreferences.setCred(authResult);
   } on FirebaseAuthException catch (e) {
     print(e);
   }
@@ -131,7 +136,7 @@ String sha256ofString(String input) {
   return digest.toString();
 }
 
-Future<UserCredential> signInWithApple() async {
+Future<UserCredential> signInWithApple(context) async {
   // To prevent replay attacks with the credential returned from Apple, we
   // include a nonce in the credential request. When signing in with
   // Firebase, the nonce in the id token returned by Apple, is expected to
@@ -154,9 +159,68 @@ Future<UserCredential> signInWithApple() async {
     rawNonce: rawNonce,
   );
 
+  final fixAppleName = [
+    appleCredential.givenName ?? '',
+    appleCredential.familyName ?? ''
+  ].join(' '.trim());
+  print(appleCredential.familyName);
+  print(appleCredential.givenName);
+  print(appleCredential.email);
+
   // Sign in the user with Firebase. If the nonce we generated earlier does
   // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-  return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+  UserCredential userC = await FirebaseAuth.instance
+      .signInWithCredential(oauthCredential)
+      .whenComplete(() {
+    if (FirebaseAuth.instance.currentUser!.displayName!.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Please wait...")));
+    }
+  });
+  UserPreferences.setCred(userC);
+  return userC;
+}
+
+Future<void> _displayTextInputDialog(BuildContext context) async {
+  TextEditingController _textFieldController = TextEditingController();
+  return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('TextField in Dialog'),
+          content: TextField(
+            onChanged: (value) {},
+            controller: _textFieldController,
+            decoration: InputDecoration(hintText: "Text Field in Dialog"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                primary: Colors.red,
+              ),
+              child: Text(
+                'CANCEL',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                primary: Colors.green,
+              ),
+              child: Text(
+                'Continue',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      });
 }
 
 Future<void> signOutFromGoogle() async {
@@ -244,6 +308,8 @@ Future<String> deleteAllData() async {
         posts.reference.delete();
       }
     }
+
+    print("removing what i liked");
     //remove myself from any posts i liked
     if (currentUser.likedPosts.isNotEmpty) {
       var eventsAttendeesCollection =
@@ -270,6 +336,7 @@ Future<String> deleteAllData() async {
       }
     }
 
+    print("removing followers list i liked");
     //remove any traces of myself on other users followers list
     if (currentUser.following.isNotEmpty) {
       var myfollowingCollection = await users
@@ -316,11 +383,16 @@ Future<String> deleteAllData() async {
   print("completed deleting all references, now the big finale");
   users.doc(currentUser.userID).delete();
 
+  User firebaseUser = await FirebaseAuth.instance.currentUser!;
+  // var result = await firebaseUser
+  //     .reauthenticateWithCredential(UserPreferences.getSCred());
+  // result.user.delete();
+  await firebaseUser.reload();
+  //firebaseser.reauthenticateWithCredential(firebaseUser.);
 
-  // await FirebaseAuth.instance.currentUser!.delete();
-  // await signOutFromGoogle();
-  // UserPreferences.resetUser();
-
+  await firebaseUser.delete();
+  await signOutFromGoogle();
+  UserPreferences.resetUser();
 
   return ("done");
 }

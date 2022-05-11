@@ -231,24 +231,24 @@ class EventsPage extends StatelessWidget {
   }
 }
 
-class AllEventsPage extends StatefulWidget {
-  const AllEventsPage({Key? key}) : super(key: key);
-  @override
-  _AllEventsPageState createState() => _AllEventsPageState();
-}
-
-class _AllEventsPageState extends State<AllEventsPage>
-    with AutomaticKeepAliveClientMixin<AllEventsPage> {
-// class AllEventsPage extends StatelessWidget {
+// class AllEventsPage extends StatefulWidget {
 //   const AllEventsPage({Key? key}) : super(key: key);
-  @override
-  void initState() {
-    super.initState();
-  }
+//   @override
+//   _AllEventsPageState createState() => _AllEventsPageState();
+// }
+
+// class _AllEventsPageState extends State<AllEventsPage>
+//     with AutomaticKeepAliveClientMixin<AllEventsPage> {
+class AllEventsPage extends StatelessWidget {
+  const AllEventsPage({Key? key}) : super(key: key);
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+//    super.build(context);
     return SafeArea(
       top: false,
       bottom: false,
@@ -279,9 +279,6 @@ class _AllEventsPageState extends State<AllEventsPage>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
 
 class YourEventsPage extends StatefulWidget {
