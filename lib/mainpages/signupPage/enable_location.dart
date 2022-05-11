@@ -97,6 +97,8 @@ class _LocationPageState extends State<LocationPage> {
                           borderRadius: BorderRadius.circular(15))),
                   onPressed: () {
                     getLocation();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Please wait...")));
                   },
                   child: const Text(
                     'Enable Location Services',
@@ -120,14 +122,18 @@ class _LocationPageState extends State<LocationPage> {
             toolbarHeight: 50,
             leading: TextButton(
               onPressed: () async {
-                
                 signOutFromGoogle();
                 UserPreferences.resetUser();
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const MyHomePage()),
                 );
               },
-              child: const Text('Back', style: TextStyle(color: Colors.red,),),
+              child: const Text(
+                'Back',
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
             ),
             actions: <Widget>[
               TextButton(

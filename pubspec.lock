@@ -318,12 +318,12 @@ packages:
     source: hosted
     version: "2.1.2"
   google_sign_in_web:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: google_sign_in_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.1"
+    version: "0.10.1+1"
   http:
     dependency: transitive
     description:
