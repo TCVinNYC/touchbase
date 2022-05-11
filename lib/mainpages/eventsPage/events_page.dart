@@ -118,6 +118,113 @@ class EventsPage extends StatelessWidget {
               },
             ));
           },
+
+//     super.build(context);
+//     return Scaffold(
+//       // i think i backtracked with this idk - aisha
+//       // appBar: AppBar(
+//       //   backgroundColor: Colors.white,
+//       //   title: const Text(
+//       //     'Search Events',
+//       //     style: TextStyle(
+//       //         color: Colors.black,
+//       //         fontFamily: 'Quicksand',
+//       //         fontWeight: FontWeight.w800,
+//       //         fontSize: 24),
+//       //     textAlign: TextAlign.start,
+//       //   ),
+//       //   actions: <Widget>[
+//       //     IconButton(
+//       //       icon: const Icon(
+//       //         Icons.menu_rounded,
+//       //         color: Colors.black,
+//       //       ),
+//       //       tooltip: 'Filter Options',
+//       //       onPressed: () {
+//       //         Navigator.push(context, MaterialPageRoute<void>(
+//       //           builder: (BuildContext context) {
+//       //             return const FilterEventsPage();
+//       //           },
+//       //         ));
+//       //       },
+//       //     )
+//       //   ],
+//       //   bottom: TabBar(
+//       //     physics: const NeverScrollableScrollPhysics(),
+//       //     labelColor: Colors.black,
+//       //     unselectedLabelColor: const Color.fromARGB(255, 32, 29, 29),
+//       //     indicatorColor: Colors.amberAccent,
+//       //     indicatorWeight: 3.2,
+//       //     isScrollable: false,
+//       //     tabs: const <Widget>[
+//       //       Tab(text: "New"),
+//       //       Tab(text: "Upcoming"),
+//       //       Tab(text: "Missed")
+//       //     ],
+//       //     controller: _tabController,
+//       //   ),
+//       // ),
+//       body: NestedScrollView(
+//         controller: _scrollViewController,
+//         headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
+//           return <Widget>[
+//             SliverAppBar(
+//               backgroundColor: Colors.white,
+//               centerTitle: false,
+//               title: const Text(
+//                 'Search Events',
+//                 style: TextStyle(
+//                     color: Colors.black,
+//                     fontFamily: 'Quicksand',
+//                     fontWeight: FontWeight.w800,
+//                     fontSize: 24),
+//                 textAlign: TextAlign.start,
+//               ),
+//               actions: <Widget>[
+//                 IconButton(
+//                   icon: const Icon(
+//                     Icons.menu_rounded,
+//                     color: Colors.black,
+//                   ),
+//                   tooltip: 'Filter Options',
+//                   onPressed: () {
+//                     Navigator.push(context, MaterialPageRoute<void>(
+//                       builder: (BuildContext context) {
+//                         return const FilterEventsPage();
+//                       },
+//                     ));
+//                   },
+//                 )
+//               ],
+//               pinned: true,
+//               floating: true,
+//               snap: true,
+//               forceElevated: boxIsScrolled,
+//               bottom: TabBar(
+//                 physics: const NeverScrollableScrollPhysics(),
+//                 labelColor: Colors.black,
+//                 unselectedLabelColor: const Color.fromARGB(255, 32, 29, 29),
+//                 indicatorColor: Colors.amberAccent,
+//                 indicatorWeight: 3.2,
+//                 isScrollable: false,
+//                 tabs: const <Widget>[
+//                   Tab(text: "New"),
+//                   Tab(text: "Upcoming"),
+//                   Tab(text: "Missed")
+//                 ],
+//                 controller: _tabController,
+//               ),
+//             )
+//           ];
+//         },
+//         body: TabBarView(
+//           children: const <Widget>[
+//             AllEventsPage(),
+//             YourEventsPage(),
+//             PastEventsPage(),
+//           ],
+//           controller: _tabController,
+// >>>>>>> e39394e38038566633fbbfd7eb69ea21b0cf4272
         ),
       ),
     );
