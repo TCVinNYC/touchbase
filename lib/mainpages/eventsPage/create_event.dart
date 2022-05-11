@@ -445,6 +445,10 @@ class _CreateEventState extends State<CreateEventPage> {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content:
                               Text('Must provide a price for your event!')));
+                    } else if (dateSelect.isAtSameMomentAs(DateTime.now()) || dateSelect.isBefore(DateTime.now())) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content:
+                              Text('Date cannot be before today!')));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Uploading, Please wait...')));

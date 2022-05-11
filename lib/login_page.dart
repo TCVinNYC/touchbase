@@ -150,13 +150,24 @@ class _LoginPageState extends State<LoginPage> {
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(0, 0, 30, 30),
                     child: GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         if (emailController.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                  content: Text('Please Enter Your Email First!')));
+                                  content:
+                                      Text('Please Enter Your Email First!')));
                         } else {
-                          resetPassword(emailController.text, context);
+                          String result =
+                              await resetPassword(emailController.text);
+                          if (result == "done") {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text("Password Reset Email Sent!")));
+                          } else {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(content: Text(result)));
+                          }
                         }
                       },
                       child: const Text(
