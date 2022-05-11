@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -175,14 +176,12 @@ SnackBar customSnackBar({required String content}) {
   );
 }
 
-Future resetPassword(String email, context) async {
+Future<String> resetPassword(String email) async {
   try {
     await auth.sendPasswordResetEmail(email: email);
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password Reset Email Sent!')));
+    return 'done';
   } on FirebaseAuthException catch (e) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(e.message.toString())));
+    return e.message.toString();
   }
 }
 
@@ -316,9 +315,56 @@ Future<String> deleteAllData() async {
 
   print("completed deleting all references, now the big finale");
   users.doc(currentUser.userID).delete();
-  await FirebaseAuth.instance.currentUser!.delete();
-  await signOutFromGoogle();
-  UserPreferences.resetUser();
 
   return ("done");
+}
+
+Future<String> deleteMyPost(String userID, String postID) async {
+  try {
+    await FirebaseFirestore.instance.collection('posts').doc(postID).delete();
+    await FirebaseFirestore.instance.collection('users').doc(userID).update({
+      "postIDs": FieldValue.arrayRemove([postID])
+    });
+    return "done";
+  } on FirebaseAuthException catch (e) {
+    return e.message.toString();
+  }
+}
+
+Future<String> deleteMyEvent(String userID, String eventID) async {
+  try {
+    var instance = FirebaseFirestore.instance;
+    print("deleting event");
+
+    var events = instance.collection('events');
+
+    //delete my events
+    await events.doc(eventID).delete();
+
+    //remove traces of my events from other users
+    var userAttendeesCollection = await instance
+        .collection('users')
+        .where('eventIDs', arrayContains: eventID)
+        .get();
+    for (var user in userAttendeesCollection.docs) {
+      print("remove my events for others");
+      user.reference.update({
+        "eventIDs": FieldValue.arrayRemove([eventID])
+      });
+    }
+
+    return "done";
+  } on FirebaseAuthException catch (e) {
+    return e.message.toString();
+  }
+
+  // try {
+  //   await FirebaseFirestore.instance.collection('posts').doc(postID).delete();
+  //   await FirebaseFirestore.instance.collection('users').doc(userID).update({
+  //     "postIDs": FieldValue.arrayRemove([postID])
+  //   });
+
+  // } on FirebaseAuthException catch (e) {
+
+  // }
 }

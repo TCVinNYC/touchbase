@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/event.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
+import 'package:lets_connect/firebase/fire_auth.dart';
 import 'package:lets_connect/widgets/showDate.dart';
 import 'package:lets_connect/widgets/showHost.dart';
 import 'package:lets_connect/widgets/showLocation.dart';
@@ -16,6 +18,23 @@ class ViewEventPage extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            actions: [
+              event.host[3] == UserPreferences.getUser().userID
+                      ? GestureDetector(
+                          onTap: () {
+                            showAlertDialog(context, event.documentID);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Icon(
+                              Icons.delete,
+                              size: 23,
+                              color: Colors.red.shade500,
+                            ),
+                          ),
+                        )
+                      : Container(),
+            ],
             floating: true,
             snap: true,
             backgroundColor: Colors.orange,
@@ -25,7 +44,7 @@ class ViewEventPage extends StatelessWidget {
                   return LinearGradient(
                     begin: Alignment.center,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black.withOpacity(0.6)],
+                    colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
                   ).createShader(
                       Rect.fromLTRB(0, -140, rect.width, rect.height - 20));
                 },
@@ -48,6 +67,7 @@ class ViewEventPage extends StatelessWidget {
                   fontFamily: 'Quicksand',
                 ),
               ),
+              
             ),
             pinned: true,
             forceElevated: true,
@@ -156,4 +176,51 @@ class ViewEventPage extends StatelessWidget {
       ),
     );
   }
+}
+
+showAlertDialog(BuildContext context, String postID) {
+  // Create button
+  Widget okButton = TextButton.icon(
+      onPressed: () async {
+        String result =
+            await deleteMyEvent(UserPreferences.getUser().userID, postID);
+        if (result == "done") {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text('Event Deleted')));
+        } else {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(result)));
+        }
+        Navigator.of(context, rootNavigator: true).pop();
+      },
+      icon: const Icon(
+        Icons.delete_forever_rounded,
+        color: Colors.red,
+      ),
+      label: const Text(
+        "Delete",
+        style: TextStyle(color: Colors.red),
+      ));
+
+  Widget cancel = TextButton.icon(
+      onPressed: () async {
+        Navigator.of(context, rootNavigator: true).pop();
+      },
+      icon: const Icon(Icons.cancel),
+      label: const Text("Cancel"));
+
+  // Create AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: const Text("Event Deletion"),
+    content: const Text("Are you sure you want to delete your event?"),
+    actions: [okButton, cancel],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

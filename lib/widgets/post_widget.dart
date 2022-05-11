@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/post_model.dart';
+import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
+import 'package:lets_connect/firebase/fire_auth.dart';
+import 'package:lets_connect/firebase/firestore.dart';
+import 'package:lets_connect/mainpages/feedPage/feed_page.dart';
+import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lets_connect/widgets/icon_button.dart';
 import 'package:lets_connect/widgets/showHost.dart';
 import 'package:intl/intl.dart';
@@ -39,11 +44,29 @@ class _FeedPostState extends State<FeedPost> {
             borderRadius: BorderRadius.circular(5),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              showHost(
-                host: widget.post.poster,
-                width: 50,
-                height: 50,
-                showName: true,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  showHost(
+                    host: widget.post.poster,
+                    width: 50,
+                    height: 50,
+                    showName: true,
+                  ),
+                  widget.post.poster[3] == UserPreferences.getUser().userID
+                      ? GestureDetector(
+                          onTap: () {
+                            showAlertDialog(context, widget.post.documentID);
+                          },
+                          child: Icon(
+                            Icons.delete,
+                            size: 17,
+                            color: Colors.redAccent.shade200,
+                          ),
+                        )
+                      : Container(),
+                ],
               ),
               const Padding(padding: EdgeInsets.only(bottom: 3)),
               const Divider(thickness: 1),
@@ -86,10 +109,24 @@ class _FeedPostState extends State<FeedPost> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        const Icon(
-                          Icons.comment,
-                          size: 17,
-                          color: Colors.grey,
+                        GestureDetector(
+                          onTap: () {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: const Text('Coming Soon'),
+                              action: SnackBarAction(
+                                label: 'Dismiss',
+                                textColor: Colors.amber,
+                                onPressed: () {
+                                  // Some code to undo the change.
+                                },
+                              ),
+                            ));
+                          },
+                          child: const Icon(
+                            Icons.comment,
+                            size: 17,
+                            color: Colors.grey,
+                          ),
                         ),
                         const SizedBox(
                           width: 10,
@@ -111,4 +148,57 @@ class _FeedPostState extends State<FeedPost> {
           ),
         ));
   }
+}
+
+showAlertDialog(BuildContext context, String postID) {
+  // Create button
+  Widget okButton = TextButton.icon(
+      onPressed: () async {
+        String result =
+            await deleteMyPost(UserPreferences.getUser().userID, postID);
+        if (result == "done") {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text('Post Deleted')));
+        } else {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(result)));
+        }
+        Navigator.of(context, rootNavigator: true).pop();
+
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const MainPage()),
+          (Route<dynamic> route) => false,
+        );
+      },
+      icon: const Icon(
+        Icons.delete_forever_rounded,
+        color: Colors.red,
+      ),
+      label: const Text(
+        "Delete",
+        style: TextStyle(color: Colors.red),
+      ));
+
+  Widget cancel = TextButton.icon(
+      onPressed: () async {
+        Navigator.of(context, rootNavigator: true).pop();
+      },
+      icon: const Icon(Icons.cancel),
+      label: const Text("Cancel"));
+
+  // Create AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: const Text("Post Deletion"),
+    content: const Text("Are you sure you want to delete your post?"),
+    actions: [okButton, cancel],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
