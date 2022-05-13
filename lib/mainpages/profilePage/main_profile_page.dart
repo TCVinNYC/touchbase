@@ -28,14 +28,6 @@ class MainProfilePage extends StatefulWidget {
 class _MainProfilePageState extends State<MainProfilePage> {
   UserData userData = UserPreferences.getUser();
 
-  // Stream<UserData> updateUserData() {
-  //   return FirebaseFirestore.instance
-  //       .collection("users")
-  //       .doc(FireMethods.fireAuth.currentUser!.uid)
-  //       .snapshots()
-  //       .map((event) => UserData.fromJson(event.data()));
-  // }
-
   Stream<UserData> updateUserData() {
     return FirebaseFirestore.instance
         .collection("users")
@@ -116,9 +108,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                   onTap: () {
                     //navigate to settings form
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => AccountSettings()));
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //     const SnackBar(content: Text("Coming Soon")));
+                        builder: (context) => const AccountSettings()));
                   },
                   child: SideMenu(
                       icon: Icons.settings_rounded,
@@ -146,27 +136,6 @@ class _MainProfilePageState extends State<MainProfilePage> {
                         icon_color: Colors.red,
                         text_color: Colors.red,
                         text: 'Log Out')),
-                //Delete Account
-                // InkWell(
-                //     onTap: () async {
-                //       String result = await deleteAllData();
-                //       print(result);
-                //       if (result == "done") {
-                //         Navigator.pushAndRemoveUntil(
-                //           context,
-                //           MaterialPageRoute(
-                //             builder: (BuildContext context) =>
-                //                 const MyHomePage(),
-                //           ),
-                //           (route) => false,
-                //         );
-                //       }
-                //     },
-                //     child: SideMenu(
-                //         icon: Icons.logout_rounded,
-                //         icon_color: Colors.red,
-                //         text_color: Colors.red,
-                //         text: 'DELETE ACCOUNT')),
               ],
             ),
           ),

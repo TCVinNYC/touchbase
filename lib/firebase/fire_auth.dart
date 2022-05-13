@@ -159,13 +159,10 @@ Future<UserCredential> signInWithApple(context) async {
     rawNonce: rawNonce,
   );
 
-  final fixAppleName = [
-    appleCredential.givenName ?? '',
-    appleCredential.familyName ?? ''
-  ].join(' '.trim());
-  print(appleCredential.familyName);
-  print(appleCredential.givenName);
-  print(appleCredential.email);
+  // final fixAppleName = [
+  //   appleCredential.givenName ?? '',
+  //   appleCredential.familyName ?? ''
+  // ].join(' '.trim());
 
   // Sign in the user with Firebase. If the nonce we generated earlier does
   // not match the nonce in `appleCredential.identityToken`, sign in will fail.
@@ -350,8 +347,8 @@ Future<String> deleteAllData() async {
     }
   }
 
-  //final Reference ref = FirebaseStorage.instance.ref();
-  //remove any traces of myself in all storage units
+  // final Reference ref = FirebaseStorage.instance.ref();
+  // //remove any traces of myself in all storage units
   // if (currentUser.eventIDs.isNotEmpty) {
   //   String userID = currentUser.userID;
   //   final eventsFolder = 'events/$userID';
@@ -382,14 +379,8 @@ Future<String> deleteAllData() async {
 
   print("completed deleting all references, now the big finale");
   users.doc(currentUser.userID).delete();
-
-  User firebaseUser = await FirebaseAuth.instance.currentUser!;
-  // var result = await firebaseUser
-  //     .reauthenticateWithCredential(UserPreferences.getSCred());
-  // result.user.delete();
+  User firebaseUser = FirebaseAuth.instance.currentUser!;
   await firebaseUser.reload();
-  //firebaseser.reauthenticateWithCredential(firebaseUser.);
-
   await firebaseUser.delete();
   await signOutFromGoogle();
   UserPreferences.resetUser();

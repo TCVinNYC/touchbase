@@ -139,27 +139,3 @@ withTitle(List<dynamic> host, width, height) {
     ],
   );
 }
-
-
-        // Navigator.push(context, MaterialPageRoute<void>(
-        //   // builder: (BuildContext context) {
-        // showModalBottomSheet(
-        // context: context,
-        //         builder: (context) {
-        //           return ProfileInfo(userData: myUser!);
-        // return Scaffold(
-        //   appBar: AppBar(
-        //     backgroundColor: Colors.orange,
-        //   ),
-        //   body: SingleChildScrollView(
-        //     child: Column(
-        //       children: <Widget>[
-        //         ProfileInfo(userData: myUser!),
-        //       ],
-        //     ),
-        //   ),
-        // );
-        // });
-        //   // return Container();
-        //   // },
-        // ));

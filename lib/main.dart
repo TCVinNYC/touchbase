@@ -62,12 +62,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      //this determines if the user has already logged in
       body: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              //if logged in, send to the main app
               return const MainPage();
             } else {
+              //if not go to log in page
               return const LoginPage();
             }
           }),

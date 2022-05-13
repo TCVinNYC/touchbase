@@ -54,11 +54,6 @@ class _MainPageState extends State<MainPage> {
         if (snapshot.hasData) {
           return MaterialApp(
             home: Scaffold(
-              // body: PageView(
-              //   controller: _pageController,
-              //   physics: NeverScrollableScrollPhysics(),
-              //   children: _pages,
-              // ),
               body: IndexedStack(
                 index: _currentIndex,
                 children: _pages,
@@ -111,7 +106,6 @@ class _MainPageState extends State<MainPage> {
                       onTabChange: (index) {
                         setState(() {
                           _currentIndex = index;
-                          //_pageController.jumpToPage(_currentIndex);
                         });
                       },
                     ),

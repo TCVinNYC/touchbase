@@ -86,10 +86,6 @@ class _FeedPostState extends State<FeedPost> {
                 Image(image: NetworkImage(widget.post.image!))
               else
                 Container(),
-              // const Padding(
-              //   padding: EdgeInsets.only(bottom: 10),
-              // ),
-              //const Divider(thickness: 1),
               Padding(
                 padding: const EdgeInsets.fromLTRB(3, 5, 3, 2),
                 child: Row(
@@ -116,9 +112,7 @@ class _FeedPostState extends State<FeedPost> {
                               action: SnackBarAction(
                                 label: 'Dismiss',
                                 textColor: Colors.amber,
-                                onPressed: () {
-                                  // Some code to undo the change.
-                                },
+                                onPressed: () {},
                               ),
                             ));
                           },

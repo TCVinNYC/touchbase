@@ -12,8 +12,6 @@ class ProfileInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: MediaQuery.of(context).size.width,
-      // height: MediaQuery.of(context).size.height,
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
@@ -255,7 +253,6 @@ class ProfileInfo extends StatelessWidget {
                               fontWeight: FontWeight.bold),
                         ),
                       ),
-                      //find a way to get posts amount
                       Text(
                         userData.postIDs.length.toString(),
                         style:
@@ -294,7 +291,6 @@ class ProfileInfo extends StatelessWidget {
                               fontWeight: FontWeight.bold),
                         ),
                       ),
-                      //find a way to get events amount
                       Text(
                         userData.eventIDs.length.toString(),
                         style:
@@ -306,7 +302,6 @@ class ProfileInfo extends StatelessWidget {
               ],
             ),
           ),
-          // )
           // ProfileStatsCard(userdata: userData)
         ],
       ),

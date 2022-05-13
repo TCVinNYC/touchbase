@@ -28,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    //gesture detector lets you hide keyboard with a tap
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -37,10 +38,6 @@ class _LoginPageState extends State<LoginPage> {
       },
       child: ListView(
         shrinkWrap: true,
-        // resizeToAvoidBottomInset : false,
-        // child: Column(
-        //   mainAxisSize: MainAxisSize.min,
-        //   crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           //Orange Guy GIF
           Container(
@@ -71,16 +68,9 @@ class _LoginPageState extends State<LoginPage> {
             child: TextField(
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
-              // scrollPadding: EdgeInsets.only(bottom: 40),
               decoration: const InputDecoration(
                   hintText: "someone@example.com",
                   prefixIcon: Icon(Icons.alternate_email_rounded),
-                  // suffixIcon: _controller.text.isEmpty
-                  //     ? null // Show nothing if the text field is empty
-                  //     : IconButton(
-                  //         icon: const Icon(Icons.clear),
-                  //         onPressed: _clearTextField,
-                  //       ), // Show the clear button if the text field has something
                   border: OutlineInputBorder(),
                   labelText: "Email ID"),
             ),
@@ -90,15 +80,11 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.fromLTRB(25, 5, 25, 15),
             child: TextField(
               controller: passwordController,
-              //scrollPadding: EdgeInsets.only(bottom: 40),
               keyboardType: TextInputType.visiblePassword,
               decoration: const InputDecoration(
                   focusedBorder: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.lock),
                   border: OutlineInputBorder(),
-                  // suffixIcon: Icon(
-                  //  Icons.error,
-                  // ),
                   labelText: "Password"),
               obscureText: true,
             ),
@@ -127,9 +113,6 @@ class _LoginPageState extends State<LoginPage> {
                   setState(() {
                     countDown -= 1;
                   });
-
-                  print("null error");
-                  print(user);
                 }
               },
               child: const Text(
@@ -143,6 +126,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
 
+          //if user fails to log in three times, show forgot password
           countDown <= 0
               ? AnimatedOpacity(
                   opacity: countDown <= 0 ? 1.0 : 0.0,
@@ -206,7 +190,6 @@ class _LoginPageState extends State<LoginPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                //const Spacer(flex: 4),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 3.3,
                   height: MediaQuery.of(context).size.height / 13,
@@ -225,7 +208,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(width: 30),
-                // const Spacer(flex: ),
                 //Apple Button
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 3.3,
@@ -244,12 +226,10 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                //const Spacer(flex: 4),
               ],
             ),
-            //Register Text and Button
           ),
-          // const Spacer(flex: 2),
+          //Register Text and Button
           Container(
             padding: const EdgeInsets.all(10),
             child: RichText(
@@ -276,7 +256,6 @@ class _LoginPageState extends State<LoginPage> {
               ]),
             ),
           ),
-          // const Spacer(flex: 1),
         ],
       ),
     );

@@ -291,31 +291,4 @@ class _StatListPageState extends State<StatList> {
         });
   }
 
-// Future<List<Post>> getPosts(UserData user) {
-//   return 
-// }
-
-
-
-    // var userTemp = UserPreferences.getUser();
-    // if (userTemp.following.isNotEmpty) {
-    //   temp = await FirebaseFirestore.instance
-    //       .collection('users')
-    //       .where('id', whereNotIn: userTemp.following)
-    //       .get()
-    //       .then((value) =>
-    //           value.docs.map((doc) => UserData.fromJson(doc.data())).toList())
-    //       .then((value) =>
-    //           value.where((value) => value.userID != userTemp.userID).toList());
-    // } else {
-    //   temp = await FirebaseFirestore.instance.collection('users').get().then(
-    //       (snapshot) => snapshot.docs
-    //           .map((doc) => UserData.fromJson(doc.data()))
-    //           .toList());
-    // }
-
-
-
-
-
 
