@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/event.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
-class showLocation extends StatelessWidget {
-  const showLocation({
+// ignore: camel_case_types
+class show_location extends StatelessWidget {
+  const show_location({
     Key? key,
     required this.event,
     this.showName,

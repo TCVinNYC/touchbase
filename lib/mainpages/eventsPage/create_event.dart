@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/widgets/custom_category.dart';
@@ -20,9 +19,11 @@ class CreateEventPage extends StatefulWidget {
 
 class _CreateEventState extends State<CreateEventPage> {
   TimeOfDay? timeSelect = TimeOfDay.now();
+  // ignore: non_constant_identifier_names
   late String? timeSelect_formatted = timeSelect?.format(context);
 
   DateTime dateSelect = DateTime.now();
+  // ignore: non_constant_identifier_names
   late String dateSelect_formatted = DateFormat.yMd().format(dateSelect);
 
   late DateTime finalDateTime;
@@ -153,7 +154,7 @@ class _CreateEventState extends State<CreateEventPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: const Color.fromARGB(225, 255, 183, 0),
+                        backgroundColor: const Color.fromARGB(225, 255, 183, 0),
                       ),
                       onPressed: () {
                         selectDate(context);
@@ -173,7 +174,7 @@ class _CreateEventState extends State<CreateEventPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: const Color.fromARGB(225, 255, 183, 0),
+                        backgroundColor: const Color.fromARGB(225, 255, 183, 0),
                       ),
                       onPressed: () async {
                         TimeOfDay? newTime = await showTimePicker(
@@ -445,10 +446,10 @@ class _CreateEventState extends State<CreateEventPage> {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content:
                               Text('Must provide a price for your event!')));
-                    } else if (dateSelect.isAtSameMomentAs(DateTime.now()) || dateSelect.isBefore(DateTime.now())) {
+                    } else if (dateSelect.isAtSameMomentAs(DateTime.now()) ||
+                        dateSelect.isBefore(DateTime.now())) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content:
-                              Text('Date cannot be before today!')));
+                          content: Text('Date cannot be before today!')));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Uploading, Please wait...')));

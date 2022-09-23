@@ -6,7 +6,6 @@ import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/fire_auth.dart';
 import 'package:lets_connect/firebase/firestore.dart';
-import 'package:lets_connect/mainpages/main_view_switcher.dart';
 
 import 'package:lets_connect/mainpages/profilePage/account_settings.dart';
 

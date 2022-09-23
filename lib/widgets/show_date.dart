@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/event.dart';
 import 'package:intl/intl.dart';
 
-class showDate extends StatelessWidget {
-  const showDate({
+// ignore: camel_case_types
+class show_date extends StatelessWidget {
+  const show_date({
     Key? key,
     required this.event,
     this.showIcon,

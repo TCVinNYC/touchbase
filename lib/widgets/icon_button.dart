@@ -3,6 +3,7 @@ import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/firebase/firestore.dart';
 import 'package:like_button/like_button.dart';
 
+// ignore: must_be_immutable
 class LikeButtonWidget extends StatefulWidget {
   //IconData iconData;
   double iconSize;

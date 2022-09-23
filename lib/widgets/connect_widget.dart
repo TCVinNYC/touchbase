@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_info.dart';
 import 'package:lets_connect/widgets/icon_button.dart';
-import 'package:lets_connect/widgets/showHost.dart';
 
+// ignore: must_be_immutable
 class ConnectWidget extends StatefulWidget {
   UserData myUser;
   UserData user;
@@ -28,7 +28,7 @@ class _ConnectWidgetState extends State<ConnectWidget> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
-            contentPadding: EdgeInsets.all(10),
+            contentPadding: const EdgeInsets.all(10),
             leading: GestureDetector(
               onTap: () {
                 showModalBottomSheet(
@@ -62,7 +62,7 @@ class _ConnectWidgetState extends State<ConnectWidget> {
               },
               child: CircleAvatar(
                 radius: 30.0,
-                backgroundImage: NetworkImage("${widget.user.profilePic}"),
+                backgroundImage: NetworkImage(widget.user.profilePic),
                 backgroundColor: Colors.transparent,
               ),
             ),
@@ -70,7 +70,7 @@ class _ConnectWidgetState extends State<ConnectWidget> {
               children: [
                 Text(
                   widget.user.name,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.black,
                       fontFamily: 'Quicksand',
                       fontWeight: FontWeight.w800,
@@ -79,7 +79,7 @@ class _ConnectWidgetState extends State<ConnectWidget> {
                 widget.user.prounouns.isNotEmpty
                     ? Text(
                         " (" + widget.user.prounouns + ")",
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.black,
                             fontFamily: 'Quicksand',
                             fontSize: 13),
@@ -99,7 +99,7 @@ class _ConnectWidgetState extends State<ConnectWidget> {
             ),
             subtitle: Text(
               widget.user.title + "\n" + widget.user.company,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.black, fontFamily: 'Quicksand', fontSize: 15),
             ),
           ),

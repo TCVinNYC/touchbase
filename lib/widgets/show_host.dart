@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:lets_connect/datamodels/event.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/mainpages/profilePage/profile_info.dart';
 
-class showHost extends StatelessWidget {
-  const showHost({
+// ignore: camel_case_types
+class show_host extends StatelessWidget {
+  const show_host({
     Key? key,
     required this.host,
     this.showName,

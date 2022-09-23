@@ -3,13 +3,12 @@ import 'package:lets_connect/datamodels/post_model.dart';
 import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/fire_auth.dart';
-import 'package:lets_connect/firebase/firestore.dart';
-import 'package:lets_connect/mainpages/feedPage/feed_page.dart';
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lets_connect/widgets/icon_button.dart';
-import 'package:lets_connect/widgets/showHost.dart';
+import 'package:lets_connect/widgets/show_host.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class FeedPost extends StatefulWidget {
   UserData user;
   final Post post;
@@ -48,7 +47,7 @@ class _FeedPostState extends State<FeedPost> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  showHost(
+                  show_host(
                     host: widget.post.poster,
                     width: 50,
                     height: 50,

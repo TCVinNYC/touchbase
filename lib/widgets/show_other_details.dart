@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:lets_connect/datamodels/event.dart';
-import 'package:intl/intl.dart';
 
-class showOtherDetails extends StatelessWidget {
-  const showOtherDetails({
+// ignore: camel_case_types
+class show_other_details extends StatelessWidget {
+  const show_other_details({
     Key? key,
     required this.text,
-    this.showIcon, this.icon, required this.color,
+    this.showIcon,
+    this.icon,
+    required this.color,
   }) : super(key: key);
 
   final String text;
   final IconData? icon;
   final bool? showIcon;
   final Color color;
-
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,9 @@ class showOtherDetails extends StatelessWidget {
         crossAxisAlignment: WrapCrossAlignment.start,
         spacing: 2.3,
         children: [
-          showIcon == false ? withOutIcon(text, color) : withIcon(text, icon ??  Icons.abc_outlined, color),
+          showIcon == false
+              ? withOutIcon(text, color)
+              : withIcon(text, icon ?? Icons.abc_outlined, color),
         ],
       ),
     );
@@ -53,7 +55,7 @@ withIcon(String text, IconData icon, Color color) {
         size: 28,
         color: color,
       ),
-     // icon,
+      // icon,
       const SizedBox(width: 8),
       Text(
         text,

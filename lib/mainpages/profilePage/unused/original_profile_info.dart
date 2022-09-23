@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
-import 'package:lets_connect/firebase/fire_auth.dart';
 import 'package:lets_connect/mainpages/profilePage/unused/profile_stats_card.dart';
 
 class ProfileInfo2 extends StatelessWidget {

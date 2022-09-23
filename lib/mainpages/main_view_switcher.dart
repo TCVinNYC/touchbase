@@ -8,9 +8,6 @@ import 'package:lets_connect/mainpages/eventsPage/events_page.dart';
 import 'package:lets_connect/mainpages/feedPage/feed_page.dart';
 import 'package:lets_connect/mainpages/profilePage/main_profile_page.dart';
 import 'package:lets_connect/mainpages/signupPage/enable_location.dart';
-import 'package:lets_connect/mainpages/signupPage/userdetails.dart';
-
-import 'feedPage/feed_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -31,7 +28,7 @@ class _MainPageState extends State<MainPage> {
     _pages = [
       const FeedPage(),
       const ConnectPage(),
-       EventsPage(),
+      const EventsPage(),
       const MainProfilePage(),
     ];
     //_pageController = PageController(initialPage: _currentIndex);
@@ -129,11 +126,13 @@ class _MainPageState extends State<MainPage> {
     if (FireMethods.fireAuth.currentUser?.uid == null) {
       return "broke";
     }
-    print("getting userData");
-    UserData? userData =
+    debugPrint("getting userData");
+    debugPrint(FireMethods.fireAuth.currentUser?.uid);
+    var id =
         await FireMethods().getUserData(FireMethods.fireAuth.currentUser!.uid);
+    UserData? userData = id;
     if (userData != null) {
-      print("set userData");
+      debugPrint("set userData");
       UserPreferences.setUser(userData);
     } else {
       Navigator.pushAndRemoveUntil(

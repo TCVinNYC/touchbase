@@ -13,7 +13,6 @@ class FilterEventsPage extends StatefulWidget {
 
 class _EventsPageState extends State<FilterEventsPage>
     with TickerProviderStateMixin {
-
   List<String> selectedCategories = [];
 
   @override
@@ -99,7 +98,7 @@ class _EventsPageState extends State<FilterEventsPage>
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: const Color.fromARGB(
+                        backgroundColor: const Color.fromARGB(
                             225, 255, 183, 0), // Background color
                       ),
                       //style: ButtonStyle(backgroundColor: Colors.orange),
@@ -121,7 +120,7 @@ class _EventsPageState extends State<FilterEventsPage>
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: const Color.fromARGB(
+                        backgroundColor: const Color.fromARGB(
                             225, 255, 183, 0), // Background color
                       ),
                       onPressed: () {
@@ -154,7 +153,7 @@ class _EventsPageState extends State<FilterEventsPage>
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width / 1.8,
                     child: const TextField(
                       keyboardType: TextInputType.number,
@@ -211,7 +210,7 @@ class _EventsPageState extends State<FilterEventsPage>
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Color.fromARGB(
+                        backgroundColor: const Color.fromARGB(
                             225, 255, 183, 0), // Background color
                       ),
                       onPressed: () async {
@@ -239,7 +238,7 @@ class _EventsPageState extends State<FilterEventsPage>
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Color.fromARGB(
+                        backgroundColor: const Color.fromARGB(
                             225, 255, 183, 0), // Background color
                       ),
                       onPressed: () async {
@@ -298,6 +297,7 @@ class _EventsPageState extends State<FilterEventsPage>
       ),
     );
   }
+
   double val = 20;
 
   TimeOfDay? startTime = TimeOfDay.now();

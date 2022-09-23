@@ -3,7 +3,7 @@ import 'dart:math';
 
 class MaxLinesTextInputFormatter extends TextInputFormatter {
   MaxLinesTextInputFormatter(this.maxLines)
-      : assert(maxLines == null || maxLines == -1 || maxLines > 0);
+      : assert(maxLines == -1 || maxLines > 0);
 
   final int maxLines;
 
@@ -12,7 +12,7 @@ class MaxLinesTextInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue, // unused.
     TextEditingValue newValue,
   ) {
-    if (maxLines != null && maxLines > 0) {
+    if (maxLines > 0) {
       final regEx = RegExp("^.*((\n?.*){0,${maxLines - 1}})");
       String newString = regEx.stringMatch(newValue.text) ?? "";
 
@@ -24,8 +24,10 @@ class MaxLinesTextInputFormatter extends TextInputFormatter {
         );
         final RuneIterator iterator = RuneIterator(newValue.text);
         if (iterator.moveNext())
-          for (int count = 0; count < maxLength; ++count)
+          // ignore: curly_braces_in_flow_control_structures
+          for (int count = 0; count < maxLength; ++count) {
             if (!iterator.moveNext()) break;
+          }
         final String truncated = newValue.text.substring(0, iterator.rawIndex);
         return TextEditingValue(
           text: truncated,

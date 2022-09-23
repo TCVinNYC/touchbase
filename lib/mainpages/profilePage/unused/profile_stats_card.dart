@@ -49,7 +49,7 @@ class ProfileStatsCard extends StatelessWidget {
                   ],
                 ),
               ),
-              VerticalDivider(
+              const VerticalDivider(
                 indent: 15,
                 endIndent: 15,
                 thickness: 0.7,
@@ -87,7 +87,7 @@ class ProfileStatsCard extends StatelessWidget {
                   ],
                 ),
               ),
-              VerticalDivider(
+              const VerticalDivider(
                 indent: 15,
                 endIndent: 15,
                 thickness: 0.7,
@@ -124,7 +124,7 @@ class ProfileStatsCard extends StatelessWidget {
                   ],
                 ),
               ),
-              VerticalDivider(
+              const VerticalDivider(
                 indent: 15,
                 endIndent: 15,
                 thickness: 0.7,

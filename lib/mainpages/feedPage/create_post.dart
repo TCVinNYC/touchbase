@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/firestore.dart';
-import 'package:lets_connect/mainpages/feedPage/feed_page.dart';
 import 'package:lets_connect/mainpages/main_view_switcher.dart';
 import 'package:lets_connect/widgets/image_widget.dart';
 
@@ -194,7 +193,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         if (result == "done") {
                           Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (context) => const MainPage()),
+                            MaterialPageRoute(
+                                builder: (context) => const MainPage()),
                             (Route<dynamic> route) => false,
                           );
                           ScaffoldMessenger.of(context).showSnackBar(

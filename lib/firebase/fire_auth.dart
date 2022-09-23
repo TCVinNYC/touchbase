@@ -1,14 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
-import 'package:lets_connect/login_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'dart:convert';
 import 'dart:math';
@@ -30,7 +25,7 @@ Future<User?> signInUsingEmailPassword({
     user = userCredential.user;
     user = auth.currentUser;
 
-    UserPreferences.setCred(userCredential);
+    //UserPreferences.setCred(userCredential);
   } on FirebaseAuthException catch (e) {
     if (email == "") {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -66,7 +61,7 @@ Future<User?> registerUsingEmailPassword({
       email: email,
       password: password,
     );
-    UserPreferences.setCred(userCredential);
+    //UserPreferences.setCred(userCredential);
     user = userCredential.user;
     await user!.updateDisplayName(name);
     await user?.reload();
@@ -113,9 +108,9 @@ Future<String> signInWithGoogle() async {
     // Attempt to sign in the user in with Google
     UserCredential authResult =
         await FirebaseAuth.instance.signInWithCredential(credential);
-    UserPreferences.setCred(authResult);
+    //UserPreferences.setCred(authResult);
   } on FirebaseAuthException catch (e) {
-    print(e);
+    debugPrint(e.toString());
   }
   // Once signed in, return the UserCredential
   return 'signInWithGoogle succeeded: $user';
@@ -174,50 +169,8 @@ Future<UserCredential> signInWithApple(context) async {
           .showSnackBar(const SnackBar(content: Text("Please wait...")));
     }
   });
-  UserPreferences.setCred(userC);
+  //UserPreferences.setCred(userC);
   return userC;
-}
-
-Future<void> _displayTextInputDialog(BuildContext context) async {
-  TextEditingController _textFieldController = TextEditingController();
-  return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('TextField in Dialog'),
-          content: TextField(
-            onChanged: (value) {},
-            controller: _textFieldController,
-            decoration: InputDecoration(hintText: "Text Field in Dialog"),
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                primary: Colors.red,
-              ),
-              child: Text(
-                'CANCEL',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                primary: Colors.green,
-              ),
-              child: Text(
-                'Continue',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      });
 }
 
 Future<void> signOutFromGoogle() async {
@@ -232,7 +185,7 @@ SnackBar customSnackBar({required String content}) {
     backgroundColor: Colors.black,
     content: Text(
       content,
-      style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
+      style: const TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
     ),
   );
 }
@@ -258,17 +211,17 @@ Future<String> deleteAllData() async {
   UserData currentUser = UserPreferences.getUser();
   var users = instance.collection('users');
 
-  print("deleting user");
+  debugPrint("deleting user");
   //checks if my user has any events associated otherwise skip
   if (currentUser.eventIDs.isNotEmpty) {
-    print("deleting eventIDs");
+    debugPrint("deleting eventIDs");
     var events = instance.collection('events');
     //remove myself from all attendeed events
     var eventsAttendeesCollection = await events
         .where('attendees', arrayContains: currentUser.userID)
         .get();
     for (var event in eventsAttendeesCollection.docs) {
-      print("@ attendee list");
+      debugPrint("@ attendee list");
       event.reference.update({
         "attendees": FieldValue.arrayRemove([currentUser.userID])
       });
@@ -278,7 +231,7 @@ Future<String> deleteAllData() async {
     var myEventsCollection =
         await events.where('host', arrayContains: currentUser.userID).get();
     for (var event in myEventsCollection.docs) {
-      print("deleting my events");
+      debugPrint("deleting my events");
       event.reference.delete();
     }
 
@@ -286,7 +239,7 @@ Future<String> deleteAllData() async {
     var userAttendeesCollection =
         await users.where('eventIDs', whereIn: currentUser.eventIDs).get();
     for (var user in userAttendeesCollection.docs) {
-      print("remove my events from others");
+      debugPrint("remove my events from others");
       user.reference.update({
         "eventIDs": FieldValue.arrayRemove([currentUser.eventIDs])
       });
@@ -295,7 +248,7 @@ Future<String> deleteAllData() async {
 
   //checks if my user has any posts associated otherwise skip
   if (currentUser.postIDs.isNotEmpty || currentUser.likedPosts.isNotEmpty) {
-    print("removing posts");
+    debugPrint("removing posts");
     var posts = instance.collection('posts');
     if (currentUser.postIDs.isNotEmpty) {
       //delete all my posts
@@ -306,7 +259,7 @@ Future<String> deleteAllData() async {
       }
     }
 
-    print("removing what i liked");
+    debugPrint("removing what i liked");
     //remove myself from any posts i liked
     if (currentUser.likedPosts.isNotEmpty) {
       var eventsAttendeesCollection =
@@ -333,7 +286,7 @@ Future<String> deleteAllData() async {
       }
     }
 
-    print("removing followers list i liked");
+    debugPrint("removing followers list i liked");
     //remove any traces of myself on other users followers list
     if (currentUser.following.isNotEmpty) {
       var myfollowingCollection = await users
@@ -355,7 +308,7 @@ Future<String> deleteAllData() async {
   //   try {
   //     await ref.child(eventsFolder).delete();
   //   } on FirebaseException catch (e) {
-  //     print(e.code);
+  //     debugPrint(e.code);
   //   }
   // }
   // if (currentUser.postIDs.isNotEmpty) {
@@ -364,7 +317,7 @@ Future<String> deleteAllData() async {
   //   try {
   //     await ref.child(eventsFolder).delete();
   //   } on FirebaseException catch (e) {
-  //     print(e.code);
+  //     debugPrint(e.code);
   //   }
   // }
   // if (currentUser.eventIDs.isNotEmpty) {
@@ -373,11 +326,11 @@ Future<String> deleteAllData() async {
   //   try {
   //     await ref.child(eventsFolder).delete();
   //   } on FirebaseException catch (e) {
-  //     print(e.code);
+  //     debugPrint(e.code);
   //   }
   // }
 
-  print("completed deleting all references, now the big finale");
+  debugPrint("completed deleting all references, now the big finale");
   users.doc(currentUser.userID).delete();
   User firebaseUser = FirebaseAuth.instance.currentUser!;
   await firebaseUser.reload();
@@ -403,7 +356,7 @@ Future<String> deleteMyPost(String userID, String postID) async {
 Future<String> deleteMyEvent(String userID, String eventID) async {
   try {
     var instance = FirebaseFirestore.instance;
-    print("deleting event");
+    debugPrint("deleting event");
 
     var events = instance.collection('events');
 
@@ -416,7 +369,7 @@ Future<String> deleteMyEvent(String userID, String eventID) async {
         .where('eventIDs', arrayContains: eventID)
         .get();
     for (var user in userAttendeesCollection.docs) {
-      print("remove my events for others");
+      debugPrint("remove my events for others");
       user.reference.update({
         "eventIDs": FieldValue.arrayRemove([eventID])
       });

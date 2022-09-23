@@ -1,10 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/firebase/fire_auth.dart';
 import 'package:lets_connect/main.dart';
-import 'package:lets_connect/mainpages/profilePage/side_menu_button.dart';
-import '../../datamodels/user_model.dart';
 
 class AccountSettings extends StatefulWidget {
   // final User user;
@@ -115,7 +111,7 @@ showAlertDialog(BuildContext context) {
         // await signOutFromGoogle();
         // UserPreferences.resetUser();
         // FirebaseAuth.instance.authStateChanges;
-        print(result);
+        debugPrint(result);
         if (result == "done") {
           Navigator.of(context, rootNavigator: true).pop();
           Navigator.pushAndRemoveUntil(

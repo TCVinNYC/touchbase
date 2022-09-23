@@ -142,7 +142,7 @@ class SignUp extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                             side: const BorderSide(
                                 width: 0.6, color: Colors.black54),
-                            primary: Colors.white.withOpacity(0.92),
+                            backgroundColor: Colors.white.withOpacity(0.92),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12))),
                         onPressed: () async {
@@ -164,7 +164,7 @@ class SignUp extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                             side: const BorderSide(
                                 width: 0.6, color: Colors.black54),
-                            primary: Colors.white.withOpacity(0.92),
+                            backgroundColor: Colors.white.withOpacity(0.92),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12))),
                         onPressed: () async {

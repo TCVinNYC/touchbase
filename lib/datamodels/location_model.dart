@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:geocoding/geocoding.dart' as goa;
@@ -29,7 +30,7 @@ class LocationService {
         _serviceEnabled = await _location.requestService();
       }
     } on PlatformException catch (error) {
-      print('error code is ${error.code} and message = ${error.message}');
+      debugPrint('error code is ${error.code} and message = ${error.message}');
       _serviceEnabled = false;
       await _checkService();
     }

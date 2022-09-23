@@ -2,11 +2,10 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lets_connect/datamodels/event.dart';
 import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
-import 'package:lets_connect/firebase/fire_auth.dart';
 import 'package:path/path.dart';
 
 class FireMethods {
@@ -251,10 +250,8 @@ class FireMethods {
       String url = await ref.getDownloadURL();
       return url;
     } on FirebaseException catch (e) {
-      print(e.code);
+      debugPrint(e.code.toString());
       return ("error");
     }
   }
-
-
 }

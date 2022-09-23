@@ -4,19 +4,16 @@ import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:lets_connect/firebase/firestore.dart';
 import 'package:lets_connect/main.dart';
 import 'package:lets_connect/mainpages/eventsPage/view_event.dart';
-import 'package:lets_connect/widgets/showDate.dart';
-import 'package:lets_connect/widgets/showHost.dart';
-import 'package:lets_connect/widgets/showLocation.dart';
+import 'package:lets_connect/widgets/show_date.dart';
+import 'package:lets_connect/widgets/show_host.dart';
+import 'package:lets_connect/widgets/show_location.dart';
 import '../datamodels/shared_preferences.dart';
 
 class EventWidget extends StatefulWidget {
   final Event event;
   final bool showBookmark;
-  const EventWidget({
-    Key? key,
-    required this.event,
-    required this.showBookmark
-  }) : super(key: key);
+  const EventWidget({Key? key, required this.event, required this.showBookmark})
+      : super(key: key);
   @override
   State<EventWidget> createState() => _EventWidgetState();
 }
@@ -27,7 +24,8 @@ class _EventWidgetState extends State<EventWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.event.attendees.contains(FireMethods.fireAuth.currentUser!.uid)) {
+    if (widget.event.attendees
+        .contains(FireMethods.fireAuth.currentUser!.uid)) {
       toggle = true;
     }
     if (widget.event.host.contains(FireMethods.fireAuth.currentUser!.uid)) {
@@ -56,7 +54,7 @@ class _EventWidgetState extends State<EventWidget> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        showDate(event: widget.event),
+                        show_date(event: widget.event),
                         Text(
                           widget.event.sessionTitle,
                           style: TextStyle(
@@ -67,73 +65,85 @@ class _EventWidgetState extends State<EventWidget> {
                         ),
                       ],
                     ),
-                    widget.showBookmark == true ? Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                      child: IconButton(
-                        onPressed: () async {
-                          if (isHost == false) {
-                            setState(() {
-                              scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(
-                                duration: const Duration(seconds: 5),
-                                content: Row(
-                                  //mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const <Widget>[
-                                    CircularProgressIndicator(color: Colors.amber),
-                                    SizedBox(width: 20,),
-                                    Text("Updating Event")
-                                  ],
-                                ),
-                              ));
-                            });
+                    widget.showBookmark == true
+                        ? Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                            child: IconButton(
+                              onPressed: () async {
+                                if (isHost == false) {
+                                  setState(() {
+                                    scaffoldMessengerKey.currentState
+                                        ?.showSnackBar(SnackBar(
+                                      duration: const Duration(seconds: 5),
+                                      content: Row(
+                                        //mainAxisAlignment: MainAxisAlignment.center,
+                                        children: const <Widget>[
+                                          CircularProgressIndicator(
+                                              color: Colors.amber),
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Text("Updating Event")
+                                        ],
+                                      ),
+                                    ));
+                                  });
 
-                            if (!mounted) return;
-                            //enable to disable
-                            if (toggle) {
-                              UserData? tempUser = UserPreferences.getUser();
-                              tempUser.eventIDs.remove(widget.event.documentID);
-                              UserPreferences.setUser(tempUser);
-                              await FireMethods().updateUserEventCount(
-                                  widget.event.documentID, false);
-                              if (!mounted) return;
-                              await FireMethods().updateAttendeeList(
-                                  widget.event.documentID, false);
-                              scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
-                            }
-                            //disable to enable
-                            else {
-                              UserData? tempUser = UserPreferences.getUser();
-                              tempUser.eventIDs.add(widget.event.documentID);
-                              UserPreferences.setUser(tempUser);
-                              await FireMethods().updateUserEventCount(
-                                  widget.event.documentID, true);
-                              if (!mounted) return;
-                              await FireMethods().updateAttendeeList(
-                                  widget.event.documentID, true);
-                              scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
-                            }
-                            if (!mounted)  return;
+                                  if (!mounted) return;
+                                  //enable to disable
+                                  if (toggle) {
+                                    UserData? tempUser =
+                                        UserPreferences.getUser();
+                                    tempUser.eventIDs
+                                        .remove(widget.event.documentID);
+                                    UserPreferences.setUser(tempUser);
+                                    await FireMethods().updateUserEventCount(
+                                        widget.event.documentID, false);
+                                    if (!mounted) return;
+                                    await FireMethods().updateAttendeeList(
+                                        widget.event.documentID, false);
+                                    scaffoldMessengerKey.currentState
+                                        ?.hideCurrentSnackBar();
+                                  }
+                                  //disable to enable
+                                  else {
+                                    UserData? tempUser =
+                                        UserPreferences.getUser();
+                                    tempUser.eventIDs
+                                        .add(widget.event.documentID);
+                                    UserPreferences.setUser(tempUser);
+                                    await FireMethods().updateUserEventCount(
+                                        widget.event.documentID, true);
+                                    if (!mounted) return;
+                                    await FireMethods().updateAttendeeList(
+                                        widget.event.documentID, true);
+                                    scaffoldMessengerKey.currentState
+                                        ?.hideCurrentSnackBar();
+                                  }
+                                  if (!mounted) return;
 
-                            setState(() {
-                              toggle = !toggle;
-                            });
-                          }
-                        },
-                        icon: toggle == false
-                            ? const Icon(Icons.bookmark_border_outlined)
-                            : const Icon(Icons.bookmark_added_rounded),
-                        iconSize: 22,
-                        splashColor: Colors.amber,
-                        splashRadius: 22,
-                      ),
-                    ) : Container(),
+                                  setState(() {
+                                    toggle = !toggle;
+                                  });
+                                }
+                              },
+                              icon: toggle == false
+                                  ? const Icon(Icons.bookmark_border_outlined)
+                                  : const Icon(Icons.bookmark_added_rounded),
+                              iconSize: 22,
+                              splashColor: Colors.amber,
+                              splashRadius: 22,
+                            ),
+                          )
+                        : Container(),
                   ],
                 ),
-                showHost(
+                show_host(
                   host: widget.event.host,
                   width: 30,
                   height: 30,
                 ),
-                showLocation(event: widget.event),
+                show_location(event: widget.event),
               ],
             ),
           ),

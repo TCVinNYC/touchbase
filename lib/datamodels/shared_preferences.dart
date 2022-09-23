@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,32 +25,30 @@ class UserPreferences {
       followers: [],
       following: []);
 
-  // static UserCredential myNullUserCred = UserCredential();
-
   static Future init() async =>
       _preferences = await SharedPreferences.getInstance();
 
   static UserData getUser() {
     final json = _preferences.getString(_keyUser);
-    print("got saved user");
+    debugPrint("got saved user");
     return json == null ? myNullUser : UserData.fromJson(jsonDecode(json));
   }
 
   static setUser(UserData user) async {
     final json = jsonEncode(user.toJson());
     await _preferences.setString(_keyUser, json);
-    print("saved user");
+    debugPrint("saved user");
   }
 
-  static setCred(UserCredential userCredential) async {
-    final json = jsonEncode(userCredential);
-    await _preferences.setString(_keyAuthCred, json);
-    print("saved cred");
-  }
+  // static setCred(UserCredential userCredential) async {
+  //   final json = jsonEncode(userCredential);
+  //   await _preferences.setString(_keyAuthCred, json);
+  //   debugPrint("saved cred");
+  // }
 
   static UserCredential getSCred() {
     final json = _preferences.getString(_keyAuthCred);
-    print("got saved cred");
+    debugPrint("got saved cred");
     return json == null ? null : jsonDecode(json);
   }
 
@@ -58,6 +57,6 @@ class UserPreferences {
     _preferences.remove(_keyAuthCred);
     _preferences.clear;
     _preferences.reload;
-    print("reset user");
+    debugPrint("reset user");
   }
 }

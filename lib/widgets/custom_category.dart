@@ -2,6 +2,7 @@ import 'package:chip_list/chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_connect/datamodels/price_model.dart';
 
+// ignore: must_be_immutable
 class CustomCategory extends StatefulWidget {
   final bool enableMultiselect;
   List<String> selectedCategories;

@@ -4,11 +4,11 @@ import 'package:lets_connect/datamodels/event.dart';
 import 'package:lets_connect/datamodels/post_model.dart';
 import 'package:lets_connect/datamodels/shared_preferences.dart';
 import 'package:lets_connect/datamodels/user_model.dart';
-import 'package:lets_connect/mainpages/eventsPage/events_page.dart';
 import 'package:lets_connect/widgets/connect_widget.dart';
 import 'package:lets_connect/widgets/event_card.dart';
 import 'package:lets_connect/widgets/post_widget.dart';
 
+// ignore: must_be_immutable
 class StatList extends StatefulWidget {
   final String listName;
   final UserData user;
@@ -254,41 +254,38 @@ class _StatListPageState extends State<StatList> {
           }
         });
   }
-
-
 }
-  FutureBuilder<List<UserData>> getAllAttendees(Event event) {
-    return FutureBuilder<List<UserData>>(
-        future: FirebaseFirestore.instance
-            .collection('users')
-            .where('id', whereIn: event.attendees)
-            .get()
-            .then((snapshot) => snapshot.docs
-                .map((doc) => UserData.fromJson(doc.data()))
-                .toList())
-            .then((user) =>
-                user.where((user) => user.userID != event.host[3]).toList()),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Text("Something when wrong!" + snapshot.error.toString());
-          } else if (snapshot.hasData) {
-            final users = snapshot.data!;
-            return ListView.separated(
-              itemBuilder: (BuildContext context, int index) {
-                return ConnectWidget(
-                  user: users[index],
-                  myUser: UserPreferences.getUser(),
-                );
-              },
-              itemCount: users.length,
-              separatorBuilder: (BuildContext context, int index) {
-                return Container();
-              },
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        });
-  }
 
-
+FutureBuilder<List<UserData>> getAllAttendees(Event event) {
+  return FutureBuilder<List<UserData>>(
+      future: FirebaseFirestore.instance
+          .collection('users')
+          .where('id', whereIn: event.attendees)
+          .get()
+          .then((snapshot) => snapshot.docs
+              .map((doc) => UserData.fromJson(doc.data()))
+              .toList())
+          .then((user) =>
+              user.where((user) => user.userID != event.host[3]).toList()),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text("Something when wrong!" + snapshot.error.toString());
+        } else if (snapshot.hasData) {
+          final users = snapshot.data!;
+          return ListView.separated(
+            itemBuilder: (BuildContext context, int index) {
+              return ConnectWidget(
+                user: users[index],
+                myUser: UserPreferences.getUser(),
+              );
+            },
+            itemCount: users.length,
+            separatorBuilder: (BuildContext context, int index) {
+              return Container();
+            },
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      });
+}
