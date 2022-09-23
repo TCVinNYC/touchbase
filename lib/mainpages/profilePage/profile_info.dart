@@ -146,6 +146,7 @@ class ProfileInfo extends StatelessWidget {
               ],
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 // FOLLOWERS BUTTON
                 TextButton(
@@ -166,7 +167,7 @@ class ProfileInfo extends StatelessWidget {
                           'Followers',
                           style: TextStyle(
                               color: Colors.orange,
-                              fontSize: 18,
+                              fontSize: 16,
                               fontFamily: 'Quicksand',
                               fontWeight: FontWeight.bold),
                         ),
@@ -205,7 +206,7 @@ class ProfileInfo extends StatelessWidget {
                           'Following',
                           style: TextStyle(
                               color: Colors.orange,
-                              fontSize: 18,
+                              fontSize: 16,
                               fontFamily: 'Quicksand',
                               fontWeight: FontWeight.bold),
                         ),
@@ -245,7 +246,7 @@ class ProfileInfo extends StatelessWidget {
                           'Posts',
                           style: TextStyle(
                               color: Colors.orange,
-                              fontSize: 18,
+                              fontSize: 16,
                               fontFamily: 'Quicksand',
                               fontWeight: FontWeight.bold),
                         ),
@@ -283,7 +284,7 @@ class ProfileInfo extends StatelessWidget {
                           'Events',
                           style: TextStyle(
                               color: Colors.orange,
-                              fontSize: 18,
+                              fontSize: 16,
                               fontFamily: 'Quicksand',
                               fontWeight: FontWeight.bold),
                         ),
